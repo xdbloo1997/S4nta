@@ -1,0 +1,53 @@
+﻿/*
+	Externalización de la css del tema logbet.common.pgs.theme.Default
+*/
+@CHARSET "ISO-8859-1";
+.logbet___modal-header {
+  padding: 15px 15px 10px;
+  min-height: 16.42857143px;
+}
+
+.logbet___tokenA{
+display: none;
+}
+
+.logbet___derecha {
+	float: right;
+	text-align: center;
+	padding: 3%;
+}
+.logbet___izquierda {
+	float: left;
+	text-align: center;
+	padding: 3%;
+      
+}
+.logbet___centro {
+	float: left;
+	text-align: center;
+	padding: 3%;
+      
+}
+
+.logbet___contInst{
+	border: 1px solid gray;
+	padding: 4%;
+	height: 150px;
+}
+.logbet___conTitulo{
+	margin-top: 2%;
+	border-bottom: 2px solid #aaa;
+	
+}
+.logbet___subTitulos{
+	margin-top: 2%;
+	margin-bottom: 0%;	
+}
+.logbet___tituloIzquierda {
+	float: left;
+	margin-bottom: 1%;
+}
+.logbet___iconoDerecha {
+	float: right;
+	margin-right: 2%;
+}

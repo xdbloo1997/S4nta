@@ -1,0 +1,444 @@
+$(document).ready(function() {
+	$('#bannerErrores').click(function(){ 
+		var mensajes = "";
+		var elemento= $('#textoMensajes').length;
+		if(elemento !== 0){
+			mensajes = document.getElementById('textoMensajes').val;
+		}	
+		if("" !== mensajes && null !== mensajes){
+			var padre = $(window.parent.document);
+			var cuerpoModal = padre.find('.bet-help-window .modal-body #contenido');
+			cuerpoModal.html(mensajes);
+		} 
+    }); 
+});
+
+function validarCampos(jsonValidaciones, jsonIdMensajes, idAreaTrabajo, borrraMensajes){
+	console.log(jsonValidaciones);
+	console.log(jsonIdMensajes);
+	var sMensajesError = "";
+	var error = false;
+	var ultimoCampoError = "";
+	var contadorMsj = 0;
+	var tresMensajes = "";
+	var padre = $(window.parent.document);
+	var cuerpoModal = padre.find('.bet-help-window .modal-body #contenido');
+	cuerpoModal.html("");
+	try{
+		for (var i = 0; i < jsonValidaciones.length; i++){
+			var jsonValidaciones2 = jsonValidaciones[i];
+		    for (var key in jsonValidaciones2){
+		    	if(null !== key && "" !== key){
+		    		var attrName = key;
+		        	var attrValue = jsonValidaciones2[key];
+		        	var valor = document.getElementById(attrName).value;
+		        	
+		        	if (attrName !== 'inputToken' || !$('#inputToken').hasClass('noValidarToken')) {
+			        	for (var key2 in attrValue){
+			        		if(null !== key2 && "" !== key2){
+			        			var attrValue2 = attrValue[key2];
+					        	for (var key3 in attrValue2){
+					        		if(null !== key3 && "" !== key3){
+					        			var attrName3 = key3;
+						        		var attrValue3 = attrValue2[key3];
+	
+					        			var errorValidacion = obtenerFuncionValidar(jsonIdMensajes, attrName, attrName3, attrValue3, valor);
+					        			if(errorValidacion === false){
+					        				error = true;
+					        				var funcionEjecutar = obtenerMensaje(jsonIdMensajes, attrName, attrName3);
+					        				document.getElementById(attrName).classList.add("ls-focus-error-input");
+					        				ultimoCampoError = attrName;
+					        				if(0 === contadorMsj){
+					        					sMensajesError += funcionEjecutar + "<br>";
+					        					contadorMsj ++;
+					        				}else{
+					        					if(-1 === sMensajesError.indexOf(funcionEjecutar) ){
+						        					contadorMsj ++;
+						        					sMensajesError += funcionEjecutar + "<br>";
+						        				}
+					        				}    	        				
+					        				if(2 >= contadorMsj){
+					        					tresMensajes = sMensajesError;
+					        				}	        				
+					        			}else{
+					        				if (ultimoCampoError !== attrName){
+					        					document.getElementById(attrName).classList.remove("ls-focus-error-input");
+					        				}	        				
+					        			}
+					        		}	        		
+					        	}
+			        		}		        	
+				    	}
+		    		}
+		    	}        	
+	    	}
+		}	
+		if(2 >= contadorMsj){
+			$("#bannerErrores").addClass("hide");
+		}else{
+			$("#bannerErrores").removeClass("hide");
+		}
+	}
+	catch(err){
+		var elementsDiv = document.getElementsByClassName(idAreaTrabajo);
+		for (var i = 0; i < elementsDiv.length; i++) {
+			  elementsDiv[i].innerHTML = sMensajesError;
+			}
+		return false;
+    }    
+    if(error === true){
+    	if(true === borrraMensajes){
+    		var elementsDiv = document.getElementsByClassName(idAreaTrabajo);
+    		for (var i = 0; i < elementsDiv.length; i++) {
+    			if(2 < contadorMsj){   				
+    				cuerpoModal.html(sMensajesError);	
+				}
+				elementsDiv[i].innerHTML = tresMensajes;	
+				document.getElementById('textoMensajes').val=sMensajesError;
+    		}
+    	}else{
+    		var elementsDiv = document.getElementsByClassName(idAreaTrabajo);
+    		for (var i = 0; i < elementsDiv.length; i++) {
+    			if(2 < contadorMsj){   				
+    				cuerpoModal.html(sMensajesError);	
+				}
+				elementsDiv[i].innerHTML = elementsDiv[i] + "<br>" + tresMensajes; 
+				document.getElementById('textoMensajes').val=sMensajesError;
+    		}
+    	}  	
+    	$(window).resize();
+    	return false;
+    }else{
+    	return true;
+    }
+}
+
+
+function obtenerFuncionValidar(jsonIdMensajes, idControl, idFuncion, valorPosible, paramPrincipal){
+	try{
+		if("requerido" === idFuncion){
+			console.log("validarRequerido(valorValidar)");
+			return validarRequerido(paramPrincipal, valorPosible);
+		}
+		if("numerico" === idFuncion){
+			console.log("validarNumerico(valorValidar)");
+	    	return validarNumerico(paramPrincipal);
+		}
+		if("decimal" === idFuncion){
+			console.log("validarDecimal(valorValidar)");
+	    	return validarDecimal(paramPrincipal);
+		}
+		if("longitudMaximaEntero" === idFuncion){
+			console.log("validarLongitudMaximaEntero(valorValidar,maximo)");
+	    	return (validarLongitudMaximaEntero(paramPrincipal,valorPosible));
+		}	
+		if("longitudMaximaDecimal" === idFuncion){
+			console.log("validarLongitudMaximaDecimal(valorValidar,maximo)");
+	    	return (validarLongitudMaximaDecimal(paramPrincipal,valorPosible));
+		}
+		if("longitudMinimaEntera" === idFuncion){
+			console.log("validarLongitudMinimaEntero(valorValidar,minimo)");
+	    	return (validarLongitudMinimaEntero(paramPrincipal,valorPosible));
+		}
+		if("longitudMinimaDecimal" === idFuncion){
+			console.log("validarLongitudMinimaDecimal(valorValidar,minimo)");
+	    	return (validarLongitudMinimaDecimal(paramPrincipal,valorPosible));
+		}
+		if("alfanumerico" === idFuncion){
+			if(valorPosible === true){
+  				console.log("alfanumerico(valorValidar)");
+  				var val = esAlfanumericojSON(paramPrincipal);
+  				return val;
+  			}else{
+  				return obtenerFuncionValidarHija(jsonIdMensajes, idControl, idFuncion, valorPosible, paramPrincipal);
+  			}
+		}
+		if("longitud" === idFuncion){
+			console.log("validarLongitud(valorValidar,longitud)");
+	  		return (validarLongitud(paramPrincipal,valorPosible));
+		}
+		if("longitudMinima" === idFuncion){
+			console.log("validarLongitudMinima(valorValidar,minimo)");
+	  		return (validarLongitudMinima(paramPrincipal,valorPosible));
+		}
+		if("longitudMaxima" === idFuncion){
+			console.log("validarLongitudMaxima(valorValidar,maximo)");
+	    	return (validarLongitudMaxima(paramPrincipal,valorPosible));
+		}
+		if("formatoRFC" === idFuncion){
+			console.log("validarFormatoRFC(valorValidar, valorPosible)");
+	    	return (validarFormatoRFC(paramPrincipal, valorPosible));
+		}	
+		if("nombreRFC" === idFuncion){
+			console.log("validarNombreRFC(nombre,valorValidar)");
+	  		var nombres = valorPosible.split("-");
+	  		var cantNom = 0;
+			for (i = 0; i < nombres.length; i++) {
+				nombres[i] = nombres[i].trim(); //Quita espacios antes y despues
+				if (nombres[i] != "" && nombres[i] != undefined) {
+					cantNom++; //Cuenta cantidad de nombre y apellidos
+				}
+			}
+	  		if(cantNom === 3){
+	  			var nombre = nombres[0];//Nombre compuesto
+	  			var appellidoP = nombres[1];//Apellido paterno compuesto
+	  			var appellidoM = nombres[2];//Apellido materno compuesto
+	  			console.log(nombre + ","+appellidoP+ ","+ appellidoM);
+	  			return (validarNombreRFC(appellidoP, appellidoM, nombre, paramPrincipal));
+	  		}else if(cantNom === 2){
+	  			var nombre = nombres[0];//Nombre compuesto
+	  			var appellidoP = nombres[1];//Apellido paterno compuesto
+	  			return (validarNombreRFC(appellidoP, "", nombre, paramPrincipal));//Sin apellido materno
+	  		}else{
+	  			return false;
+	  		}
+		}
+		if("fechaRFC" === idFuncion){
+			console.log("validarFechaRFC(valorValidar,idCampoNombre)");
+	    	var campoComparar = document.getElementById(valorPosible).value;
+	    	return (validarFechaRFC(paramPrincipal, campoComparar));
+		}
+		if("fechaMenorQue" === idFuncion){
+			console.log("validarFechaMenorQue(valorValidar,idCampoComparar)");
+	  		var campoComparar = document.getElementById(valorPosible).value;
+	    	return (validarFechaMenorQue(paramPrincipal, campoComparar));
+		}
+		if("fechaMenorIgualQue" === idFuncion){
+			console.log("validarFechaMenorIgualQue(valorValidar,idCampoComparar)");
+	    	var campoComparar = document.getElementById(valorPosible).value;
+	    	return (validarFechaMenorIgualQue(paramPrincipal, campoComparar));
+		}
+		if("fechaVaciaMenorIgualQue" === idFuncion){
+			console.log("fechaVaciaMenorIgualQue(valorValidar,idCampoComparar)");
+	    	var campoComparar = document.getElementById(valorPosible).value;
+	    	return (validarFechaVaciaMenorIgualQue(paramPrincipal, campoComparar));
+		}
+		if("fechaMayorQue" === idFuncion){
+			console.log("validarFechaMayorQue(valorValidar,idCampoComparar)");
+	    	var campoComparar = document.getElementById(valorPosible).value;
+	    	return (validarFechaMayorQue(paramPrincipal, campoComparar));
+		}
+		if("fechaMayorIgualQue" === idFuncion){
+			console.log("	(valorValidar,idCampoComparar)");
+	    	var campoComparar = document.getElementById(valorPosible).value;
+	    	return (validarFechaMayorIgualQue(paramPrincipal, campoComparar));
+		}
+		if("fechaPosteriorMinima" === idFuncion){
+			console.log("validarFechaPosteriorMinima(valorValidar,diasMinimos)");
+	    	return (validarFechaPosteriorMinima(paramPrincipal, valorPosible));
+		}
+		if("fechaActual" === idFuncion){
+			console.log("validarFechaActual(valorValidar)");
+	    	return (validarFechaActual(paramPrincipal));
+		}
+		if("fechaPosteriorMaxima" === idFuncion){
+			console.log("validarFechaPosteriorMaxima(valorValidar,diasMaximos)");
+	    	return (validarFechaPosteriorMaxima(paramPrincipal, valorPosible));
+		}
+		if("fechaAnteriorMinima" === idFuncion){
+			console.log("validarFechaAnteriorMinima(valorValidar,diasMinimos)");
+	    	return (validarFechaAnteriorMinima(paramPrincipal, valorPosible));
+		}
+		if("fechaAnteriorMaxima" === idFuncion){
+			console.log("validarFechaAnteriorMaxima(valorValidar,diasMaximos)");
+	    	return (validarFechaAnteriorMaxima(paramPrincipal, valorPosible));
+		}
+		if("formatoFecha" === idFuncion){
+			console.log("validarFormatoFecha(valorValidar,valorPosible)");
+	    	return (validarFormatoFecha(paramPrincipal, valorPosible));
+		}
+		if("validarRangoFecha3Meses" === idFuncion){
+			console.log("validarRangoFecha3Meses(valorValidar,idCampoComparar)");
+	    	var campoComparar = document.getElementById(valorPosible).value;
+	    	return (validarRangoFecha3Meses(paramPrincipal, campoComparar));
+		}
+		
+		if("validarFechaHoraProgramada" === idFuncion){
+			console.log("validarFechaHoraProgramada(valorValidar)");
+	    	return (validarFechaHoraProgramada(paramPrincipal));
+		}
+		if("validarFechaHoraLimiteProgramada" === idFuncion){
+			console.log("validarFechaHoraLimiteProgramada(valorValidar)");
+	    	return (validarFechaHoraLimiteProgramada(paramPrincipal));
+		}
+		if("validarFechaHorarioSabado" === idFuncion){
+			console.log("validarFechaHorarioSabado(valorValidar)");
+	    	return (validarFechaHorarioSabado(paramPrincipal));
+		}
+		if("correo" === idFuncion && true === valorPosible){
+	   			console.log("validarCorreo(valorValidar)");
+	   			return (validarCorreo(paramPrincipal));
+		}
+		if("formatoArchivo" === idFuncion){
+			console.log("validarFormatoArchivo(valorValidar)");
+	    	return (validarFormatoArchivo(paramPrincipal,valorPosible));
+		}
+		if("unoObligatorio" === idFuncion){
+			console.log("validarUnoObligatorio(valorValidar)");
+	  		var campoComparar = document.getElementById(valorPosible).value;
+	  		return (validarUnoObligatorio(paramPrincipal,campoComparar));
+		}
+		if("requeridoGrupoCheck" === idFuncion){
+			console.log("validarRequeridoGrupoCheck(valorValidar)");
+	  		return (validarRequeridoGrupoCheck(valorPosible));
+		}
+		if("requeridoOpciones" === idFuncion){
+			console.log("validarRequeridoOpciones(valorValidar)");
+	  		return (validarRequeridoOpciones(paramPrincipal,valorPosible));
+		}
+		if("valoresDiferentes" === idFuncion){
+			console.log("validarValoresDiferentes(valorValidar,campoComparar)");
+	    	var campoComparar = document.getElementById(valorPosible).value;
+	    	return (validarValoresDiferentes(paramPrincipal,campoComparar));
+		}
+		if("valoresIguales" === idFuncion){
+			console.log("validarValoresIguales(valorValidar,campoComparar)");
+	  		var campoComparar = document.getElementById(valorPosible).value;
+	    	return (validarValoresIguales(paramPrincipal,campoComparar));
+		}
+		if("valorMayorQue" === idFuncion){
+			console.log("validarValorMayorQue(valorValidar,campoComparar)");
+	  		return (validarValorMayorQue(paramPrincipal,valorPosible));
+		}
+		if("valorMayorQueCeroRecaudaciones" === idFuncion){
+			console.log("validarValorMayorQueCeroRecaudaciones(valorValidar,campoComparar)");
+	  		return (validarValorMayorQueCeroRecaudaciones(paramPrincipal,valorPosible));
+		}
+		if("validarValorMayorQueCeroSAT" === idFuncion){
+			console.log("validarValorMayorQueCeroSAT(valorValidar,campoComparar)");
+	  		return (validarValorMayorQueCeroSAT(paramPrincipal,valorPosible));
+		}
+		if("valorMayorIgualQue" === idFuncion){
+			console.log("validarValorMayorIgualQue(valorValidar,campoComparar)");
+	    	return (validarValorMayorIgualQue(paramPrincipal,valorPosible));
+		}
+		if("valorMenorQue" === idFuncion){
+			console.log("validarValorMenorQue(valorValidar,campoComparar)");
+	    	return (validarValorMenorQue(paramPrincipal,valorPosible));
+		}
+		if("valorMenorQueConfirming" === idFuncion){
+			console.log("valorMenorQueConfirming(valorValidar,campoComparar)");
+	    	return (validaValorMenorQueConfirming(paramPrincipal,valorPosible));
+		}
+		if("valorMenorIgualQue" === idFuncion){
+			console.log("validarValorMenorIgualQue(valorValidar,campoComparar)");
+	    	return (validarValorMenorIgualQue(paramPrincipal,valorPosible));
+		}
+		if("valorVaciosValorMenorIgualQue" === idFuncion){
+			console.log("validarVaciosValorMenorIgualQue(valorValidar,campoComparar)");
+	    	return (validarVaciosValorMenorIgualQue(paramPrincipal,valorPosible));
+		}
+		if("selectCuenta" === idFuncion){
+			console.log("validaSelecCuenta(valorValidar)");
+	    	if(validaSelecCuenta(paramPrincipal)){
+	    		$( "button[data-id='"+idControl+"']").removeClass("ls-focus-error-input");
+	    	}else{
+	    		$( "button[data-id='"+idControl+"']").addClass("ls-focus-error-input");
+	    		return false;	    		
+	    	}
+		}
+		if("checado" === idFuncion){
+			console.log("validaChecado(id)");
+	    	var validacion = validaChecado(idControl);
+	    	return validacion;
+		}
+		if("requeridoGrupoCheckPorClass" === idFuncion){
+			console.log("validarRequeridoGrupoCheckPorClass(valorPosible)");
+	  		return validarRequeridoGrupoCheckPorClass(valorPosible);
+		}
+	}
+	catch(err){
+		return false;
+	}
+}
+
+
+function obtenerFuncionValidarHija(jsonIdMensajes, idControl, idFuncion, idFuncionHija, paramPrincipal){	
+	if("alfabetico" === idFuncionHija){
+ 		return (validarAlfabetico(paramPrincipal));
+ 	}
+	else if("alfanumericoAcentos" === idFuncionHija){
+ 		console.log("validarAlfanumericoAcentos(valorValidar)");
+    	return (validarAlfanumericoAcentos(paramPrincipal));
+ 	}
+	else if("alfanumericoEspeciales" === idFuncionHija){
+ 		console.log("validarAlfanumericoEspeciales(valorValidar)");
+    	return (validarAlfanumericoEspeciales(paramPrincipal));
+ 	}
+	else if("alfanumericoLetras" === idFuncionHija){
+		console.log("validarAlfanumericoLetras(valorValidar)");
+    	return (validaLetrasjSON(paramPrincipal));
+	}
+	else if("alfanumericoLetrasNumeros" === idFuncionHija){
+		console.log("validarAlfanumericoLetrasNumeroa(valorValidar)");
+    	return (validaLetrasNumerosjSON(paramPrincipal));
+	}
+	else if("numericoPunto" === idFuncionHija){
+		console.log("validaNumerosPunto(valorValidar)");
+    	return (validaNumerosPuntojSON(paramPrincipal));
+	}
+	else if("alfanumericoLetrasNumerosAmpersand" === idFuncionHija){
+		console.log("validaLetrasNumerosAmpersand(valorValidar)");
+    	return (validaLetrasNumerosAmpersand(paramPrincipal));
+	}
+	else if("validaCalle" === idFuncionHija){
+ 		console.log("validaCallejSON");
+ 		return (validaCallejSON(paramPrincipal));
+ 	}
+	else if("letrasEneNum" === idFuncionHija){
+ 		console.log("validaLetrasEne");
+ 		return (validaLetrasEne(paramPrincipal));
+ 	}
+	else if("letrasEneNumAmp" === idFuncionHija){
+ 		console.log("validaLetrasEneNumAmp");
+ 		return (validaLetrasEneNumAmp(paramPrincipal));
+ 	}
+	else{
+ 		return obtenerFuncionValidarHija2(jsonIdMensajes, idControl, idFuncion, idFuncionHija, paramPrincipal);
+ 	}
+}
+
+function obtenerFuncionValidarHija2(jsonIdMensajes, idControl, idFuncion, idFuncionHija, paramPrincipal) {
+ 	if("alfanumericoTeclasEspeciales" === idFuncionHija){
+ 		console.log("validarAlfanumericoTeclasEspeciales(valorValidar)");
+    	return (validarAlfanumericoTeclasEspeciales(paramPrincipal));
+ 	}
+ 	if("alfanumericoSinAmperson" === idFuncionHija){
+ 		console.log("validarAlfanumericoSinAmperson(valorValidar)");
+    	return (validarAlfanumericoSinAmperson(paramPrincipal));
+ 	}
+ 	if("numericoEspeciales" === idFuncionHija){
+ 		console.log("validarNumericoEspeciales(valorValidar)");
+    	return (validarNumericoEspeciales(paramPrincipal));
+ 	}
+ 	if("numericoEspecialesExtra" === idFuncionHija){
+ 		console.log("validarNumericoEspecialesExtra(valorValidar)");
+    	return (validarNumericoEspecialesExtra(paramPrincipal));
+ 	}
+}
+
+function obtenerMensaje(jsonIdMensajes, idControl, idFuncion){
+	var mensaje = jsonIdMensajes[0];
+	var mensaje2 = mensaje[idControl];
+	var mensaje3 = mensaje2[0];
+	var mensaje4 = mensaje3[idFuncion];
+	var respuesta;
+
+	if (mensaje4 === undefined || mensaje4 === "" || mensaje4 === null) {
+		console.log("mensaje4: "+mensaje4);
+		respuesta = eval(idFuncion);
+	}else{
+		console.log("eval(mensaje4) : "+mensaje4);
+		try{
+			respuesta = (eval(mensaje4) === undefined) ? "" : eval(mensaje4);
+		}catch(err){
+			respuesta = mensaje4;
+			console.log("mensaje4 catch : "+mensaje4);
+		}
+		
+		
+	}
+
+	console.log(respuesta);
+	return respuesta;
+}

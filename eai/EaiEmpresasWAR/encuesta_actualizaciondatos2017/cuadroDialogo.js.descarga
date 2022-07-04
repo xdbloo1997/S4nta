@@ -1,0 +1,1309 @@
+var respuesta=0;
+var ventanaActiva=1;
+var campoTexto ="";
+var nh ="";
+var pagBack = 0;
+var opcNumber = 0;
+
+function popupOTP(servlet) {
+	ventana = window.open('/Enlace/jsp/tokenConfirm.jsp?op='+servlet,'popup','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, width=600, height=450, top=150, left=150');
+	ventana.focus();
+}
+// Agregado por Javier Díaz - 03/2004. Nueva función de cuadro de diálogo de captura de email para inhibir el uso de la tecla enter.
+function cuadroCapturaEmail(mensaje,titulo)
+{
+	campoTexto ="";
+	isEmail = "";
+	isEmail = mensaje.indexOf("correo");
+
+	captura=window.open('','trainerWindow','width=380,height=170,toolbar=no,scrollbars=no,left=210,top=225');
+	captura.document.open();
+	captura.focus();
+	captura.document.write("<html>");
+	captura.document.writeln("<head><title>MSG</title>");
+	captura.document.writeln("<link rel='stylesheet' href='/EnlaceMig/consultas.css' type='text/css'>");
+	captura.document.writeln("<script language='javaScript'>");
+	captura.document.writeln("var estate = false");
+	captura.document.writeln("function ValidaEmail(email)");
+	captura.document.writeln("{");
+	captura.document.writeln("	    if(email.indexOf(\"@\") == 2 || email.indexOf(\"@\") == -1 || email.length < 9 || email.indexOf(\".\") == -1)");
+	captura.document.writeln("	    {");
+	captura.document.writeln("		     return false;");
+	captura.document.writeln("	     }else");
+	captura.document.writeln("	     return true;");
+	captura.document.writeln("}");
+	captura.document.writeln("function ValidaForma(forma,boton)");
+	captura.document.writeln(" {");
+    captura.document.writeln("   if(boton==1)");
+	captura.document.writeln("   {    ");
+	captura.document.writeln("     ");
+	captura.document.writeln("       if(opener.isEmail != -1)");
+	captura.document.writeln("        {");
+	captura.document.writeln("					 if(forma.texto.value != \"\" || forma.texto.value == \"undefined\" )");
+	captura.document.writeln("                  {");
+	captura.document.writeln("			                if(ValidaEmail(forma.texto.value))");
+	captura.document.writeln("                         {");
+    captura.document.writeln("								if(opener.estatus == \"Alta Empleados\"){");
+	captura.document.writeln("									opener.campoTexto=forma.texto.value;");
+	captura.document.writeln("									opener.respuesta=boton;");
+	captura.document.writeln("									forma.operacion.value=\"obtensucursal\";");
+	captura.document.writeln("									forma.action  = \"NomEmpOpciones\";");
+	captura.document.writeln("									forma.submit();");
+	captura.document.writeln("                           }else if(opener.estatus == \"Consulta Empleados\"){");
+	captura.document.writeln("									opener.campoTexto=forma.texto.value;");
+	captura.document.writeln("									opener.respuesta=boton;");
+	captura.document.writeln("									forma.operacion.value=\"enviaEmpDetalle\";");
+	captura.document.writeln("									forma.valor_radio.value=opener.cad;");
+	captura.document.writeln("									forma.action  = \"NomEmpOpciones\";");
+	captura.document.writeln("									forma.submit();");
+	captura.document.writeln("                           }");
+	captura.document.writeln("                        }else{");
+	captura.document.writeln("                                      alert(\"Por Favor entre un correo electronico valido\");");
+	captura.document.writeln("                                }");
+	captura.document.writeln("                  }else{");
+    captura.document.writeln("								if(opener.estatus == \"Alta Empleados\"){");
+	captura.document.writeln("									opener.campoTexto=forma.texto.value;");
+	captura.document.writeln("									opener.respuesta=boton;");
+	captura.document.writeln("									forma.operacion.value=\"obtensucursal\";");
+	captura.document.writeln("									forma.action  = \"NomEmpOpciones\";");
+	captura.document.writeln("									forma.submit();");
+	captura.document.writeln("                           }else if(opener.estatus == \"Consulta Empleados\"){");
+	captura.document.writeln("									opener.campoTexto=forma.texto.value;");
+	captura.document.writeln("									opener.respuesta=boton;");
+	captura.document.writeln("									forma.operacion.value=\"enviaEmpDetalle\";");
+	captura.document.writeln("									forma.valor_radio.value=opener.cad");
+	captura.document.writeln("									forma.action  = \"NomEmpOpciones\";");
+	captura.document.writeln("									forma.submit();");
+	captura.document.writeln("                           }");
+	captura.document.writeln("                  }");
+	captura.document.writeln("         }else{");
+	captura.document.writeln("              opener.campoTexto=forma.texto.value;");
+	captura.document.writeln("	             opener.respuesta=boton;");
+	captura.document.writeln("	             opener.continuaCaptura();");
+	captura.document.writeln("	             window.close();");
+	captura.document.writeln("               ");
+	captura.document.writeln("         }");
+	captura.document.writeln("   }else{opener.respuesta=boton;window.close();}");
+	captura.document.writeln(" }");
+	captura.document.writeln("</script>");
+	captura.document.writeln("</head>");
+	captura.document.writeln("<body bgcolor='white'>");
+	captura.document.writeln("<form enctype='multipart/form-data' name='captura' method=post onSubmit='return estate'> ");
+	captura.document.writeln("<table border=0 width=365 class='textabdatcla' align=center cellspacing=3 cellpadding=0>");
+	captura.document.writeln("<tr><th height=25 class='tittabdat' colspan=2>"+ titulo + "</th></tr>");
+	captura.document.writeln("</table>");
+	captura.document.writeln("<table border=0 width=365 class='textabdatcla' align=center cellspacing=0 cellpadding=1>");
+	captura.document.writeln("<tr><td class='tabmovtex1' align=right width=50 rowspan=2><img src='/gifs/EnlaceMig/gic25020.gif' border=0></a></td>");
+	captura.document.writeln("<td class='tabmovtex1' align=center width=300><br>"+mensaje+"<br>");
+	captura.document.writeln("</td></tr>");
+	captura.document.writeln("<tr><td class='tabmovtex1' align=center><input type=hidden name=valor_radio><input type=hidden name=operacion><input type=text name=texto size=30 maxlength=120 class=tabmovtex><br><br></td></tr>");
+	captura.document.writeln("</table>");
+	captura.document.writeln("<table border=0 align=center cellspacing=0 cellpadding=0>");
+	captura.document.writeln("<tr><td align=right><a href='javascript:ValidaForma(document.captura,1);'><img src='/gifs/EnlaceMig/gbo25280.gif' border=0 onClick='estate=true'></a></td>");
+	captura.document.writeln("<td align=left><a href='javascript:ValidaForma(document.captura,2);'><img src='/gifs/EnlaceMig/gbo25190.gif' border=0></a></td></tr>");
+	captura.document.writeln("</table>");
+	captura.document.writeln("</form>");
+	captura.document.writeln("</body>\n</html>");
+	captura.focus();
+	captura.document.captura.texto.focus();
+}
+
+
+/*
+ * Función para el cuadro de diálogo de confirmación para envío de archivos duplicados
+ * de Altas Masivas.
+ * Agregado por Javier Díaz (Sinapsis) - 01/2004.
+ */
+function cuadroDialogoMttoEmp( encabezado, mensaje, tipo )
+{
+	respuesta=0;
+	var titulo="Error";
+	var imagen="gic25020.gif";
+
+	if ( tipo== 9) // Confirmación
+	{
+		imagen ="gic25050.gif"; // signo de interrogación
+		titulo =encabezado;
+	}
+
+	ventana=window.open('','trainerWindow','width=380,height=165,toolbar=no,scrollbars=no,left=210,top=225');
+	ventana.document.open();
+	ventana.document.write("<html>");
+	ventana.document.writeln("<head>\n<title>MSG</title>\n");
+	ventana.document.writeln("<link rel='stylesheet' href='/EnlaceMig/consultas.css' type='text/css'>");
+	ventana.document.writeln("</head>");
+	ventana.document.writeln("<body bgcolor='white'>");
+	ventana.document.writeln("<form name='captura'>");
+	ventana.document.writeln("<table border=0 width=365 class='textabdatcla' align=center cellspacing=3 cellpadding=0>");
+	ventana.document.writeln("<tr><th height=25 class='tittabdat' colspan=2>"+ titulo + "</th></tr>");
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("<table border=0 width=365 class='textabdatcla' align=center cellspacing=0 cellpadding=1>");
+	ventana.document.writeln("<tr><td class='tabmovtex1' align=right width=50><img src='/gifs/EnlaceMig/"+imagen+"' border=0></a></td>");
+	ventana.document.writeln("<td class='tabmovtex1' align=center width=300><br>"+mensaje+"<br><br>");
+	ventana.document.writeln("</tr></td>");
+	ventana.document.writeln("<tr><td class='tabmovtex1'>");
+	ventana.document.writeln("</td></tr>");
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("<table border=0 align=center cellspacing=6 cellpadding=0>");
+
+	if (tipo == 9) // Solo para confirmación : aceptar y cancelar
+	{
+		ventana.document.writeln("<tr><td align=right><a href='javascript:opener.ventanaActiva=0;opener.respuesta=11;window.close();opener.continua();'><img src='/gifs/EnlaceMig/gbo25280.gif' border=0></a></td>");
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=12;window.close();opener.continua();'><img src='/gifs/EnlaceMig/gbo25190.gif' border=0></a></td></tr>");
+	}
+
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("</form>");
+	ventana.document.writeln("</body>\n</html>");
+	ventana.focus();
+}
+
+function cuadroDialogoPagosNomina( encabezado, mensaje, tipo )
+{
+	respuesta=0;
+	var titulo="Error";
+	var imagen="gic25020.gif";
+	if ( tipo == 1 ) // Alerta
+	{
+		imagen="gic25020.gif"; // signo de admiración
+		titulo=encabezado;
+	}
+	else if ( tipo== 2  ) // Confirmación
+	{
+		opcNumber = 2;
+		imagen ="gic25050.gif"; // signo de interrogación
+		titulo =encabezado;
+	}
+	else if ( tipo== 3 ) // Confirmación
+	{
+		imagen ="gic25050.gif"; // signo de interrogación
+		titulo =encabezado;
+	}
+	else if ( tipo== 5) // Confirmación Norma43
+	{
+		imagen ="gic25050.gif"; // signo de interrogación
+		titulo =encabezado;
+	}
+	else if ( tipo== 6) // Confirmación Norma43 Cerrar
+	{
+		imagen ="gic25050.gif"; // signo de interrogación
+		titulo =encabezado;
+	}
+	else if ( tipo== 9) // Confirmación
+	{
+		opcNumber = 9;
+		imagen ="gic25050.gif"; // signo de interrogación
+		titulo =encabezado;
+	}
+		else if ( tipo== 15) // Confirmación
+	{
+		opcNumber = 15;
+		imagen ="gic25050.gif"; // signo de interrogación
+		titulo =encabezado;
+	}
+	else if ( tipo== 7) // Confirmación de Sucursal
+	{
+		imagen ="gic25020.gif"; // signo de admiracion
+		titulo =encabezado;
+	}
+	else if ( tipo== 8) // Confirmación de Sucursal
+	{
+		imagen ="gic25020.gif"; // signo de admiracion
+		titulo =encabezado;
+	}
+	else // Error
+	{
+		imagen="gic25060.gif"; // una espantosa X
+		titulo="Error";
+	}
+
+	ventana=window.open('','trainerWindow','width=380,height=200,toolbar=no,scrollbars=no,left=210,top=350');
+	ventana.document.open();
+	ventana.document.write("<html>");
+	ventana.document.writeln("<head>\n<title>MSG</title>\n");
+	ventana.document.writeln("<link rel='stylesheet' href='/EnlaceMig/consultas.css' type='text/css'>");
+	ventana.document.writeln("<script language='javaScript'>");
+	ventana.document.writeln("function ValidaForma(forma,boton)");
+	ventana.document.writeln(" {");
+    ventana.document.writeln("   if(boton==1)");
+	ventana.document.writeln("   {    ");
+	ventana.document.writeln("        opener.nh=forma.HorarioPremierDialogo.options[forma.HorarioPremierDialogo.selectedIndex].value;");
+	ventana.document.writeln("	      opener.respuesta=13;");
+	ventana.document.writeln("	      opener.continua()");
+	ventana.document.writeln("	      window.close();");
+	ventana.document.writeln("   }    ");
+	ventana.document.writeln(" }");
+	ventana.document.writeln("</script>");
+	ventana.document.writeln("</head>");
+	ventana.document.writeln("<body bgcolor='white'>");
+	ventana.document.writeln("<form name='captura'>");
+	ventana.document.writeln("<table border=0 width=365 class='textabdatcla' align=center cellspacing=3 cellpadding=0>");
+	ventana.document.writeln("<tr><th height=25 class='tittabdat' colspan=2>"+ titulo + "</th></tr>");
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("<table border=0 width=365 class='textabdatcla' align=center cellspacing=0 cellpadding=1>");
+	ventana.document.writeln("<tr><td class='tabmovtex1' align=right width=50><img src='/gifs/EnlaceMig/"+imagen+"' border=0></a></td>");
+	ventana.document.writeln("<td class='tabmovtex1' align=center width=300><br>"+mensaje+"<br><br>");
+	ventana.document.writeln("</tr></td>");
+	ventana.document.writeln("<tr><td class='tabmovtex1'>");
+	ventana.document.writeln("</td></tr>");
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("<table border=0 align=center cellspacing=6 cellpadding=0>");
+	if (tipo == 2) // Solo para Enviar
+	{
+		ventana.document.writeln("<tr><td align=right><a href='javascript:ValidaForma(document.captura,1);'><img src='/gifs/EnlaceMig/gbo25520.gif' border=0></a></td>");
+	}
+	else if (tipo == 3) // Solo para Aceptar
+	{
+		ventana.document.writeln("<tr><td align=right><a href='javascript:ValidaForma(document.captura,1);'><img src='/gifs/EnlaceMig/gbo25280.gif' border=0></a></td></tr>");
+	}
+	else if (tipo == 15) // Solo para Enviar No premier
+	{
+		ventana.document.writeln("<tr><td align=center><a href='javascript:opener.ventanaActiva=0;opener.respuesta=12;window.close();opener.continua();'><img src='/gifs/EnlaceMig/gbo25520.gif' border=0></a></td></tr>");
+		//ventana.document.writeln("<tr><td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=12;window.close();opener.continua();'><img src='/gifs/EnlaceMig/gbo25280.gif' border=0></a></td></tr>");
+	}
+	else if (tipo == 6) // Solo para Norma 43 : cerrar
+	{
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=2;window.close();'><img src='/gifs/EnlaceMig/gbo25200.gif' border=0></a></td></tr>");
+	}
+	else if (tipo == 9) // Solo para confirmación : aceptar y cancelar
+	{
+		ventana.document.writeln("<tr><td align=right><a href='javascript:opener.ventanaActiva=0;opener.respuesta=11;window.close();opener.continua();'><img src='/gifs/EnlaceMig/gbo25280.gif' border=0></a></td>");
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=12;window.close();opener.continua();'><img src='/gifs/EnlaceMig/gbo25190.gif' border=0></a></td></tr>");
+	}
+	else if (tipo == 10) // Agregado por Javier Díaz - 02/2004. Cerrar y regresar a página inicial.
+	{
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=12;window.close();opener.continua();'><img src='/gifs/EnlaceMig/gbo25200.gif' border=0></a></td></tr>");
+	}
+	else // botón Cerrar
+	{
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=0;window.close();'><img src='/gifs/EnlaceMig/gbo25200.gif' border=0></a></td></tr>");
+	}
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("</form>");
+	ventana.document.writeln("</body>\n</html>");
+	ventana.focus();
+}
+
+//=================================================================================================
+
+function cuadroDialogo( mensaje, tipo )
+{
+	respuesta=0;
+	var titulo="Error";
+	var imagen="gic25020.gif";
+
+	if ( tipo == 1 || tipo == 10) // Alerta
+	{
+		imagen="gic25020.gif"; // signo de admiración
+		titulo="Alerta";
+	}
+	else if ( tipo== 2 || tipo==12) // Confirmación
+	{
+		imagen ="gic25050.gif"; // signo de interrogación
+		titulo ="Confirmaci&oacute;n";
+	}
+	else if ( tipo== 5) // Confirmación Norma43
+	{
+		imagen ="gic25050.gif"; // signo de interrogación
+		titulo ="Confirmaci&oacute;n";
+	}
+	else if ( tipo== 6) // Confirmación Norma43 Cerrar
+	{
+		imagen ="gic25050.gif"; // signo de interrogación
+		titulo ="Confirmaci&oacute;n";
+	}
+	else if ( tipo== 7) // Confirmación de Sucursal
+	{
+		imagen ="gic25020.gif"; // signo de admiracion
+		titulo ="AVISO";
+	}
+	else if ( tipo== 8) // Confirmación de Sucursal
+	{
+		imagen ="gic25020.gif"; // signo de admiracion
+		titulo ="Obten Data";
+	}
+	else if (tipo==11)
+	{
+	imagen="gic25020.gif";
+	titulo="Alerta";
+	}
+
+	else // Error
+	{
+		imagen="gic25060.gif"; // una espantosa X
+		titulo="Error";
+	}
+	
+	if (tipo == 10) {
+		ventana=window.open('','trainerWindow','width=380,height=210,toolbar=no,scrollbars=no,left=210,top=225');
+	}
+	
+	else if (tipo == 11 || tipo == 12 ) {
+		ventana=window.open('','trainerWindow','width=450,height=250,toolbar=no,scrollbars=no,left=210,top=225');
+	}
+	else {
+		ventana=window.open('','trainerWindow','width=380,height=150,toolbar=no,scrollbars=no,left=210,top=225');
+	}
+	
+	ventana.document.open();
+	ventana.document.write("<html>");
+	ventana.document.writeln("<head>\n<title>"+titulo+"</title>\n");
+	ventana.document.writeln("<link rel='stylesheet' href='/EnlaceMig/consultas.css' type='text/css'>");
+	ventana.document.writeln("</head>");
+	ventana.document.writeln("<body bgcolor='white'>");
+	ventana.document.writeln("<form>");
+	ventana.document.writeln("<table border=0 width=365 class='textabdatcla' align=center cellspacing=3 cellpadding=0>");
+	ventana.document.writeln("<tr><th height=25 class='tittabdat' colspan=2>"+ titulo + "</th></tr>");
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("<table border=0 width=365 class='textabdatcla' align=center cellspacing=0 cellpadding=1>");
+	ventana.document.writeln("<tr><td class='tabmovtex1' align=right width=50><img src='/gifs/EnlaceMig/"+imagen+"' border=0></a></td>");
+	ventana.document.writeln("<td class='tabmovtex1' align=center width=300><br>"+mensaje+"<br><br>");
+	ventana.document.writeln("</tr></td>");
+	ventana.document.writeln("<tr><td class='tabmovtex1'>");
+	ventana.document.writeln("</td></tr>");
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("<table border=0 align=center cellspacing=6 cellpadding=0>");
+	if (tipo == 2) // Solo para confirmación : aceptar y cancelar
+	{
+		ventana.document.writeln("<tr><td align=right><a href='javascript:opener.ventanaActiva=0;opener.respuesta=1;window.close();opener.continua();'><img src='/gifs/EnlaceMig/gbo25280.gif' border=0></a></td>");
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=2;opener.continua();window.close();'><img src='/gifs/EnlaceMig/gbo25190.gif' border=0></a></td></tr>");
+	}
+	else if (tipo == 3) // Confirmación para Cancelaci?n de Alta de Empleados. : aceptar y cancelar
+	{
+		ventana.document.writeln("<tr><td align=right><a href='javascript:opener.ventanaActiva=0;opener.respuesta=3;window.close();opener.continua();'><img src='/gifs/EnlaceMig/gbo25280.gif' border=0></a></td>");
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=0;opener.continua();window.close();'><img src='/gifs/EnlaceMig/gbo25190.gif' border=0></a></td></tr>");
+	}
+	else if (tipo == 5) // Solo para Norma 43 : aceptar y cerrar
+	{
+		ventana.document.writeln("<tr><td align=right><a href='javascript:opener.ventanaActiva=0;opener.respuesta=1;window.close();opener.continua();'><img src='/gifs/EnlaceMig/gbo25280.gif' border=0></a></td>");
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=2;opener.continua();window.close();'><img src='/gifs/EnlaceMig/gbo25200.gif' border=0></a></td></tr>");
+	}
+	else if (tipo == 6) // Solo para Norma 43 : cerrar
+	{
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=2;window.close();'><img src='/gifs/EnlaceMig/gbo25200.gif' border=0></a></td></tr>");
+	}else if (tipo == 7) // Solo para confirmación : aceptar y cancelar de sucursal
+	{
+		ventana.document.writeln("<tr><td align=right><a href='javascript:opener.ventanaActiva=0;opener.respuesta=8;window.close();opener.continua();'><img src='/gifs/EnlaceMig/gbo25280.gif' border=0></a></td>");
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=7;opener.continua();window.close();'><img src='/gifs/EnlaceMig/gbo25190.gif' border=0></a></td></tr>");
+	}else if (tipo == 8) // Solo para confirmación : aceptar y cancelar
+	{
+		ventana.document.writeln("<tr><td align=right><a href='javascript:opener.ventanaActiva=0;opener.respuesta=9;window.close();opener.continua();'><img src='/gifs/EnlaceMig/gbo25280.gif' border=0></a></td>");
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=10;window.close();opener.continua();'><img src='/gifs/EnlaceMig/gbo25190.gif' border=0></a></td></tr>");
+	}
+	else if (tipo == 9) // Solo para confirmación : aceptar y cancelar
+	{
+		ventana.document.writeln("<tr><td align=right><a href='javascript:opener.ventanaActiva=0;opener.respuesta=11;window.close();opener.continua();'><img src='/gifs/EnlaceMig/gbo25280.gif' border=0></a></td>");
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=12;opener.continua();window.close();'><img src='/gifs/EnlaceMig/gbo25190.gif' border=0></a></td></tr>");
+	}
+	else if (tipo == 10) {
+		ventana.document.writeln("<tr><td align=right><a href='/Enlace/enlaceMig/LiberaEmpleadosServlet?opcion=1' onclick='javascript:opener.ventanaActiva=0;opener.respuesta=0;window.close();opener.location.href=this.href;return false;'><img src='/gifs/EnlaceMig/gbo25248.gif' border=0></a></td>");
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=0;window.close();'><img src='/gifs/EnlaceMig/gbo25200.gif' border=0></a></td></tr>");
+	}
+	else if (tipo == 11){
+		
+
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=0;window.close();'><img src='/gifs/EnlaceMig/gbo25200.gif' border=0></a></td></tr>");
+
+	}
+	else if (tipo == 12) // Solo para confirmación : aceptar y cancelar en AutorizaTodos Mancomunidad
+	{
+		ventana.document.writeln("<tr><td align=right><a href='javascript:opener.continua();window.close();'><img src='/gifs/EnlaceMig/gbo25280.gif' border=0></a></td>");
+		ventana.document.writeln("<td align=left><a href='javascript:window.close();'><img src='/gifs/EnlaceMig/gbo25190.gif' border=0></a></td></tr>");
+	}
+	else // botón Cerrar
+	{
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=0;window.close();'><img src='/gifs/EnlaceMig/gbo25200.gif' border=0></a></td></tr>");
+	}
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("</form>");
+	ventana.document.writeln("</body>\n</html>");
+	ventana.focus();
+}
+//=================================================================================================
+
+ function cuadroDialogoCLABE( mensaje, tipo )
+{
+	respuesta=0;
+	var titulo="Error";
+	var imagen="gic25020.gif";
+
+	if ( tipo == 1 ) // Alerta
+	{
+		imagen="gic25020.gif"; // signo de admiración
+		titulo="Alerta";
+	}
+	else if ( tipo== 2 ) // Confirmación
+	{
+		imagen ="gic25050.gif"; // signo de interrogación
+		titulo ="Confirmaci&oacute;n";
+	}
+	else if ( tipo== 5) // Confirmación Norma43
+	{
+		imagen ="gic25050.gif"; // signo de interrogación
+		titulo ="Confirmaci&oacute;n";
+	}
+	else if ( tipo== 6) // Confirmación Norma43 Cerrar
+	{
+		imagen ="gic25050.gif"; // signo de interrogación
+		titulo ="Confirmaci&oacute;n";
+	}
+	else if ( tipo== 7) // Confirmación de Sucursal
+	{
+		imagen ="gic25020.gif"; // signo de admiracion
+		titulo ="AVISO";
+	}
+	else if ( tipo== 8) // Confirmación de Sucursal
+	{
+		imagen ="gic25020.gif"; // signo de admiracion
+		titulo ="Obten Data";
+	}
+	else // Error
+	{
+		imagen="gic25060.gif"; // una espantosa X
+		titulo="Error";
+	}
+
+	ventana=window.open('','trainerWindow','width=380,height=150,toolbar=no,scrollbars=no,left=210,top=225');
+	ventana.document.open();
+	ventana.document.write("<html>");
+	ventana.document.writeln("<head>\n<title>"+titulo+"</title>\n");
+	ventana.document.writeln("<link rel='stylesheet' href='/EnlaceMig/consultas.css' type='text/css'>");
+	ventana.document.writeln("</head>");
+	ventana.document.writeln("<body bgcolor='white'>");
+	ventana.document.writeln("<form>");
+	ventana.document.writeln("<table border=0 width=365 class='textabdatcla' align=center cellspacing=3 cellpadding=0>");
+	ventana.document.writeln("<tr><th height=25 class='tittabdat' colspan=2>"+ titulo + "</th></tr>");
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("<table border=0 width=365 class='textabdatcla' align=center cellspacing=0 cellpadding=1>");
+	ventana.document.writeln("<tr><td class='tabmovtex1' align=right width=50><img src='/gifs/EnlaceMig/"+imagen+"' border=0></a></td>");
+	ventana.document.writeln("<td class='tabmovtex1' align=center width=300><br>"+mensaje+"<br><br>");
+	ventana.document.writeln("</tr></td>");
+	ventana.document.writeln("<tr><td class='tabmovtex1'>");
+	ventana.document.writeln("</td></tr>");
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("<table border=0 align=center cellspacing=6 cellpadding=0>");
+	if (tipo == 2) // Solo para confirmación : aceptar y cancelar
+	{
+		ventana.document.writeln("<tr><td align=right><a href='javascript:opener.ventanaActiva=0;opener.respuesta=1;opener.continua();window.close();'><img src='/gifs/EnlaceMig/gbo25280.gif' border=0></a></td>");
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=2;opener.continua();window.close();'><img src='/gifs/EnlaceMig/gbo25190.gif' border=0></a></td></tr>");
+	}
+	else if (tipo == 5) // Solo para Norma 43 : aceptar y cerrar
+	{
+		ventana.document.writeln("<tr><td align=right><a href='javascript:opener.ventanaActiva=0;opener.respuesta=1;window.close();opener.continua();'><img src='/gifs/EnlaceMig/gbo25280.gif' border=0></a></td>");
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=2;opener.continua();window.close();'><img src='/gifs/EnlaceMig/gbo25200.gif' border=0></a></td></tr>");
+	}
+	else if (tipo == 6) // Solo para Norma 43 : cerrar
+	{
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=2;window.close();'><img src='/gifs/EnlaceMig/gbo25200.gif' border=0></a></td></tr>");
+	}else if (tipo == 7) // Solo para confirmación : aceptar y cancelar de sucursal
+	{
+		ventana.document.writeln("<tr><td align=right><a href='javascript:opener.ventanaActiva=0;opener.respuesta=8;window.close();opener.continua();'><img src='/gifs/EnlaceMig/gbo25280.gif' border=0></a></td>");
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=7;opener.continua();window.close();'><img src='/gifs/EnlaceMig/gbo25190.gif' border=0></a></td></tr>");
+	}else if (tipo == 8) // Solo para confirmación : aceptar y cancelar
+	{
+		ventana.document.writeln("<tr><td align=right><a href='javascript:opener.ventanaActiva=0;opener.respuesta=9;window.close();opener.continua();'><img src='/gifs/EnlaceMig/gbo25280.gif' border=0></a></td>");
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=10;window.close();opener.continua();'><img src='/gifs/EnlaceMig/gbo25190.gif' border=0></a></td></tr>");
+	}
+	else if (tipo == 9) // Solo para confirmación : aceptar y cancelar
+	{
+		ventana.document.writeln("<tr><td align=right><a href='javascript:opener.ventanaActiva=0;opener.respuesta=11;window.close();opener.continua();'><img src='/gifs/EnlaceMig/gbo25280.gif' border=0></a></td>");
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=12;opener.continua();window.close();'><img src='/gifs/EnlaceMig/gbo25190.gif' border=0></a></td></tr>");
+	}
+	else // botón Cerrar
+	{
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=0;window.close();'><img src='/gifs/EnlaceMig/gbo25200.gif' border=0></a></td></tr>");
+	}
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("</form>");
+	ventana.document.writeln("</body>\n</html>");
+	ventana.focus();
+}
+//=================================================================================================
+
+
+function cuadroCaptura(mensaje,titulo)
+{
+	campoTexto ="";
+	isEmail = "";
+	isEmail = mensaje.indexOf("correo");
+
+	captura=window.open('','trainerWindow','width=380,height=170,toolbar=no,scrollbars=no,left=210,top=225');
+	captura.document.open();
+	captura.document.write("<html>");
+	captura.document.writeln("<head><title>MSG</title>");
+	captura.document.writeln("<link rel='stylesheet' href='/EnlaceMig/consultas.css' type='text/css'>");
+	captura.document.writeln("<script language='javaScript'>");
+	captura.document.writeln("function ValidaEmail(email)");
+	captura.document.writeln("{");
+	captura.document.writeln("	    if(email.indexOf(\"@\") == 2 || email.indexOf(\"@\") == -1 || email.length < 9 || email.indexOf(\".\") == -1)");
+	captura.document.writeln("	    {");
+	captura.document.writeln("		     return false;");
+	captura.document.writeln("	     }else");
+	captura.document.writeln("	     return true;");
+	captura.document.writeln("}");
+	captura.document.writeln("function ValidaForma(forma,boton)");
+	captura.document.writeln(" {");
+    captura.document.writeln("   if(boton==1)");
+	captura.document.writeln("   {    ");
+	captura.document.writeln("     ");
+	captura.document.writeln("       if(opener.isEmail != -1)");
+	captura.document.writeln("        {");
+	captura.document.writeln("					 if(forma.texto.value != \"\" || forma.texto.value == \"undefined\" )");
+	captura.document.writeln("                  {");
+	captura.document.writeln("			                if(ValidaEmail(forma.texto.value))");
+	captura.document.writeln("                         {");
+    captura.document.writeln("								if(opener.estatus == \"Alta Empleados\"){");
+	captura.document.writeln("									opener.campoTexto=forma.texto.value;");
+	captura.document.writeln("									opener.respuesta=boton;");
+	captura.document.writeln("									forma.operacion.value=\"obtensucursal\";");
+	captura.document.writeln("									forma.action  = \"NomEmpOpciones\";");
+	captura.document.writeln("									forma.submit();");
+	captura.document.writeln("                           }else if(opener.estatus == \"Consulta Empleados\"){");
+	captura.document.writeln("									opener.campoTexto=forma.texto.value;");
+	captura.document.writeln("									opener.respuesta=boton;");
+	captura.document.writeln("									forma.operacion.value=\"enviaEmpDetalle\";");
+	captura.document.writeln("									forma.valor_radio.value=opener.cad;");
+	captura.document.writeln("									forma.action  = \"NomEmpOpciones\";");
+	captura.document.writeln("									forma.submit();");
+	captura.document.writeln("                           }");
+	captura.document.writeln("                        }else{");
+	captura.document.writeln("                                      alert(\"Por Favor entre un correo electronico valido\");");
+	captura.document.writeln("                                }");
+	captura.document.writeln("                  }else{");
+    captura.document.writeln("								if(opener.estatus == \"Alta Empleados\"){");
+	captura.document.writeln("									opener.campoTexto=forma.texto.value;");
+	captura.document.writeln("									opener.respuesta=boton;");
+	captura.document.writeln("									forma.operacion.value=\"obtensucursal\";");
+	captura.document.writeln("									forma.action  = \"NomEmpOpciones\";");
+	captura.document.writeln("									forma.submit();");
+	captura.document.writeln("                           }else if(opener.estatus == \"Consulta Empleados\"){");
+	captura.document.writeln("									opener.campoTexto=forma.texto.value;");
+	captura.document.writeln("									opener.respuesta=boton;");
+	captura.document.writeln("									forma.operacion.value=\"enviaEmpDetalle\";");
+	captura.document.writeln("									forma.valor_radio.value=opener.cad");
+	captura.document.writeln("									forma.action  = \"NomEmpOpciones\";");
+	captura.document.writeln("									forma.submit();");
+	captura.document.writeln("                           }");
+	captura.document.writeln("                  }");
+	captura.document.writeln("         }else{");
+	captura.document.writeln("              opener.campoTexto=forma.texto.value;");
+	captura.document.writeln("	             opener.respuesta=boton;");
+	captura.document.writeln("	             opener.continuaCaptura();");
+	captura.document.writeln("	             window.close();");
+	captura.document.writeln("               ");
+	captura.document.writeln("         }");
+	captura.document.writeln("   }else{opener.respuesta=boton;window.close();}");
+	captura.document.writeln(" }");
+	captura.document.writeln("</script>");
+	captura.document.writeln("</head>");
+	captura.document.writeln("<body bgcolor='white' onSubmit='javascript:ValidaForma(document.captura,1);'>");
+	captura.document.writeln("<form enctype='multipart/form-data' name='captura' method=post>");
+	captura.document.writeln("<table border=0 width=365 class='textabdatcla' align=center cellspacing=3 cellpadding=0>");
+	captura.document.writeln("<tr><th height=25 class='tittabdat' colspan=2>"+ titulo + "</th></tr>");
+	captura.document.writeln("</table>");
+	captura.document.writeln("<table border=0 width=365 class='textabdatcla' align=center cellspacing=0 cellpadding=1>");
+	captura.document.writeln("<tr><td class='tabmovtex1' align=right width=50 rowspan=2><img src='/gifs/EnlaceMig/gic25020.gif' border=0></a></td>");
+	captura.document.writeln("<td class='tabmovtex1' align=center width=300><br>"+mensaje+"<br>");
+	captura.document.writeln("</td></tr>");
+	captura.document.writeln("<tr><td class='tabmovtex1' align=center><input type=hidden name=valor_radio><input type=hidden name=operacion><input type=text name=texto size=30 maxlength=120 class=tabmovtex><br><br></td></tr>");
+	captura.document.writeln("</table>");
+	captura.document.writeln("<table border=0 align=center cellspacing=0 cellpadding=0>");
+	captura.document.writeln("<tr><td align=right><a href='javascript:ValidaForma(document.captura,1);'><img src='/gifs/EnlaceMig/gbo25280.gif' border=0></a></td>");
+	captura.document.writeln("<td align=left><a href='javascript:ValidaForma(document.captura,2);'><img src='/gifs/EnlaceMig/gbo25190.gif' border=0></a></td></tr>");
+	captura.document.writeln("</table>");
+	captura.document.writeln("</form>");
+	captura.document.writeln("</body>\n</html>");
+	captura.focus();
+	captura.document.captura.texto.focus();
+}
+
+
+function cuadroCaptura1(mensaje,titulo)
+{
+
+	campoTexto ="";
+
+	captura=window.open('','trainerWindow','width=380,height=170,toolbar=no,scrollbars=no,left=210,top=225');
+	captura.document.open();
+	captura.document.write("<html>");
+	captura.document.writeln("<head>\n<title>MSG</title>\n");
+	captura.document.writeln("<link rel='stylesheet' href='/EnlaceMig/consultas.css' type='text/css'>");
+	captura.document.writeln("<script language='javaScript'>");
+	captura.document.writeln("function ValidaForma(forma,boton)");
+	captura.document.writeln(" {");
+    captura.document.writeln("   if(boton==1)");
+	captura.document.writeln("       opener.campoTexto=forma.texto.value;");
+	captura.document.writeln("	 opener.respuesta=boton;");
+	captura.document.writeln("	 opener.continuaCaptura(1);");
+	captura.document.writeln("	 window.close();");
+	captura.document.writeln(" }");
+	captura.document.writeln("</script>");
+	captura.document.writeln("</head>");
+	captura.document.writeln("<body bgcolor='white'>");
+	captura.document.writeln("<form enctype='multipart/form-data' name='captura' onSubmit='return ValidaForma(this,1);' method=post>");
+	captura.document.writeln("<table border=0 width=365 class='textabdatcla' align=center cellspacing=3 cellpadding=0>");
+	captura.document.writeln("<tr><th height=25 class='tittabdat' colspan=2>"+ titulo + "</th></tr>");
+	captura.document.writeln("</table>");
+	captura.document.writeln("<table border=0 width=360 class='textabdatcla' align=center cellspacing=0 cellpadding=1>");
+	captura.document.writeln("<tr><td class='tabmovtex1' align=right width=50 rowspan=2><img src='/gifs/EnlaceMig/gic25020.gif' border=0></a></td>");
+	captura.document.writeln("<td class='tabmovtex1' align=center width=300><br>"+mensaje+"<br>");
+	captura.document.writeln("</tr></td>");
+	captura.document.writeln("<tr><td class='tabmovtex1' align=center><input type=text name=texto size=30 maxlength=25 class=tabmovtex><br><br></td></tr>");
+	captura.document.writeln("</table>");
+	captura.document.writeln("<table border=0 align=center cellspacing=0 cellpadding=0>");
+	captura.document.writeln("<tr><td align=right><a href='javascript:ValidaForma(document.captura,1);'><img src='/gifs/EnlaceMig/gbo25280.gif' border=0></a></td>");
+	captura.document.writeln("<td align=left><a href='javascript:ValidaForma(document.captura,2);'><img src='/gifs/EnlaceMig/gbo25190.gif' border=0></a></td></tr>");
+	captura.document.writeln("</table>");
+	captura.document.writeln("</form>");
+	captura.document.writeln("</body>\n</html>");
+	captura.focus();
+	captura.document.captura.texto.focus();
+}
+
+function cuadroCapturaRespaldo(mensaje,titulo)
+{
+
+	campoTexto ="";
+
+	captura=window.open('','trainerWindow','width=380,height=170,toolbar=no,scrollbars=no,left=210,top=225');
+	captura.document.open();
+	captura.document.write("<html>");
+	captura.document.writeln("<head>\n<title>MSG</title>\n");
+	captura.document.writeln("<link rel='stylesheet' href='/EnlaceMig/consultas.css' type='text/css'>");
+	captura.document.writeln("<script language='javaScript'>");
+	captura.document.writeln("function ValidaForma(forma,boton)");
+	captura.document.writeln(" {");
+    captura.document.writeln("   if(boton==1)");
+	captura.document.writeln("     {");
+	captura.document.writeln("       if(forma.texto.value=='' && forma.texto.value.length<1) ");
+	captura.document.writeln("          forma.texto.focus();");
+	captura.document.writeln("       else");
+	captura.document.writeln("        {");
+	captura.document.writeln("          opener.campoTexto=forma.texto.value;");
+	captura.document.writeln("	        opener.respuesta=boton;");
+	captura.document.writeln("	        opener.continuaCaptura();");
+	captura.document.writeln("	        window.close();");
+	captura.document.writeln("        }");
+	captura.document.writeln("    }");
+	captura.document.writeln("  else");
+	captura.document.writeln("   {");
+	captura.document.writeln("	   opener.respuesta=boton;");
+	captura.document.writeln("	   opener.continuaCaptura();");
+	captura.document.writeln("	   window.close();");
+	captura.document.writeln("   }");
+	captura.document.writeln("}");
+	captura.document.writeln("</script>");
+	captura.document.writeln("</head>");
+	captura.document.writeln("<body bgcolor='white'>");
+	captura.document.writeln("<form enctype='multipart/form-data' name='captura' onSubmit='return ValidaForma(this,1);' method=post>");
+	captura.document.writeln("<table border=0 width=365 class='textabdatcla' align=center cellspacing=3 cellpadding=0>");
+	captura.document.writeln("<tr><th height=25 class='tittabdat' colspan=2>"+ titulo + "</th></tr>");
+	captura.document.writeln("</table>");
+	captura.document.writeln("<table border=0 width=360 class='textabdatcla' align=center cellspacing=0 cellpadding=1>");
+	captura.document.writeln("<tr><td class='tabmovtex1' align=right width=50 rowspan=2><img src='/gifs/EnlaceMig/gic25020.gif' border=0></a></td>");
+	captura.document.writeln("<td class='tabmovtex1' align=center width=300><br>"+mensaje+"<br>");
+	captura.document.writeln("</tr></td>");
+	captura.document.writeln("<tr><td class='tabmovtex1' align=center><input type=text name=texto size=30 class=tabmovtex><br><br></td></tr>");
+	captura.document.writeln("</table>");
+	captura.document.writeln("<table border=0 align=center cellspacing=0 cellpadding=0>");
+	captura.document.writeln("<tr><td align=right><a href='javascript:ValidaForma(document.captura,1);'><img src='/gifs/EnlaceMig/gbo25280.gif' border=0></a></td>");
+	captura.document.writeln("<td align=left><a href='javascript:ValidaForma(document.captura,2);'><img src='/gifs/EnlaceMig/gbo25190.gif' border=0></a></td></tr>");
+	captura.document.writeln("</table>");
+	captura.document.writeln("</form>");
+	captura.document.writeln("</body>\n</html>");
+	captura.focus();
+}
+
+
+function cuadroDeCaptura(mensaje,titulo)
+{
+
+	campoTexto ="";
+
+
+   captura=window.open('','trainerWindow','width=380,height=170,toolbar=no,scrollbars=no,left=210,top=225');
+	captura.document.open();
+	captura.document.write("<html>");
+	captura.document.writeln("<head>\n<title>MSG</title>\n");
+	captura.document.writeln("<link rel='stylesheet' href='/EnlaceMig/consultas.css' type='text/css'>");
+	captura.document.writeln("<script language='javaScript'>");
+	captura.document.writeln("function ValidaForma(forma,boton)");
+	captura.document.writeln(" {");
+    captura.document.writeln("   if(boton==1)");
+	captura.document.writeln("       opener.campoTexto=forma.texto.value;");
+	captura.document.writeln("	 opener.respuesta=boton;");
+    captura.document.writeln("	 opener.ChesPrincipal.archivo_actual.value = forma.texto.value;");
+	captura.document.writeln("	 opener.ChesPrincipal.archivo_actual.focus();");
+	captura.document.writeln("	 window.close();");
+	captura.document.writeln(" }");
+	captura.document.writeln("</script>");
+	captura.document.writeln("</head>");
+	captura.document.writeln("<body bgcolor='white'>");
+    captura.document.writeln("<% session.setAttribute('Enviado','no');%>");
+	captura.document.writeln("<% out.println('hi mundo');%>");
+	captura.document.writeln("<form enctype='multipart/form-data' name='captura' onSubmit='return ValidaForma(this,1);' method=post>");
+	captura.document.writeln("<table border=0 width=365 class='textabdatcla' align=center cellspacing=3 cellpadding=0>");
+	captura.document.writeln("<tr><th height=25 class='tittabdat' colspan=2>"+ titulo + "</th></tr>");
+	captura.document.writeln("</table>");
+	captura.document.writeln("<table border=0 width=360 class='textabdatcla' align=center cellspacing=0 cellpadding=1>");
+	captura.document.writeln("<tr>");
+	captura.document.writeln("<td class='tabmovtex1' align=center width=300><br>"+mensaje+"<br>");
+	captura.document.writeln("</td></tr>");
+	captura.document.writeln("<tr><td class='tabmovtex1' align=center><input type=text name=texto size=30 class=tabmovtex><br><br></td></tr>");
+	captura.document.writeln("</table>");
+	captura.document.writeln("<table border=0 align=center cellspacing=0 cellpadding=0>");
+	captura.document.writeln("<tr><td align=right><a href='javascript:ValidaForma(document.captura,1);'><img src='/gifs/EnlaceMig/gbo25280.gif' border=0></a></td>");
+	captura.document.writeln("</tr>");
+	captura.document.writeln("</table>");
+	captura.document.writeln("</form>");
+	captura.document.writeln("</body>\n</html>");
+	captura.focus();
+	captura.document.captura.texto.focus();
+}
+
+
+
+function cuadroDialogoLupa( mensaje, tipo )
+{
+	respuesta=0;
+	var titulo="Error";
+	var imagen="gic25020.gif";
+
+	if ( tipo == 1 ) // Alerta
+	{
+		imagen="gic25020.gif"; // signo de admiración
+		titulo="Alerta";
+	}
+	else if ( tipo== 2) // Confirmación
+	{
+		imagen ="gic25050.gif"; // signo de interrogación
+		titulo ="Confirmaci&oacute;n";
+	}
+	else // Error
+	{
+		imagen="gic25060.gif"; // una espantosa X
+		titulo="Error";
+	}
+
+	ventana=window.open('','trainerWindow','width=380,height=180,toolbar=no,scrollbars=no,left=210,top=225');
+	ventana.document.open();
+	ventana.document.write("<html>");
+	ventana.document.writeln("<head>\n<title>"+titulo+"</title>\n");
+	ventana.document.writeln("<link rel='stylesheet' href='/EnlaceMig/consultas.css' type='text/css'>");
+	ventana.document.writeln("</head>");
+	ventana.document.writeln("<body bgcolor='white'>");
+	ventana.document.writeln("<form>");
+	ventana.document.writeln("<table border=0 width=365 class='textabdatcla' align=center cellspacing=3 cellpadding=0>");
+	ventana.document.writeln("<tr><th height=25 class='tittabdat' colspan=2>"+ titulo + "</th></tr>");
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("<table border=0 width=360 class='textabdatcla' align=center cellspacing=0 cellpadding=1>");
+	ventana.document.writeln("<tr><td class='tabmovtex1' align=right width=50><img src='/gifs/EnlaceMig/"+imagen+"' border=0></a></td>");
+	ventana.document.writeln("<td class='tabmovtex1' align=center width=300><br>"+mensaje+"<br><br>");
+	ventana.document.writeln("</tr></td>");
+	ventana.document.writeln("<tr><td class='tabmovtex1'>");
+	ventana.document.writeln("</td></tr>");
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("<table border=0 align=center cellspacing=6 cellpadding=0>");
+	if (tipo == 2) // Solo para confirmación : aceptar y cancelar
+	{
+		ventana.document.writeln("<tr><td align=right><a href='javascript:opener.ventanaActiva=0;opener.respuesta=1;window.close();opener.continua();'><img src='/gifs/EnlaceMig/gbo25280.gif' border=0></a></td>");
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=2;opener.continua();window.close();'><img src='/gifs/EnlaceMig/gbo25190.gif' border=0></a></td></tr>");
+	}
+	else // botón Cerrar
+	{
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=0;window.close();'><img src='/gifs/EnlaceMig/gbo25200.gif' border=0></a></td></tr>");
+	}
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("</form>");
+	ventana.document.writeln("</body>\n</html>");
+	ventana.focus();
+}
+
+
+
+
+function cuadroDialogoEspecial( mensaje, tipo )
+{
+	respuesta=0;
+	var titulo="Error";
+	var imagen="gic25020.gif";
+
+	if ( tipo == 1 ) // Alerta
+	{
+		imagen="gic25020.gif"; // signo de admiración
+		titulo="Alerta";
+	}
+	else if ( tipo== 2) // Confirmación
+	{
+		imagen ="gic25050.gif"; // signo de interrogación
+		titulo ="Confirmaci&oacute;n";
+	}
+	else // Error
+	{
+		imagen="gic25060.gif"; // una espantosa X
+		titulo="Error";
+	}
+
+	ventana=window.open('','trainerWindow','width=380,height=190,toolbar=no,scrollbars=no,left=210,top=225');
+	ventana.document.open();
+	ventana.document.write("<html>");
+	ventana.document.writeln("<head>\n<title>"+titulo+"</title>\n");
+	ventana.document.writeln("<link rel='stylesheet' href='/EnlaceMig/consultas.css' type='text/css'>");
+	ventana.document.writeln("</head>");
+	ventana.document.writeln("<body bgcolor='white'>");
+	ventana.document.writeln("<form>");
+	ventana.document.writeln("<table border=0 width=365 class='textabdatcla' align=center cellspacing=3 cellpadding=0>");
+	ventana.document.writeln("<tr><th height=25 class='tittabdat' colspan=2>"+ titulo + "</th></tr>");
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("<table border=0 width=360 class='textabdatcla' align=center cellspacing=0 cellpadding=1>");
+	ventana.document.writeln("<tr><td class='tabmovtex1' align=right width=50><img src='/gifs/EnlaceMig/"+imagen+"' border=0></a></td>");
+	ventana.document.writeln("<td class='tabmovtex1' align=center width=300><br>"+mensaje+"<br><br>");
+	ventana.document.writeln("</tr></td>");
+	ventana.document.writeln("<tr><td class='tabmovtex1'>");
+	ventana.document.writeln("</td></tr>");
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("<table border=0 align=center cellspacing=6 cellpadding=0>");
+	if (tipo == 2) // Solo para confirmación : aceptar y cancelar
+	{
+		ventana.document.writeln("<tr><td align=right><a href='javascript:opener.ventanaActiva=0;opener.respuesta=1;window.close();opener.continua();'><img src='/gifs/EnlaceMig/gbo25280.gif' border=0></a></td>");
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=2;opener.continua();window.close();'><img src='/gifs/EnlaceMig/gbo25190.gif' border=0></a></td></tr>");
+	}
+	else // botón Cerrar
+	{
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=0;window.close();'><img src='/gifs/EnlaceMig/gbo25200.gif' border=0></a></td></tr>");
+	}
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("</form>");
+	ventana.document.writeln("</body>\n</html>");
+	ventana.focus();
+        ventana.document.close();
+}
+
+function cuadroDialogoEspecial2( mensaje, tipo )
+{
+	respuesta=0;
+	var titulo="Error";
+	var imagen="gic25020.gif";
+
+	if ( tipo == 1 ) // Alerta
+	{
+		imagen="gic25020.gif"; // signo de admiración
+		titulo="Alerta";
+	}
+	else if ( tipo== 2) // Confirmación
+	{
+		imagen ="gic25050.gif"; // signo de interrogación
+		titulo ="Confirmaci&oacute;n";
+	}
+	else // Error
+	{
+		imagen="gic25060.gif"; // una espantosa X
+		titulo="Error";
+	}
+
+	ventana=window.open('','trainerWindow','width=480,height=320,toolbar=no,scrollbars=no,left=210,top=225');
+	ventana.document.open();
+	ventana.document.write("<html>");
+	ventana.document.writeln("<head>\n<title>"+titulo+"</title>\n");
+	ventana.document.writeln("<link rel='stylesheet' href='/EnlaceMig/consultas.css' type='text/css'>");
+	ventana.document.writeln("</head>");
+	ventana.document.writeln("<body bgcolor='white'>");
+	ventana.document.writeln("<form>");
+	ventana.document.writeln("<table border=0 width=90% class='textabdatcla' align=center cellspacing=3 cellpadding=0>");
+	ventana.document.writeln("<tr><th height=25 class='tittabdat' colspan=2>"+ titulo + "</th></tr>");
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("<table border=0 width=90% class='textabdatcla' align=center cellspacing=0 cellpadding=1>");
+	ventana.document.writeln("<tr><td class='tabmovtex1' align=right width=50><img src='/gifs/EnlaceMig/"+imagen+"' border=0></a></td>");
+	ventana.document.writeln("<td class='tabmovtex1' style='font-size:15px; text-align:justify' width=90%><br>"+mensaje+"<br><br>");
+	ventana.document.writeln("</tr></td>");
+	ventana.document.writeln("<tr><td class='tabmovtex1'>");
+	ventana.document.writeln("</td></tr>");
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("<table border=0 align=center cellspacing=6 cellpadding=0>");
+	if (tipo == 2) // Solo para confirmación : aceptar y cancelar
+	{
+		ventana.document.writeln("<tr><td align=right><a href='javascript:opener.ventanaActiva=0;opener.respuesta=1;window.close();opener.continua();'><img src='/gifs/EnlaceMig/gbo25280.gif' border=0></a></td>");
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=2;opener.continua();window.close();'><img src='/gifs/EnlaceMig/gbo25190.gif' border=0></a></td></tr>");
+	}
+	else // botón Cerrar
+	{
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=0;window.close();'><img src='/gifs/EnlaceMig/gbo25200.gif' border=0></a></td></tr>");
+	}
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("</form>");
+	ventana.document.writeln("</body>\n</html>");
+	ventana.focus();
+}
+
+function logout() {
+	/* VSWF - 08-Dic-2008 Cambia el contexto de NASApp a Enlace
+	ventana=window.open('/NASApp/enlaceMig/logout?cerrar=S','trainerWindow','width=580,height=350,toolbar=no,scrollbars=no,left=210,top=225');
+	*/
+	ventana=window.open('/Enlace/enlaceMig/logout?cerrar=S','trainerWindow','width=580,height=350,toolbar=no,scrollbars=no,left=210,top=225');
+	//window.document.location='/NASApp/enlaceMig/logout?cerrar=S';
+}
+
+function cuadroCerrar( mensaje, tipo )
+{
+	respuesta=0;
+	var titulo="Error";
+	var imagen="gic25020.gif";
+
+	if ( tipo == 1 ) // Alerta
+	{
+		imagen="gic25020.gif"; // signo de admiración
+		titulo="Alerta";
+	}
+	ventana=window.open('','trainerWindow','width=380,height=150,toolbar=no,scrollbars=no,left=210,top=225');
+	ventana.document.open();
+	ventana.document.writeln("<html>");
+	ventana.document.writeln("<head>");
+	ventana.document.writeln("    <title>"+titulo+"</title>");
+	ventana.document.writeln("    <link rel='stylesheet' href='/EnlaceMig/consultas.css' type='text/css'></link>");
+	ventana.document.writeln("</head>");
+	ventana.document.writeln("<body bgcolor='white'>");
+	ventana.document.writeln("<form>");
+	ventana.document.writeln("    <table border=0 width=365 class='textabdatcla' align=center cellspacing=3 cellpadding=0>");
+	ventana.document.writeln("        <tr><th height=25 class='tittabdat' colspan=2>"+ titulo + "</th></tr>");
+	ventana.document.writeln("    </table>");
+	ventana.document.writeln("    <table border=0 width=365 class='textabdatcla' align=center cellspacing=0 cellpadding=1>");
+	ventana.document.writeln("        <tr><td class='tabmovtex1' align=right width=50><img src='/gifs/EnlaceMig/"+imagen+"' border=0></td>");
+	ventana.document.writeln("            <td class='tabmovtex1' align=center width=300><br>"+mensaje+"<br><br></td>");
+	ventana.document.writeln("        </tr>");
+	ventana.document.writeln("        <tr><td class='tabmovtex1'></td></tr>");
+	ventana.document.writeln("    </table>");
+	ventana.document.writeln("    <table border=0 align=center cellspacing=6 cellpadding=0>");
+	ventana.document.writeln("        <tr><td align=left><a href='javascript:window.close();'><img src='/gifs/EnlaceMig/gbo25200.gif' border=0></a></td></tr>");
+	ventana.document.writeln("    </table>");
+	ventana.document.writeln("</form>");
+	ventana.document.writeln("</body>");
+	ventana.document.writeln("</html>");
+	ventana.focus();
+	return ventana;
+}
+
+
+
+//-------------------------FUNCIONES DE CUADROS DE DIALOGO PARA SAM
+
+function cuadroDialogoSAM( mensaje, tipo )
+{
+	respuesta=0;
+	var titulo="Error";
+	var imagen="gic25020.gif";
+
+	if ( tipo == 1 ) // Alerta
+	{
+		imagen="gic25020.gif"; // signo de admiración
+		titulo="Alerta";
+	}
+	else if ( tipo== 2 ) // Confirmación
+	{
+		imagen ="gic25050.gif"; // signo de interrogación
+		titulo ="Confirmaci&oacute;n";
+	}
+	else if ( tipo== 5) // Confirmación Norma43
+	{
+		imagen ="gic25050.gif"; // signo de interrogación
+		titulo ="Confirmaci&oacute;n";
+	}
+	else if ( tipo== 6) // Confirmación Norma43 Cerrar
+	{
+		imagen ="gic25050.gif"; // signo de interrogación
+		titulo ="Confirmaci&oacute;n";
+	}
+	else if ( tipo== 7) // Confirmación de Sucursal
+	{
+		imagen ="gic25020.gif"; // signo de admiracion
+		titulo ="AVISO";
+	}
+	else if ( tipo== 8) // Confirmación de Sucursal
+	{
+		imagen ="gic25020.gif"; // signo de admiracion
+		titulo ="Obten Data";
+	}
+	else // Error
+	{
+		imagen="gic25060.gif"; // una espantosa X
+		titulo="Error";
+	}
+
+	ventana=window.open('','trainerWindow','width=380,height=150,toolbar=no,scrollbars=no,left=210,top=225');
+	ventana.document.open();
+	ventana.document.write("<html>");
+	ventana.document.writeln("<head>\n<title>"+titulo+"</title>\n");
+	ventana.document.writeln("<link rel='stylesheet' href='/EnlaceMig/consultas.css' type='text/css'>");
+	ventana.document.writeln("</head>");
+	ventana.document.writeln("<body bgcolor='white'>");
+	ventana.document.writeln("<form>");
+	ventana.document.writeln("<table border=0 width=365 class='textabdatcla' align=center cellspacing=3 cellpadding=0>");
+	ventana.document.writeln("<tr><th height=25 class='tittabdat' colspan=2>"+ titulo + "</th></tr>");
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("<table border=0 width=365 class='textabdatcla' align=center cellspacing=0 cellpadding=1>");
+	ventana.document.writeln("<tr><td class='tabmovtex1' align=right width=50><img src='/gifs/EnlaceMig/"+imagen+"' border=0></a></td>");
+	ventana.document.writeln("<td class='tabmovtex1' align=center width=300><br>"+mensaje+"<br><br>");
+	ventana.document.writeln("</tr></td>");
+	ventana.document.writeln("<tr><td class='tabmovtex1'>");
+	ventana.document.writeln("</td></tr>");
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("<table border=0 align=center cellspacing=6 cellpadding=0>");
+	if (tipo == 2) // Solo para confirmación : aceptar y cancelar
+	{
+		ventana.document.writeln("<tr><td align=right><img src='/gifs/EnlaceMig/gbo25280.gif' border=0 onclick='window.close();' style='cursor:pointer'></td>");
+		ventana.document.writeln("<td align=left><img src='/gifs/EnlaceMig/gbo25190.gif' border=0 onclick='window.close();' style='cursor:pointer'></td></tr>");
+	}
+	else if (tipo == 5) // Solo para Norma 43 : aceptar y cerrar
+	{
+		ventana.document.writeln("<tr><td align=right><img src='/gifs/EnlaceMig/gbo25280.gif' border=0 onclick='window.close();' style='cursor:pointer'></td>");
+		ventana.document.writeln("<td align=left><img src='/gifs/EnlaceMig/gbo25200.gif' border=0 onclick='window.close();' style='cursor:pointer'></td></tr>");
+	}
+	else if (tipo == 6) // Solo para Norma 43 : cerrar
+	{
+		ventana.document.writeln("<td align=left><img src='/gifs/EnlaceMig/gbo25200.gif' border=0 onclick='window.close();' style='cursor:pointer'></td></tr>");
+	}else if (tipo == 7) // Solo para confirmación : aceptar y cancelar de sucursal
+	{
+		ventana.document.writeln("<tr><td align=right><img src='/gifs/EnlaceMig/gbo25280.gif' border=0 onclick='window.close();' style='cursor:pointer'></td>");
+		ventana.document.writeln("<td align=left><img src='/gifs/EnlaceMig/gbo25190.gif' border=0 onclick='window.close();' style='cursor:pointer'></td></tr>");
+	}else if (tipo == 8) // Solo para confirmación : aceptar y cancelar
+	{
+		ventana.document.writeln("<tr><td align=right><img src='/gifs/EnlaceMig/gbo25280.gif' border=0 onclick='window.close();' style='cursor:pointer'></td>");
+		ventana.document.writeln("<td align=left><img src='/gifs/EnlaceMig/gbo25190.gif' border=0 onclick='window.close();' style='cursor:pointer'></td></tr>");
+	}
+	else if (tipo == 9) // Solo para confirmación : aceptar y cancelar
+	{
+		ventana.document.writeln("<tr><td align=right><img src='/gifs/EnlaceMig/gbo25280.gif' border=0 onclick='window.close();' style='cursor:pointer'></td>");
+		ventana.document.writeln("<td align=left><img src='/gifs/EnlaceMig/gbo25190.gif' border=0 onclick='window.close();' style='cursor:pointer'></td></tr>");
+	}
+	else // botón Cerrar
+	{
+		ventana.document.writeln("<td align=left><img src='/gifs/EnlaceMig/gbo25200.gif' border=0 onclick='window.close();' style='cursor:pointer'></td></tr>");
+	}
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("</form>");
+	ventana.document.writeln("</body>\n</html>");
+	ventana.focus();
+}
+
+
+
+
+function cuadroDialogoEspecialSAM( mensaje, tipo )
+{
+	respuesta=0;
+	var titulo="Error";
+	var imagen="gic25020.gif";
+
+	if ( tipo == 1 ) // Alerta
+	{
+		imagen="gic25020.gif"; // signo de admiración
+		titulo="Alerta";
+	}
+	else if ( tipo== 2) // Confirmación
+	{
+		imagen ="gic25050.gif"; // signo de interrogación
+		titulo ="Confirmaci&oacute;n";
+	}
+	else // Error
+	{
+		imagen="gic25060.gif"; // una espantosa X
+		titulo="Error";
+	}
+
+	ventana=window.open('','trainerWindow','width=380,height=190,toolbar=no,scrollbars=no,left=210,top=225');
+	ventana.document.open();
+	ventana.document.write("<html>");
+	ventana.document.writeln("<head>\n<title>"+titulo+"</title>\n");
+	ventana.document.writeln("<link rel='stylesheet' href='/EnlaceMig/consultas.css' type='text/css'>");
+	ventana.document.writeln("</head>");
+	ventana.document.writeln("<body bgcolor='white'>");
+	ventana.document.writeln("<form>");
+	ventana.document.writeln("<table border=0 width=365 class='textabdatcla' align=center cellspacing=3 cellpadding=0>");
+	ventana.document.writeln("<tr><th height=25 class='tittabdat' colspan=2>"+ titulo + "</th></tr>");
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("<table border=0 width=360 class='textabdatcla' align=center cellspacing=0 cellpadding=1>");
+	ventana.document.writeln("<tr><td class='tabmovtex1' align=right width=50><img src='/gifs/EnlaceMig/"+imagen+"' border=0></a></td>");
+	ventana.document.writeln("<td class='tabmovtex1' align=center width=300><br>"+mensaje+"<br><br>");
+	ventana.document.writeln("</tr></td>");
+	ventana.document.writeln("<tr><td class='tabmovtex1'>");
+	ventana.document.writeln("</td></tr>");
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("<table border=0 align=center cellspacing=6 cellpadding=0>");
+	if (tipo == 2) // Solo para confirmación : aceptar y cancelar
+	{
+		ventana.document.writeln("<tr><td align=right><img src='/gifs/EnlaceMig/gbo25280.gif' border=0 onclick='window.close();' style='cursor:pointer'></td>");
+		ventana.document.writeln("<td align=left><img src='/gifs/EnlaceMig/gbo25190.gif' border=0 onclick='window.close();' style='cursor:pointer'></td></tr>");
+	}
+	else // botón Cerrar
+	{
+		ventana.document.writeln("<td align=left><img src='/gifs/EnlaceMig/gbo25200.gif' border=0 onclick='window.close();' style='cursor:pointer'></td></tr>");
+	}
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("</form>");
+	ventana.document.writeln("</body>\n</html>");
+	ventana.focus();
+}
+
+function cuadroDialogoEspecial2SAM( mensaje, tipo )
+{
+	respuesta=0;
+	var titulo="Error";
+	var imagen="gic25020.gif";
+
+	if ( tipo == 1 ) // Alerta
+	{
+		imagen="gic25020.gif"; // signo de admiración
+		titulo="Alerta";
+	}
+	else if ( tipo== 2) // Confirmación
+	{
+		imagen ="gic25050.gif"; // signo de interrogación
+		titulo ="Confirmaci&oacute;n";
+	}
+	else // Error
+	{
+		imagen="gic25060.gif"; // una espantosa X
+		titulo="Error";
+	}
+
+	ventana=window.open('','trainerWindow','width=480,height=320,toolbar=no,scrollbars=no,left=210,top=225');
+	ventana.document.open();
+	ventana.document.write("<html>");
+	ventana.document.writeln("<head>\n<title>"+titulo+"</title>\n");
+	ventana.document.writeln("<link rel='stylesheet' href='/EnlaceMig/consultas.css' type='text/css'>");
+	ventana.document.writeln("</head>");
+	ventana.document.writeln("<body bgcolor='white'>");
+	ventana.document.writeln("<form>");
+	ventana.document.writeln("<table border=0 width=90% class='textabdatcla' align=center cellspacing=3 cellpadding=0>");
+	ventana.document.writeln("<tr><th height=25 class='tittabdat' colspan=2>"+ titulo + "</th></tr>");
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("<table border=0 width=90% class='textabdatcla' align=center cellspacing=0 cellpadding=1>");
+	ventana.document.writeln("<tr><td class='tabmovtex1' align=right width=50><img src='/gifs/EnlaceMig/"+imagen+"' border=0></a></td>");
+	ventana.document.writeln("<td class='tabmovtex1' style='font-size:15px; text-align:justify' width=90%><br>"+mensaje+"<br><br>");
+	ventana.document.writeln("</tr></td>");
+	ventana.document.writeln("<tr><td class='tabmovtex1'>");
+	ventana.document.writeln("</td></tr>");
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("<table border=0 align=center cellspacing=6 cellpadding=0>");
+	if (tipo == 2) // Solo para confirmación : aceptar y cancelar
+	{
+		ventana.document.writeln("<tr><td align=right><img src='/gifs/EnlaceMig/gbo25280.gif' border=0 onclick='window.close();' style='cursor:pointer'></td>");
+		ventana.document.writeln("<td align=left><img src='/gifs/EnlaceMig/gbo25190.gif' border=0 onclick='window.close();' style='cursor:pointer'></td></tr>");
+	}
+	else // botón Cerrar
+	{
+		ventana.document.writeln("<td align=left><img src='/gifs/EnlaceMig/gbo25200.gif' border=0 onclick='window.close();' style='cursor:pointer'></td></tr>");
+	}
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("</form>");
+	ventana.document.writeln("</body>\n</html>");
+	ventana.focus();
+}
+
+
+//*-----------------------------------------FUNCI?N DE CUADROS DE DIALOGO PARA CAT?LOGO DE N?MINA ------------------------------ everis----------------------------inicio-----
+
+function cuadroDialogoCatNomina( mensaje, tipo )
+{
+	respuesta=0;
+	var titulo="Error";
+	var imagen="gic25060.gif";
+
+	if ( tipo == 1 ) // Alerta
+	{
+		imagen="gic25060.gif"; // una espantosa X
+		titulo="Error";
+	}
+	else // Error
+	{
+		imagen="gic25060.gif"; // una espantosa X
+		titulo="Error";
+	}
+
+	ventana=window.open('','trainerWindow','width=420,height=150,toolbar=no,scrollbars=yes,left=210,top=225');
+	ventana.document.open();
+	ventana.document.write("<html>");
+	ventana.document.writeln("<head>\n<title>"+titulo+"</title>\n");
+	ventana.document.writeln("<link rel='stylesheet' href='/EnlaceMig/consultas.css' type='text/css'>");
+	ventana.document.writeln("</head>");
+	ventana.document.writeln("<body bgcolor='white'>");
+	ventana.document.writeln("<form>");
+	ventana.document.writeln("<table border=0 width=365 class='textabdatcla' align=center cellspacing=3 cellpadding=0>");
+	ventana.document.writeln("<tr><th height=25 class='tittabdat' colspan=2>"+ titulo + "</th></tr>");
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("<table border=0 width=365 class='textabdatcla' align=center cellspacing=0 cellpadding=1>");
+	ventana.document.writeln("<tr><td class='tabmovtex1' align=right width=50><img src='/gifs/EnlaceMig/"+imagen+"' border=0></a></td>");
+	ventana.document.writeln("<td class='tabmovtex1' align=center width=300><br>"+mensaje+"<br><br>");
+	ventana.document.writeln("</tr></td>");
+	ventana.document.writeln("<tr><td class='tabmovtex1'>");
+	ventana.document.writeln("</td></tr>");
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("<table border=0 align=center cellspacing=6 cellpadding=0>");
+	if (tipo == 1) // bot?n Cerrar
+	{
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=0;window.close();'><img src='/gifs/EnlaceMig/gbo25200.gif' border=0></a></td></tr>");
+	}
+
+	else // bot?n Cerrar
+	{
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=0;window.close();'><img src='/gifs/EnlaceMig/gbo25200.gif' border=0></a></td></tr>");
+	}
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("</form>");
+	ventana.document.writeln("</body>\n</html>");
+	ventana.focus();
+}
+
+//*-----------------------------------------FUNCI?N DE CUADROS DE DIALOGO PARA CAT?LOGO DE N?MINA ------------------------------ everis----------------------------fin-----
+
+
+
+//*-----------------------------------------FUNCI?N DE CUADROS DE DIALOGO PARA ENV?O DE MENSAJES------------------------------ everis----------------------------inicio-----
+
+function cuadroDialogoMensaje( mensaje, tipo )
+{
+	respuesta=0;
+	var titulo="Error";
+	var imagen="gic25020.gif";
+
+	if ( tipo == 1 ) // Alerta
+	{
+		titulo="Mensajes";
+	}
+	else // Error
+	{
+		titulo="Mensajes";
+	}
+
+	ventana=window.open('','trainerWindow2','width=460,height=200,toolbar=no,scrollbars=yes,left=210,top=225');
+	ventana.document.open();
+	ventana.document.write("<html>");
+	ventana.document.writeln("<head>\n<title>"+titulo+"</title>\n");
+	ventana.document.writeln("<link rel='stylesheet' href='/EnlaceMig/consultas.css' type='text/css'>");
+	ventana.document.writeln("</head>");
+	ventana.document.writeln("<body bgcolor='white'>");
+	ventana.document.writeln("<form>");
+	ventana.document.writeln("<table border=0 width=420 class='textabdatcla' align=center cellspacing=0 cellpadding=0>");
+	ventana.document.writeln("<tr><th height=25 class='tittabdat' colspan=0>"+ titulo + "</th></tr>");
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("<table border=0 width=420 class='textabdatcla' align=center cellspacing=0 cellpadding=0>");
+	ventana.document.writeln(mensaje);
+	ventana.document.writeln("<tr><td class='textabdatobs'>");
+	ventana.document.writeln("</td></tr>");
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("<table border=0 align=center cellspacing=6 cellpadding=0>");
+	if (tipo == 1) // bot?n Cerrar
+	{
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=0;window.close();'><img src='/gifs/EnlaceMig/gbo25200.gif' border=0></a></td></tr>");
+	}
+
+	else // bot?n Cerrar
+	{
+		ventana.document.writeln("<td align=left><a href='javascript:opener.ventanaActiva=0;opener.respuesta=0;window.close();'><img src='/gifs/EnlaceMig/gbo25200.gif' border=0></a></td></tr>");
+	}
+	ventana.document.writeln("</table>");
+	ventana.document.writeln("</form>");
+	ventana.document.writeln("</body>\n</html>");
+	ventana.focus();
+}
+
+//*-----------------------------------------FUNCI?N DE CUADROS DE DIALOGO PARA ENV?O DE MENSAJES ------------------------------ everis------------27/06/2008----------------fin-----

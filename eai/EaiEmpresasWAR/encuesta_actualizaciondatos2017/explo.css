@@ -1,0 +1,861 @@
+body{
+  margin:0px;
+  padding:0px;
+  overflow-x: hidden;
+  overflow: hidden;
+}
+.FontTituloEmpresa
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 14px;
+    COLOR: #000f77;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.FontTituloEMEDM
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 14px;
+    COLOR: #000f77;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.FontTituloENASI
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 14px;
+    COLOR: #000f77;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.FontTituloInstitucion
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 14px;
+    COLOR: #546d86;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.FontTituloIDESC
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 14px;
+    COLOR: #546d86;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.FontTituloPersona
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 14px;
+    COLOR: #cc0001;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.FontTituloPERSO
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 14px;
+    COLOR: #cc0001;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.Seleccione
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    TEXT-TRANSFORM: capitalize;
+    COLOR: black;
+    FONT-FAMILY: verdana;
+    BACKGROUND-COLOR: #e7e7ef
+}
+.Seleccione1
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: black;
+    FONT-FAMILY: verdana;
+    BACKGROUND-COLOR: #e7e7ef
+}
+.TituloB
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 12px;
+    COLOR: black;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.TituloC
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: black;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.FondoCelda4
+{
+    FONT-SIZE: 10px;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana;
+    BACKGROUND-COLOR: white;
+    TEXT-ALIGN: right;
+    TEXT-DECORATION: none
+}
+.FondoCeldaTitulo
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: #000000;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+    BACKGROUND-COLOR: #dedee6;
+    TEXT-ALIGN: center
+}
+.Seleccione2
+{
+    FONT-SIZE: 10px;
+    COLOR: black;
+    FONT-FAMILY: verdana;
+    BACKGROUND-COLOR: #e7e7ef
+}
+.Seleccion
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: black;
+    FONT-FAMILY: verdana;
+    BACKGROUND-COLOR: #f7f7f7
+}
+.Seleccion2
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: black;
+    FONT-FAMILY: verdana;
+    BACKGROUND-COLOR: #eeeff1
+}
+.Borde
+{
+    HEIGHT: 20px;
+    BACKGROUND-COLOR: #d2d2da
+}
+.tablafondo
+{
+    BACKGROUND-COLOR: #999999;
+    cellspacing: 1;
+    cellpadding: 3
+}
+.tablaprincipal
+{
+    BORDER-RIGHT: 0px;
+    BORDER-TOP: 0px;
+    BORDER-LEFT: 0px;
+    BORDER-BOTTOM: 0px;
+    cell-padding: 4;
+    cell-spacing: 1
+}
+.t1
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: black;
+    FONT-FAMILY: verdana;
+    BACKGROUND-COLOR: #dedee6
+}
+.t2
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 11px;
+    COLOR: black;
+    FONT-FAMILY: verdana;
+    HEIGHT: 20px;
+    BACKGROUND-COLOR: #d2d2da
+}
+.t3
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 12px;
+    COLOR: black;
+    FONT-FAMILY: verdana;
+    BACKGROUND-COLOR: #d2d2da
+}
+.i1
+{
+    FONT-SIZE: 10px;
+    COLOR: #979797;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.i2
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: black;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.i3
+{
+    FONT-SIZE: 10px;
+    COLOR: black;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.c1
+{
+    FONT-SIZE: 10px;
+    COLOR: black;
+    FONT-FAMILY: verdana;
+    BACKGROUND-COLOR: #ffffff
+}
+.c3
+{
+    FONT-SIZE: 10px;
+    COLOR: black;
+    FONT-FAMILY: verdana;
+    BACKGROUND-COLOR: #ffffff
+}
+.c4
+{
+    FONT-SIZE: 10px;
+    COLOR: black;
+    FONT-FAMILY: verdana;
+    HEIGHT: 20px;
+    BACKGROUND-COLOR: #d2d2da
+}
+.c5
+{
+    FONT-SIZE: 10px;
+    COLOR: black;
+    FONT-FAMILY: verdana;
+    HEIGHT: 20px;
+    BACKGROUND-COLOR: #f7f7f7
+}
+.c6
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: black;
+    FONT-FAMILY: verdana;
+    HEIGHT: 20px;
+    BACKGROUND-COLOR: #d2d2da
+}
+.menusuperior
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: #000000;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.menuizquierda
+{
+    FONT-SIZE: 10px;
+    COLOR: #000000;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.submenuizquierda
+{
+    FONT-SIZE: 10px;
+    COLOR: #000000;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraCajaTextoBuscar
+{
+    FONT-WEIGHT: normal;
+    FONT-SIZE: 10px;
+    BORDER-LEFT-COLOR: black;
+    BORDER-BOTTOM-COLOR: black;
+    COLOR: black;
+    BORDER-TOP-COLOR: black;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana;
+    BORDER-RIGHT-COLOR: black
+}
+.LetraRojaTitulo
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 14px;
+    COLOR: #cc0000;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraCelesteBold
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: #679cd8;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraGris1Normal
+{
+    FONT-SIZE: 10px;
+    COLOR: #979797;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraGris1Bold
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: #979797;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraGris2Normal
+{
+    FONT-SIZE: 10px;
+    COLOR: #6a737c;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraGris2Bold
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: #6a737c;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraAzulMenu
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: #010d79;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraGrisBoldDer
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: #979797;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraGrisNormalDer
+{
+    FONT-SIZE: 10px;
+    COLOR: #979797;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraBlancaBold
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: white;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraBlancaBold1
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 11px;
+    COLOR: white;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraAzulMenuNormal
+{
+    FONT-SIZE: 10px;
+    COLOR: #010d79;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraGrisSubMenuBold
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: #a5a9c4;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraGrisSubMenuNormal
+{
+    FONT-SIZE: 10px;
+    COLOR: #a5a9c4;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraAzulOscuraNormal
+{
+    FONT-SIZE: 10px;
+    COLOR: #000f77;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraAzulOscuraBold
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: #000f77;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraAzulOscBold1
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 12px;
+    COLOR: #000f77;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraNegraMenuBold
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: black;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraNegraMenuNormal
+{
+    FONT-SIZE: 10px;
+    COLOR: black;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraNegraMenuBoldMed
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 11px;
+    COLOR: black;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraInstPubBold
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: #545b65;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraInstPubNormal
+{
+    FONT-SIZE: 10px;
+    COLOR: #545b65;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraRecomenNormal
+{
+    FONT-SIZE: 9px;
+    COLOR: #6a737c;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraRecomenBold
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 9px;
+    COLOR: #6a737c;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraMiniSitiosBold
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: #979797;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraMiniSitiosBold:visited
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: #979797;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraMiniSitiosBold:active
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: #979797;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraMiniSitiosBold:hover
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: #f1801a;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana;
+    TEXT-DECORATION: underline
+}
+.LetraMenuCorpNegNaj
+{
+    FONT-SIZE: 10px;
+    COLOR: black;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraMenuCorpNegNaj:visited
+{
+    FONT-SIZE: 10px;
+    COLOR: black;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraMenuCorpNegNaj:active
+{
+    FONT-SIZE: 10px;
+    COLOR: black;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraMenuCorpNegNaj:hover
+{
+    FONT-SIZE: 10px;
+    COLOR: #f1801a;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana;
+    TEXT-DECORATION: underline
+}
+.LetraNegraRojaNor
+{
+    FONT-SIZE: 10px;
+    COLOR: #000000;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraNegraRojaNor:visited
+{
+    FONT-SIZE: 10px;
+    COLOR: #000000;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraNegraRojaNor:active
+{
+    FONT-SIZE: 10px;
+    COLOR: #000000;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraNegraRojaNor:hover
+{
+    FONT-SIZE: 10px;
+    COLOR: #cc0001;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana;
+    TEXT-DECORATION: underline
+}
+.LetraNegraRojaBold
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: #000000;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraNegraRojaBold:visited
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: #000000;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraNegraRojaBold:active
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: #000000;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+.LetraNegraRojaBold:hover
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: #cc0001;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana;
+    TEXT-DECORATION: underline
+}
+A:link
+{
+    COLOR: #000000
+}
+A:visited
+{
+    COLOR: #000000
+}
+A:hover
+{
+    COLOR: #cc0001
+}
+A:hover
+{
+    TEXT-DECORATION: none
+}
+.t4
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 12px;
+    COLOR: black;
+    FONT-FAMILY: verdana;
+    BACKGROUND-COLOR: #dedee6;
+    cell-padding: 4
+	cell-spacing
+}
+.date
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    COLOR: #000000;
+    FONT-FAMILY: verdana
+}
+.t6
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 12px;
+    COLOR: #cc0001;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+TR.clsFilaSeleccionada
+{
+    BACKGROUND-IMAGE: url(ImagesEmpresas/fila_selec.gif);
+    CURSOR: hand;
+    FONT-FAMILY: Arial
+}
+FORM
+{
+}
+FORM .NuevaImagenPagina
+{
+    BORDER-RIGHT: medium none;
+    PADDING-RIGHT: 0px;
+    BACKGROUND-POSITION: center bottom;
+    BORDER-TOP: medium none;
+    PADDING-LEFT: 0px;
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    BACKGROUND-IMAGE: url(ImagesEmpresas\fondo_imagenpag.gif);
+    PADDING-BOTTOM: 0px;
+    MARGIN: 0px;
+    BORDER-LEFT: medium none;
+    WIDTH: 200px;
+    COLOR: black;
+    PADDING-TOP: 4px;
+    BORDER-BOTTOM: medium none;
+    BACKGROUND-REPEAT: no-repeat;
+    FONT-FAMILY: Verdana;
+    HEIGHT: 20px;
+    BACKGROUND-COLOR: transparent
+}
+FORM .NuevaImagenBoton
+{
+    BORDER-RIGHT: medium none;
+    PADDING-RIGHT: 0px;
+    BACKGROUND-POSITION: center bottom;
+    BORDER-TOP: medium none;
+    PADDING-LEFT: 0px;
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    BACKGROUND-IMAGE: url(ImagesEmpresas\botonNI.gif);
+    PADDING-BOTTOM: 0px;
+    MARGIN: 0px;
+    BORDER-LEFT: medium none;
+    WIDTH: 86px;
+    COLOR: white;
+    PADDING-TOP: 4px;
+    BORDER-BOTTOM: medium none;
+    BACKGROUND-REPEAT: no-repeat;
+    FONT-FAMILY: Verdana;
+    HEIGHT: 18px;
+    BACKGROUND-COLOR: transparent
+}
+.FontTituloCartHistCtaCte
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 14px;
+    COLOR: darkorange;
+    FONT-FAMILY: Arial
+}
+.FontTituloNuevaImagen
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 14px;
+    COLOR: darkorange;
+    FONT-FAMILY: Verdana
+}
+.t100
+{
+    FONT-SIZE: 10px;
+    COLOR: black;
+    FONT-FAMILY: Verdana;
+    BACKGROUND-COLOR: #e7e7ef
+}
+.c1CF
+{
+    FONT-SIZE: 7px;
+    COLOR: black;
+    FONT-FAMILY: Arial;
+    BACKGROUND-COLOR: #ffffff
+}
+.c3CF
+{
+    FONT-SIZE: 8px;
+    COLOR: black;
+    FONT-FAMILY: Arial;
+    BACKGROUND-COLOR: #ffffff
+}
+.FontTituloNICartola
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 11px;
+    COLOR: darkorange;
+    FONT-FAMILY: Verdana
+}
+.t3CF
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 7px;
+    COLOR: black;
+    FONT-FAMILY: Arial;
+    BACKGROUND-COLOR: #dedee6
+}
+.t1CF
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 8px;
+    COLOR: black;
+    FONT-FAMILY: Arial;
+    BACKGROUND-COLOR: #dedee6
+}
+.t1CFNI
+{
+    BORDER-RIGHT: white;
+    BORDER-TOP: white;
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 8px;
+    BACKGROUND-IMAGE: url(imagesEmpresas/FondoMenu.jpg);
+    BORDER-LEFT: white;
+    COLOR: white;
+    BORDER-BOTTOM: white;
+    FONT-FAMILY: Arial;
+    BACKGROUND-COLOR: orange
+}
+FORM .BotonRojo
+{
+    BORDER-RIGHT: medium none;
+    PADDING-RIGHT: 0px;
+    BACKGROUND-POSITION: center bottom;
+    BORDER-TOP: medium none;
+    PADDING-LEFT: 0px;
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    BACKGROUND-IMAGE: url(ImagesPersonas\boton_rojo.gif);
+    PADDING-BOTTOM: 0px;
+    MARGIN: 0px;
+    BORDER-LEFT: medium none;
+    WIDTH: 86px;
+    COLOR: white;
+    PADDING-TOP: 4px;
+    BORDER-BOTTOM: medium none;
+    BACKGROUND-REPEAT: no-repeat;
+    FONT-FAMILY: Verdana;
+    HEIGHT: 18px;
+    BACKGROUND-COLOR: transparent
+}
+.t11
+{
+    FONT-SIZE: 10px;
+    COLOR: black;
+    FONT-FAMILY: Verdana;
+    BACKGROUND-COLOR: #dedee6
+}
+FORM .numpag
+{
+    BACKGROUND-IMAGE: url(ImagesEmpresas\botonpag.gif);
+    COLOR: black;
+    FONT-FAMILY: Verdana;
+    BACKGROUND-COLOR: transparent
+}
+FORM .fondoima
+{
+    BORDER-RIGHT: medium none;
+    PADDING-RIGHT: 0px;
+    BACKGROUND-POSITION: center center;
+    BORDER-TOP: medium none;
+    PADDING-LEFT: 0px;
+    FONT-WEIGHT: normal;
+    FONT-SIZE: 8px;
+    BACKGROUND-IMAGE: url(imagesinstituciones\fondo_imagenfact.gif);
+    PADDING-BOTTOM: 0px;
+    MARGIN: 0px;
+    BORDER-LEFT: medium none;
+    WIDTH: 103px;
+    COLOR: black;
+    PADDING-TOP: 4px;
+    BORDER-BOTTOM: medium none;
+    BACKGROUND-REPEAT: no-repeat;
+    FONT-FAMILY: Verdana;
+    HEIGHT: 26px;
+    BACKGROUND-COLOR: transparent
+}
+FORM .NuevaImagenBotonLargo
+{
+    BORDER-RIGHT: medium none;
+    PADDING-RIGHT: 0px;
+    BACKGROUND-POSITION: center bottom;
+    BORDER-TOP: medium none;
+    PADDING-LEFT: 0px;
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    BACKGROUND-IMAGE: url(ImagesEmpresas\botonNILargo.gif);
+    PADDING-BOTTOM: 0px;
+    MARGIN: 0px;
+    BORDER-LEFT: medium none;
+    WIDTH: 115px;
+    COLOR: white;
+    PADDING-TOP: 4px;
+    BORDER-BOTTOM: medium none;
+    BACKGROUND-REPEAT: no-repeat;
+    FONT-FAMILY: Verdana;
+    HEIGHT: 20px;
+    BACKGROUND-COLOR: transparent
+}
+
+div#cargando{
+    FONT-SIZE: 10px;
+    COLOR: #ffff;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+
+div#pide_token1{
+    FONT-SIZE: 11px;
+    COLOR: #000;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+
+div#pide_token2{
+    FONT-SIZE: 11px;
+    COLOR: #000;
+    FONT-STYLE: normal;
+    FONT-FAMILY: Verdana
+}
+
+table#coordenadas td{
+   FONT-SIZE: 11x;
+   FONT-STYLE: normal;
+   FONT-FAMILY: Verdana
+}
+
+table#coordenadas input{
+   FONT-SIZE: 11px;
+   border:1px solid #666;
+   width:60px;
+}

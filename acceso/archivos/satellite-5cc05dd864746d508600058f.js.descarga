@@ -1,0 +1,9 @@
+var ghead = document.getElementsByTagName("head")[0];
+var gscript = document.createElement("script");
+gscript.src = "https://www.googletagmanager.com/gtag/js?id=DC-9340184";
+ghead.appendChild(gscript);
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'DC-9340184');

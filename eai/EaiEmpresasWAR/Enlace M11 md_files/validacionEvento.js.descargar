@@ -1,0 +1,288 @@
+//Valida que el campo contenga únicamente números enteros
+function validarNumericoEvent(evet){
+	var evt = (evet) ? evet : event;
+	var key = (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode : ((evt.which) ? evt.which : 0));
+	if(key === 44 || 37 === key){
+		return false;
+	}
+	if(37 !== key && 8 !== key && 9 !== key){
+		return (key >= 48 && key <= 57);
+	}else{
+		return true;
+	}	
+}
+
+function validarNumericoEventBlur(input){
+	 var pattern = /^\d+$/;
+	 var valor = $("#" + input).val();
+	 var validacion = pattern.test(valor);
+	 if(validacion){
+		 $("#" + input).removeClass("ls-focus-error-input");
+	 }else{
+		 $("#" +input).addClass("ls-focus-error-input");
+	 }
+     return validacion;
+}
+
+function validarNumericoDecimalEventKey(input, enteros, event, tipo){
+	var key = (event.charCode) ? event.charCode : ((event.keyCode) ? event.keyCode : ((event.which) ? event.which : 0));
+	if(37 !== key && 39 !== key && 8 !== key && 9 !== key){
+		 regex = /[a-zA-ZÑñ\-\(\)\/=+:?\!\¡\}\{%&*@$><;#~\^\[\]\'\,\"\¿\,\¨\'\´\`\|\s/\_\°\¬\\]/gi;
+		 var valor = $("#" + input).val();
+		 valor=valor.replace(regex,"");
+		 $("#"+input).val(valor);
+		 numeroValido2Dec(input, enteros, tipo);
+	}
+}
+
+function validaDecimales(decimales, tipo){
+	if(tipo){
+		if(decimales.length>2 || decimales.length === 2){
+	    	decimales=decimales.substring(0,2);
+	    }
+	    return decimales;
+	}else{
+		if(decimales.length === 0){
+	    	decimales=decimales+"00";
+	    }else if(decimales.length === 1){
+	    	decimales=decimales+"0";
+	    }
+		return decimales;
+	}
+}
+    
+
+function numeroValido2Dec(idelemento, enteros, tipo) {
+    var valor=document.getElementById(idelemento).value;
+    var decimales=validaDecimales(valor.substring(valor.indexOf(".")+1), tipo);
+    var tamanio=valor.substring(0,valor.indexOf(".")).length;
+    if (valor !== '') {
+        if(valor.indexOf(".")>-1){
+        	valor = recuperaValor(tamanio, enteros, valor, tipo, decimales);
+        }
+        if(tipo){
+        	document.getElementById(idelemento).value=valor;
+        }else{
+        	if(valor.indexOf(".")===0){
+        		valor="0"+valor;
+        	}
+        	if(valor.indexOf(".")>-1){
+        		document.getElementById(idelemento).value=valor;      		
+        	}else{
+        		recuperaValor2(enteros, valor, idelemento);		
+        	}     	
+        }      
+    }
+}
+
+function recuperaValor(tamanio, enteros, valor, tipo, decimales) {
+	if(tamanio>enteros){
+		valor=valor.substring(0,enteros)+"."+decimales.replace(".", "0");
+		return valor;
+    }else if(tamanio<=enteros){
+        valor=valor.substring(0,tamanio)+"."+validaDecimales(valor.substring(valor.indexOf(".")+1), tipo).replace(".", "0");
+        return valor;
+    }
+}
+
+function recuperaValor2(enteros, valor, idelemento) {
+	if(enteros < valor.length){       			
+		valor = valor.substring(0, enteros) + ".00";
+		document.getElementById(idelemento).value = valor;
+	}else{
+		document.getElementById(idelemento).value = valor + ".00";
+	} 
+}
+
+function esAlfanumerico(e){
+    tecla = (document.all) ? e.keyCode : e.which; 
+    if (tecla<=8 || tecla === 32){
+    	return true; 
+    }else{
+    	patronVa =/\w/; 
+	    te = String.fromCharCode(tecla); 
+	    return patronVa.test(te);	
+    }		
+}
+
+function esAlfanumerico2(input, event){
+	tecla = (document.all) ? event.keyCode : event.which; 
+	if (tecla<=8 || tecla === 32){ 
+		return true; 
+	}else{
+		var ant = $("#" + input).val();
+		var valor = $("#" + input).val();
+		patronVa =/[Ññ\u00C1\u00C9\u00CD\u00D3\u00DA\-\(\)\/=+:?\!\¡\}\{%&*@$><;#~\^\[\]\'\,\"\¿\,\¨\'\´\`\.\|/\_\°\¬\\]/gi;
+		valor=valor.replace(patronVa,"");
+		$("#"+input).val(valor);
+		return patronVa.test(ant);
+	}		
+}
+
+function esAlfanumericoBlur(e, input){
+	var valor = $("#" + input).val();
+	patronVa =/^[\w]+$/; 
+    var validacion = patronVa.test(valor);
+    if(validacion){
+    	$("#" + input).removeClass("ls-focus-error-input");
+    }else{
+    	$("#" +input).addClass("ls-focus-error-input");
+    }
+    return validacion;
+}
+
+function validarAlfabeticoEvent(e){
+	tecla = (document.all) ? e.keyCode : e.which; 
+	if (tecla<=8){ 
+		return true; 
+	}else{
+		patronVa =/^([a-z áéíóú])$/i; 
+		te = String.fromCharCode(tecla); 
+		return patronVa.test(te);
+	}	
+}
+
+function validarAlfabeticoEvent2(input, event){
+	tecla = (document.all) ? event.keyCode : event.which; 
+	if (tecla<=8 || tecla === 32){ 
+		return true; 
+	}else{
+		var ant = $("#" + input).val();
+		var valor = $("#" + input).val();
+		patronVa =/[0-9\u00C1\u00C9\u00CD\u00D3\u00DA\-\(\)\/=+:?\!\¡\}\{%&*@$><;#~\^\[\]\'\,\"\¿\,\¨\'\´\`\.\|/\_\°\¬\\]/gi;
+		valor=valor.replace(patronVa,"");
+		$("#"+input).val(valor);
+		return patronVa.test(ant);
+	}	
+}
+
+function validarAlfabeticoEvent3(input, event){
+	tecla = (document.all) ? event.keyCode : event.which; 
+	if (tecla<=8 || tecla === 32){ 
+		return true; 
+	}else{
+		var ant = $("#" + input).val();
+		var valor = $("#" + input).val();
+		patronVa =/[\u00C1\u00C9\u00CD\u00D3\u00DA]/gi;
+		valor=valor.replace(patronVa,"");
+		$("#"+input).val(valor);
+		return patronVa.test(ant);
+	}	
+}
+
+function validarAlfabeticoEvent4(input, event){
+	tecla = (document.all) ? event.keyCode : event.which; 
+	if (tecla<=8 || tecla === 32){ 
+		return true; 
+	}else{
+		var ant = $("#" + input).val();
+		var valor = $("#" + input).val();
+		patronVa =/[\u00C1\u00C9\u00CD\u00D3\u00DA\-\(\)\/=+:?\!\¡\}\{%*@$><;#~\^\[\]\'\,\"\¿\,\¨\'\´\`\.\|/\_\°\¬\\]/gi;
+		valor=valor.replace(patronVa,"");
+		$("#"+input).val(valor);
+		return patronVa.test(ant);
+	}	
+}
+
+function validarAlfabeticoEvent5(input, event){
+	tecla = (document.all) ? event.keyCode : event.which; 
+	if (tecla<=8 || tecla === 32){ 
+		return true; 
+	}else{
+		var ant = $("#" + input).val();
+		var valor = $("#" + input).val();
+		patronVa =/[\u00C1\u00C9\u00CD\u00D3\u00DA\-\(\)\/=+:?\!\¡\}\{%&*@$><;#~\^\[\]\'\,\"\¿\,\¨\'\´\`\.\|/\_\°\¬\\]/gi;
+		valor=valor.replace(patronVa,"");
+		$("#"+input).val(valor);
+		return patronVa.test(ant);
+	}	
+}
+
+function validarAlfabeticoEventBlur(input){ 
+	var valor = $("#" + input).val();
+	patronVa = /^[a-zA-Z]*$/; 
+    var validacion = patronVa.test(valor);
+    if(validacion){
+    	$("#" + input).removeClass("ls-focus-error-input");
+    }else{
+    	$("#" +input).addClass("ls-focus-error-input");
+    }
+    return validacion;
+}
+
+function validaSelecCuenta(valorPosible) {
+	return !('0' === valorPosible || '*' === valorPosible || '' === valorPosible);
+}
+
+function validaChecado(idControl) {	
+	var checado = $('#' + idControl).is(":checked"); 	
+	return checado;	
+}
+
+function validarLongitudMaximaEvent(inputValidar, maximo, event){
+	var valorValidar = $('#' + inputValidar).val();
+	var key = (event.charCode)?event.charCode:((event.keyCode)?event.keyCode:((event.which)?event.which:0));
+	if(37 !== key && 39 !== key && 8 !== key && 9 !== key){
+		return regresaValor(valorValidar, maximo);
+
+	}else{
+		return true;
+	}	
+}
+
+function regresaValor(valorValidar, maximo) {
+	if("" !== valorValidar){
+		var longitud = valorValidar.length;
+		maximo = parseInt(maximo);
+		return (longitud<=(maximo-1));
+	}else{
+		return true;
+	}
+}
+
+function validarLongitudMaximaEventBlur(input, maximo, event){
+	var valorValidar = $("#" + input).val();
+	var key = (event.charCode)?event.charCode:((event.keyCode)?event.keyCode:((event.which)?event.which:0));
+	if(37 !== key && 39 !== key && 8 !== key && 9 !== key){
+		if("" !== valorValidar){
+			return validaValor(valorValidar, maximo, input);
+		}else{
+			$("#" + input).removeClass("ls-focus-error-input");
+			return true;
+		}
+	}else{
+		$("#" + input).removeClass("ls-focus-error-input");
+		return true;
+	}	
+}
+
+function validaValor(valorValidar, maximo, input) {
+	var reg = /^([0-9a-zA-Z .]{1,})$/i;
+	if(reg.test(valorValidar)){
+		var validacion = valorValidar.length>maximo;
+		if(validacion){
+			$("#" +input).addClass("ls-focus-error-input");
+		}else{
+			$("#" + input).removeClass("ls-focus-error-input");
+		}
+		return validacion;
+	}
+	else{
+		$("#" +input).addClass("ls-focus-error-input");
+		return false;
+	}
+}
+
+//VSF Pago de Servicios - 2019
+function esAlfanumericoConEspaciosBlur(e, input){
+	var valor = $("#" + input).val();
+	patronVa =/^[\w\s]+$/; 
+    var validacion = patronVa.test(valor);
+    if(validacion){
+    	$("#" + input).removeClass("ls-focus-error-input");
+    }else{
+    	$("#" +input).addClass("ls-focus-error-input");
+    }
+    return validacion;
+}
+//VSF Pago de Servicios - 2019

@@ -1,0 +1,13 @@
+var ghead = document.getElementsByTagName("head")[0];
+var gscript = document.createElement("script");
+gscript.src = "https://www.googletagmanager.com/gtag/js?id=AW-1020600847";
+ghead.appendChild(gscript);
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', '752609565');
+gtag('config', '752438319');
+
+

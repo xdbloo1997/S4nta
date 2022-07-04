@@ -1,0 +1,364 @@
+//Valida que el campo contenga una fecha en el formato indicado
+function validarFormatoFecha(valorValidar, formatoFecha){
+	try{
+		if("" !== valorValidar){
+			var lowerFormatDate = formatoFecha.toLowerCase();
+	
+			var formatYear = lowerFormatDate.substring(lowerFormatDate.indexOf('y'), lowerFormatDate.lastIndexOf('y')+1);
+			var formatMonth = lowerFormatDate.substring(lowerFormatDate.indexOf('m'), lowerFormatDate.lastIndexOf('m')+1);
+			var formatDay = lowerFormatDate.substring(lowerFormatDate.indexOf('d'), lowerFormatDate.lastIndexOf('d')+1);
+	
+			var year = valorValidar.substring(lowerFormatDate.indexOf('y'), lowerFormatDate.lastIndexOf('y')+1);
+			var month = valorValidar.substring(lowerFormatDate.indexOf('m'), lowerFormatDate.lastIndexOf('m')+1);
+			var day = valorValidar.substring(lowerFormatDate.indexOf('d'), lowerFormatDate.lastIndexOf('d')+1);
+	
+			var delimitersFormatDate = lowerFormatDate.replace(formatYear,'').replace(formatMonth,'').replace(formatDay,'');
+			var delimitersDate = valorValidar.replace(year,'').replace(month,'').replace(day,'');		
+	
+			if(delimitersFormatDate===delimitersDate && valorValidar.length<=10){
+				var toDate = new Date(month+'/'+day+'/'+year);
+				//LFER:se modifica para agregar espacio ya que compara el objeto Date contra una cadena
+				return ((toDate+'')!=='Invalid Date');
+			}
+			return false;
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+
+//Valida que el campo contenga una fecha posterior mínima a la fecha actual por el número de días indicado
+function validarFechaPosteriorMinima(valorValidar, diasMinimos){
+	try{
+		var fecha = new Date();
+		if("" !== valorValidar){
+		var day = fecha.getDate().toString();
+		if(day<10){
+			day='0'+day;
+		}
+		var month =  fecha.getMonth() + 1;
+		if(month<10){
+			month='0'+month;
+		}
+		var year = fecha.getFullYear();
+		var dateNow = day + "/" + month + "/" + year;
+		var now = obtenerFecha(dateNow, "dd/mm/yyyy");
+		var toDate = obtenerFecha(valorValidar, "dd/mm/yyyy");
+		if(toDate!=='Invalid Date'){
+			if(parseInt(diasMinimos)!==0){
+			now.setDate(now.getDate()+parseInt(diasMinimos));
+			}
+			return toDate <= now;
+		}
+		return false;
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+
+//Valida que el campo contenga una fecha posterior máxima a la fecha actual por el número de días indicado
+function validarFechaPosteriorMaxima(valorValidar, diasMaximos){
+	try{
+		var fecha = new Date();
+		if("" !== valorValidar){
+			var day = fecha.getDate().toString();
+			if(day<10){
+				day='0'+day;
+			}
+			var month =  fecha.getMonth() + 1;
+			if(month<10){
+				month='0'+month;
+			}
+			var year = fecha.getFullYear();
+			var dateNow = day + "/" + month + "/" + year;
+			var now = obtenerFecha(dateNow, "dd/mm/yyyy");
+			var toDate = obtenerFecha(valorValidar, "dd/mm/yyyy");
+			if(toDate!=='Invalid Date'){
+				now.setDate(now.getDate()+diasMaximos);
+				return now >= toDate;
+			}
+			return false;
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que el campo contenga una fecha anterior mínima a la fecha actual por el número de días indicado
+function validarFechaAnteriorMinima(valorValidar, diasMinimos){
+	try{
+		var fecha = new Date();
+		if("" !== valorValidar){
+			var day = fecha.getDate().toString();
+			if(day<10){
+				day='0'+day;
+			}
+			var month =  fecha.getMonth() + 1;
+			if(month<10){
+				month='0'+month;
+			}
+			var year = fecha.getFullYear();
+			var dateNow = day + "/" + month + "/" + year;
+			var now = obtenerFecha(dateNow, "dd/mm/yyyy");
+			var toDate = obtenerFecha(valorValidar, "dd/mm/yyyy");
+			if(toDate!=='Invalid Date'){
+				now.setDate(now.getDate()-diasMinimos);
+				return now <= toDate;
+			}
+			return false;
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que el campo contenga una fecha anterior máxima a la fecha actual por el número de días indicado
+function validarFechaAnteriorMaxima(valorValidar, diasMaximos){
+	try{
+		var fecha = new Date();
+		if("" !== valorValidar){
+			var day = fecha.getDate().toString();
+			if(day<10){
+				day='0'+day;
+			}
+			var month =  fecha.getMonth() + 1;
+			if(month<10){
+				month='0'+month;
+			}
+			var year = fecha.getFullYear();
+			var dateNow = day + "/" + month + "/" + year;
+			var now = obtenerFecha(dateNow, "dd/mm/yyyy");
+			var toDate = obtenerFecha(valorValidar, "dd/mm/yyyy");
+			if(toDate!=='Invalid Date'){
+				now.setDate(now.getDate()-diasMaximos);
+				return now <= toDate;
+			}
+			return false;
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que el campo contenga una fecha anterior máxima a la fecha actual por el número de días indicado
+function validarFechaActual(valorValidar){
+	try{
+		var fecha = new Date();
+		if("" !== valorValidar){
+			var day = fecha.getDate().toString();
+			if(day<10){
+				day='0'+day;
+			}
+			var month =  fecha.getMonth() + 1;
+			if(month<10){
+				month='0'+month;
+			}
+			var year = fecha.getFullYear();
+			var dateNow = day + "/" + month + "/" + year;
+			var now = obtenerFecha(dateNow, "dd/mm/yyyy");
+			var toDate = obtenerFecha(valorValidar, "dd/mm/yyyy");
+			if(toDate!=='Invalid Date'){
+				var bolean = now === toDate;
+				return bolean;
+			}
+			return false;
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que el campo contenga una fecha menor que la fecha de comparación
+function validarFechaMenorQue(valorValidar, fechaComparar){
+	try{
+		var toDate = obtenerFecha(valorValidar, "dd/mm/yyyy");
+		var toDateCompare = obtenerFecha(fechaComparar, "dd/mm/yyyy");
+		if(toDate!=='Invalid Date' && toDateCompare!=='Invalid Date'){
+			return Math.floor(toDate/(1000*60*60*24))<Math.floor(toDateCompare/(1000*60*60*24));
+		}
+		return false;
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que el campo contenga una fecha menor igual que la fecha de comparación
+function validarFechaMenorIgualQue(valorValidar, fechaComparar){
+	try{
+		var toDate = obtenerFecha(valorValidar, "dd/mm/yyyy");
+		var toDateCompare = obtenerFecha(fechaComparar, "dd/mm/yyyy");
+		if(toDate!=='Invalid Date' && toDateCompare!=='Invalid Date'){
+			var bolean = toDate <= toDateCompare;
+			return bolean;
+		}
+		return false;
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que el campo contenga una fecha menor igual que la fecha de comparación considerando vacios
+function validarFechaVaciaMenorIgualQue(valorValidar, fechaComparar){
+	try{
+		if (valorValidar !== '' || fechaComparar !== '') {
+			var toDate = obtenerFecha(valorValidar, "dd/mm/yyyy");
+			var toDateCompare = obtenerFecha(fechaComparar, "dd/mm/yyyy");
+			if(toDate!=='Invalid Date' && toDateCompare!=='Invalid Date'){
+				var bolean = toDate <= toDateCompare;
+				return bolean;
+			}
+			return false;
+		} else {
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que el campo contenga una fecha mayor que la fecha de comparación
+function validarFechaMayorQue(valorValidar, fechaComparar){
+	try{
+		var toDate = obtenerFecha(valorValidar, "dd/mm/yyyy");
+		var toDateCompare = obtenerFecha(fechaComparar, "dd/mm/yyyy");
+		if(toDate!=='Invalid Date' && toDateCompare!=='Invalid Date'){
+			return Math.floor(toDate/(1000*60*60*24))>Math.floor(toDateCompare/(1000*60*60*24));
+		}
+		return false;
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que el rango entre la fecha seleccionada y otra fecha sea menor o igual a 3 meses
+function validarRangoFecha3Meses(valorValidar, fechaComparar){
+	try{
+		var toDate = obtenerFecha(valorValidar, "dd/mm/yyyy");
+		var toDateCompare = obtenerFecha(fechaComparar, "dd/mm/yyyy");
+		
+		
+		if(toDate!=='Invalid Date' && toDateCompare!=='Invalid Date'){
+			var auxDate = new Date (toDate);
+			
+			auxDate.setMonth(toDate.getUTCMonth() - 3);
+			
+			var rango = Math.floor(toDateCompare/(1000*60*60*24) - Math.floor(auxDate/(1000*60*60*24)));
+			
+			return rango >= 0;
+		}
+		return false;
+	}
+     catch(err){
+     	return false;
+     }
+}
+
+//Valida que el campo contenga una fecha mayor igual que la fecha de comparación
+function validarFechaMayorIgualQue(valorValidar, fechaComparar){
+	try{	
+		var toDate = obtenerFecha(valorValidar, "dd/mm/yyyy");
+		var toDateCompare = obtenerFecha(fechaComparar, "dd/mm/yyyy");
+		if(toDate!=='Invalid Date' && toDateCompare!=='Invalid Date'){
+			return Math.floor(toDate/(1000*60*60*24))>=Math.floor(toDateCompare/(1000*60*60*24));
+		}
+		return false;
+	}
+     catch(err){
+     	return false;
+     }
+}
+
+//Valida que el campo contenga una fecha en el formato indicado
+function obtenerFecha(valorValidar, formatoFecha){
+	var toDate = "Invalid Date";
+	try{
+		var lowerFormatDate = formatoFecha.toLowerCase();
+		var year = valorValidar.substring(lowerFormatDate.indexOf('y'), lowerFormatDate.lastIndexOf('y')+1);
+		var month = valorValidar.substring(lowerFormatDate.indexOf('m'), lowerFormatDate.lastIndexOf('m')+1);
+		var day = valorValidar.substring(lowerFormatDate.indexOf('d'), lowerFormatDate.lastIndexOf('d')+1);
+		toDate = new Date(month+'/'+day+'/'+year);
+		return toDate;
+	}
+     catch(err){
+     	return toDate;
+     }
+}
+
+
+//Valida que la hora actual sea menor 30 min que la hora programada
+function validarFechaHoraProgramada(valorValidar) {
+	try {
+		var datos = valorValidar.split("/");
+		var fechaHoraSeleccionada = new Date(datos[2], parseInt(datos[1])-1, datos[0],
+				datos[3], datos[4], 0, 0);
+		var fechaHoraActual = new Date();
+
+		var auxFechaHoraSeleccionada = new Date(fechaHoraSeleccionada.getTime()-(1000*60*30));
+
+		return !(fechaHoraActual >= auxFechaHoraSeleccionada);
+
+	} catch (err) {
+		return false;
+	}
+}
+
+//Valida que los horarios permitidos para día sabado sean 6:00 y 11:00
+function validarFechaHorarioSabado(valorValidar) {
+	try {
+		var datos = valorValidar.split("/");
+		var fechaHoraSeleccionada = new Date(datos[2], datos[1]-1, datos[0],
+				datos[3], datos[4], 0, 0);
+				
+		if (fechaHoraSeleccionada.getDay() === 6){
+			if(fechaHoraSeleccionada.getHours() === 6 || fechaHoraSeleccionada.getHours() === 11 ){
+				return true;
+				}
+			return false;
+			}		
+		return true;
+	} catch (err) {
+		return false;
+	}
+}
+
+//Valida que la Hora Limite para aplicar pagos sea 16:30 hrs.
+function validarFechaHoraLimiteProgramada(valorValidar) {
+	try {
+		console.log("Entro a validar hora limite para aplicar pago ");
+		console.log("valorValidar" + valorValidar);
+		var datos = valorValidar.split("/");
+		var fechaHoraSeleccionada = new Date(datos[2], datos[1]-1, datos[0],
+				datos[3], datos[4], 0, 0);
+		var fechaHoraActual = new Date();
+
+		if(fechaHoraActual >= fechaHoraSeleccionada){
+			if(fechaHoraActual.getDate() == fechaHoraSeleccionada.getDate() 
+					&& fechaHoraActual.getMonth() == fechaHoraSeleccionada.getMonth()
+						&& fechaHoraActual.getFullYear() == fechaHoraSeleccionada.getFullYear()){
+				if(fechaHoraSeleccionada.getHours() === 16 && fechaHoraSeleccionada.getMinutes() >= 30 || fechaHoraSeleccionada.getHours() >= 17){
+					return true;
+				}
+				return false;
+			}
+			return true;
+		}
+		return true;
+	} catch (err) {
+		return false;
+	}
+}

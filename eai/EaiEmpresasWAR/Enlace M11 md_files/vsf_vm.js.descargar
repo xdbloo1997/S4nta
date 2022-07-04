@@ -1,0 +1,60 @@
+/**
+ * Libreria Ventanas modales
+ * Vector SF
+ * Saul Adame apreza
+ * 20/10/2016
+ */
+
+var html_modal_code='<div class="modal fade in" id="vsf_vm" role="dialog" data-backdrop="static" data-keyboard="false">';
+    html_modal_code+='<div class="modal-dialog col-md-6" role="document">';
+    
+    html_modal_code+='<!-- Modal content-->';
+    html_modal_code+='<div class="modal-content">';
+    html_modal_code+='  	<div class="modal-header {icono}"><h4 class="modal-title text-center margin-top-0" style="margin-left: -15px;">{titulo}</h4></div>';
+    //html_modal_code+='      <h2 class="texto-centro {icono} vsf-vm-titulo" style="color:red">{titulo}</h2>';
+    //html_modal_code+='    </div>';
+    html_modal_code+='    <div class="modal-body text-center vertical-align-middle">';
+	//html_modal_code+='        <div class="form-group">';
+	html_modal_code+='       	 <span>{texto}</span>';
+	//html_modal_code+='        </div>';
+	         
+    html_modal_code+='    </div>';
+        
+    html_modal_code+='    <div class="modal-footer">';
+    html_modal_code+='<div class="col-md-3 col-sm-3 col-xs-1"></div><div class="col-md-6 col-sm-6 col-xs-10 vsf-vm-botonera"></div><div class="col-md-3 col-sm-3 col-xs-1"></div>';
+    html_modal_code+='    </div>';
+    html_modal_code+='  </div>';
+      
+    html_modal_code+='</div>';
+ 
+	html_modal_code+='</div>';
+	//console.log("iframe selector");
+	//padre.find("body").append("<script>var vsf_iframe = document.getElementById('iFramePrincipal').contentWindow;</script>");
+	
+function vsf_modal(icono,titulo,texto,botones,acciones){
+	
+	var padre = $(window.parent.document);
+	//html_modal_code = html_modal_code.replace("{titulo}",titulo).replace("{texto}",texto).replace("{icono}",icono);
+	padre.find("body").append(html_modal_code.replace("{titulo}",titulo).replace("{texto}",texto).replace("{icono}",icono));
+	var btnArray = botones.split("|");
+	var btnAction = acciones.split("|");
+	var columnas= Math.round(12/btnArray.length);
+	var boton='<div class="col-md-'+columnas+'"><a href="{link}" class="btn btn-primary" id="btn_vm_" name="btnAceptarExpiraPass">{btnLabel}</a></div>';
+	var newBoton ="";
+	//console.log(btnArray.lenght);
+	if(botones!=""){
+		for(i=0;i<btnArray.length;i++){
+			newBoton = boton.replace("{btnLabel}",btnArray[i].split(",")[0]).replace("btn_vm_","btn_vm_"+i).replace("{link}",btnAction[i]);
+			padre.find("body").find("#btn_vm_" + i).remove();
+			padre.find("body").find("#vsf_vm .vsf-vm-botonera").append(newBoton);
+		}
+	}
+	padre.find("body").find("#vsf_vm").css("display","block");
+	//console.log(html_modal_code);
+	
+	padre.find("body").find("#vsf_vm .btn").click(function(){
+		//padre.find("body").find("#vsf_vm").removeClass("in").addClass("out");
+		padre.find("body").find("#vsf_vm").remove();
+	});
+	console.info("Modal con titulo ["+ titulo +"] generada con exito." );
+}

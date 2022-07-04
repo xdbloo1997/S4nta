@@ -1,0 +1,278 @@
+  var segundosRestantes = 1200;
+  var timerID = null;
+  var timerRunning = false;
+  var ejecucion = 0;
+  var d = null;
+  var begin = null;
+  var indTiempo = 0;
+$(document).ready(function() {
+    validaLocalStorageBet();
+    bannerBuzon2();
+//	if(sessionStorage.getItem('estBuc')=='N'){
+//		 $('#versionAnteriorIco').hide();
+//		 $('#versionAnteriorLab').hide();
+//	 }
+        
+        $("#root-tplVentanaOperativa-_cont_2").css("overflow","visible");
+        $("#root-tplVentanaOperativa-slideContent").css("overflow-x","visible");
+        $("#root-tplVentanaOperativa-slideContent").css("overflow-y","visible");
+        
+});
+
+function validaLocalStorageBet() {
+    var info = false;
+    var voCommons = ["fchUltAccSto", "fchPenAccSto", "indBloqueoSto", "entidadSto", "centroSto", "cuentaSto", "productoSto", "subproductoSto", "aliasCmcSto", "nombreSto", "apePatSto", "apeMatSto"]; 
+    if(0 !== sessionStorage.length){
+        for(var i=0, t=sessionStorage.length; i < t; i++) {
+            key = sessionStorage.key(i);
+            for(var j=0; j<voCommons.length; j++){
+	            if(key === voCommons[j]){
+	                if(null === sessionStorage.getItem(key) || "" === sessionStorage.getItem(key) || "null" === sessionStorage.getItem(key)){
+	                      break;
+	                }else{
+	                   info = true;
+	                }
+	            }
+          }
+        }
+        cargaLocalStorage(info);
+    }else{
+       cargaLocalStorage(info);
+    }
+}
+
+function cargaLocalStorage(info) {
+	var estBuc='';
+	if(!info){
+		ejecucion ++;
+		var parametros = {
+	            "ejecucion" : ejecucion,
+	    };
+		$.ajax({
+	        url :'../voCommons/cargaSessionStorage.do',
+	        data : parametros,
+	        dataType : 'json',
+	        success : function(data) {
+	        	if("OK" === data.cargaSession){
+		    		if("BER0002" === data.codError){
+		                $form = $('<form id="formBet" action="'+app+'/error/500.do" method="GET"></form>');
+		                $('body').append($form);
+		                $form.submit(); 
+		    		}
+		    		if("E0001" === data.codError){
+	        			window.location.href=data.urlLogin;
+	            	}else{
+		                sessionStorage.setItem('fchUltAccSto', data.fchUltAccSto);
+		                sessionStorage.setItem("fchPenAccSto", data.fchPenAccSto);
+		                sessionStorage.setItem("indBloqueoSto", data.indBloqueoSto);
+		                sessionStorage.setItem("entidadSto", data.entidadSto);
+		                sessionStorage.setItem("centroSto", data.centroSto);
+		                sessionStorage.setItem("cuentaSto", data.cuentaSto);
+		                sessionStorage.setItem("cuentaAnterior", data.cuentaAnterior);
+		                sessionStorage.setItem("productoSto", data.productoSto);
+		                sessionStorage.setItem("subproductoSto", data.subproductoSto);
+		                sessionStorage.setItem("aliasCmcSto", data.aliasCmcSto);
+		                sessionStorage.setItem("nombreSto", data.nombreSto);
+		                sessionStorage.setItem("apePatSto", data.apePatSto);
+		                sessionStorage.setItem("apeMatSto", data.apeMatSto);
+		                sessionStorage.setItem("contratoCmcPart", data.contratoCmcPart);
+		                $("#root-tplVentanaOperativa-genericaParHeaderSecondaryUserInfoNameText").text(sessionStorage.getItem("nombreSto") + " " + sessionStorage.getItem("apePatSto") + " " + sessionStorage.getItem("apeMatSto"));
+		                $("#idContratoVentOper").text(sessionStorage.getItem("aliasCmcSto"));
+		                $("#idNoContratoVentOper").text(sessionStorage.getItem("cuentaSto"));
+		                $("#root-tplVentanaOperativa-genericaParHeaderSecondaryUserInfoLastAccessText").text(sessionStorage.getItem("fchPenAccSto"));
+		    		}
+		    		$('iframe').attr('src', $('iframe').attr('src')); 
+	        	}else{
+	                $("#root-tplVentanaOperativa-genericaParHeaderSecondaryUserInfoNameText").text(sessionStorage.getItem("nombreSto") + " " + sessionStorage.getItem("apePatSto") + " " + sessionStorage.getItem("apeMatSto"));
+	                $("#idContratoVentOper").text(sessionStorage.getItem("aliasCmcSto"));
+	                $("#idNoContratoVentOper").text(sessionStorage.getItem("cuentaSto"));
+	                $("#root-tplVentanaOperativa-genericaParHeaderSecondaryUserInfoLastAccessText").text(sessionStorage.getItem("fchPenAccSto"));
+	        	}  		      		
+	        },
+	        error : function(e) {
+	        console.log("Ha fallado la peticion de datos para la sesion en LocalStorageHeader. Error: "+e);
+	       }
+	    });
+	}else{
+        $("#root-tplVentanaOperativa-genericaParHeaderSecondaryUserInfoNameText").text(sessionStorage.getItem("nombreSto") + " " + sessionStorage.getItem("apePatSto") + " " + sessionStorage.getItem("apeMatSto"));
+        $("#idContratoVentOper").text(sessionStorage.getItem("aliasCmcSto"));
+        $("#idNoContratoVentOper").text(sessionStorage.getItem("cuentaSto"));
+        $("#root-tplVentanaOperativa-genericaParHeaderSecondaryUserInfoLastAccessText").text(sessionStorage.getItem("fchPenAccSto"));
+	}
+}
+
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+} 
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)===' ') {
+           c = c.substring(1);
+        }
+        if (c.indexOf(name) === 0) {
+            return c.substring(name.length,c.length);
+        }
+    }
+    return "";
+}
+
+function cerrarSession(){
+	var logOutFlag=$('#logOutFlag').val();
+	if(logOutFlag != undefined){
+	$('#logOutFlag').val('OK');
+	var token = $("meta[name='_csrf']").attr("content");                                            
+    var header = $("meta[name='_csrf_header']").attr("content");
+    $.ajax({
+       type : "POST",
+       beforeSend : function(request) {
+          if (token) {
+               request.setRequestHeader(header, token);
+           }
+       },
+       cache : false,
+       contentType: false,
+       processData: false,
+       url : window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1]+"/ventanaOperativa/cerrarSesionInactividad.go",
+       data : '',
+       dataType : 'json',
+       success : function(response) {
+    	   console.log('Se Ejecuto el Cierre de session');  
+       },
+       error: function(e){
+    	   console.log('Se Ejecuto el Cierre de session: Error:'+e);  
+       }
+    });
+	}
+}
+
+/*Funcion para exportar mas de 1000 registros en el exportador local de forma asincrona*/
+function expoAsincrona1000Reg(){
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	var form = $("#formArchivosAscno").serialize(); 
+	$.get({
+        type : "GET",
+        beforeSend : function(request) {
+            if (token) {
+               request.setRequestHeader(header, token);
+            }
+        },
+        url : window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1]+"/MainArchivos/GeneraReporteBETMas1000.do",
+        data: form,
+        success : function(response){
+        	var array = decodeArrayFile(response);
+        	saveByteArray("Reporte.csv", array);
+          },
+          error : function(xhr, ajaxOptions, thrownError){
+           console.log(" NO FUNCIONA: ");
+           console.log(xhr.status);
+           console.log(ajaxOptions);
+           console.log(thrownError);
+           $(window).resize();
+        },
+        complete : function() {
+           console.log("COMPLETE : ");
+           removeAjaxLoader();
+        }
+     });
+}
+
+/*Funcion para ejecutar ajax fuera del iframe*/
+function reasignaFormArchivo(){
+	var padre = $(window.parent.document);
+	var ref = $(padre).find("#referenciaArchivoExpAscno");
+	var lay = $(padre).find("#layoutArchivoExpAscno");
+	var est = $(padre).find("#estatusArchivoExpAscno");
+	var btnAr = $(padre).find("#btnArchivoAscno");
+	
+	$(ref).val( $("#referenciaArchivoExp").val() );
+	$(lay).val( $("#layoutArchivoExp").val() );
+	$(est).val( $("#estatusArchivoExp").val() );
+	
+	$(btnAr).click();
+}
+
+/*Funcion para decodificar arreglo de datos*/
+function decodeArrayFile(bytes){
+	var binaryString = window.atob(bytes); /*Regresa arreglo de bytes en base 64 y con atob se decodifica*/ 
+    var binaryLen = binaryString.length;   /*Se saca el tamaño del arreglo*/
+    var bytes = new Uint8Array(binaryLen); /*Se crea un arreglo con limite de memoria de 1 byte*/
+    for (var i = 0; i < binaryLen; i++) {
+       var ascii = binaryString.charCodeAt(i);	/*Se recorre el arregli y de cada caracter se toma su codigo ascii*/
+       bytes[i] = ascii;
+    }
+    return bytes;
+}
+
+/*Funcion para crear archivo csv dependiendo del navegador*/
+function saveByteArray(reportName, byte) {
+    var blob = new Blob([byte], {type: "application/csv"});
+    var padre = $(window.parent.document);
+	var name = $(padre).find("#referenciaArchivoExpAscno");
+    	if(window.BrowserDetect.browser == "Explorer"){
+    		 window.navigator.msSaveBlob(blob, $(name).val()+".csv");
+    		 
+    	}else if(window.BrowserDetect.browser == "Firefox"){
+    		var link = document.createElement('a');
+    	    var url  = window.URL.createObjectURL(blob);
+    	    document.body.appendChild(link);
+    	    link.href = url;
+    	    link.download = $(name).val()+".csv";
+    	    link.click();
+    	    
+    	    setTimeout(function() {window.URL.revokeObjectURL(url);},0);
+    	
+    	    
+    	}else{
+    		var link = document.createElement('a');
+    	    link.href = window.URL.createObjectURL(blob);
+    	    link.download = $(name).val()+".csv";
+    	    link.click();
+    	
+    	}
+}
+    	
+function bannerBuzon2() {
+    $(".vm_help.plus").click(function() {
+        var padre = $(window.parent.document);
+        var cuerpoModal = padre.find('.bet-help-window .modal-body #contenido');
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            $.ajax({
+                type : "POST",
+                beforeSend : function(request) {
+                    if (token) {
+                        request.setRequestHeader(header, token);
+                    }
+                },
+                cache : false,
+                url : window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1]+"/posicionGlobal/archivosPendientes.do",
+                data : {
+                    jsonData : JSON.stringify(indTiempo)
+                },
+                success : function(response) {
+                    htmlBuzon = response;
+                    console.log("ACCION CORRECTA");
+        cuerpoModal.html(htmlBuzon);
+        window.parent.resizeMe();
+                },
+                error : function() {
+                    console.log("Error: peticion ajax fail.");
+                }
+           });
+    });
+}    		
+    	  
+function enviarFormulario (url, referencia, codLayout){
+    $("#referenciaArchivoPosGlob").val(referencia);
+    $("#codLayout").val(codLayout);
+    $("#frmModuloPosicionGlobal").attr("action", url);
+    $("#frmModuloPosicionGlobal").submit();
+}

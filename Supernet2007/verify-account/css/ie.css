@@ -1,0 +1,453 @@
+.oprap table.etable{
+	margin:0px 0px 0px 10px !important;
+}
+.cfSOFOM{
+	position:absolute !important;
+	top:353px !important;
+}
+
+div#UtilDialogBody.win_bckg #divTableConfirmaPaperless #divHeader{
+	width: 100% !important;
+}
+#infoExtra .dialogButton .confirmData .reciboLeft{
+	width: 0px !important;
+}
+#infoExtra .dialogButton .confirmData .reciboLeft font.linkunder{
+	position: relative !important;
+}
+#ai_calFecOpMulti{
+	left: 185px !important;
+}
+#calFecOpMulti{
+	left: 100px !important;
+}
+
+
+
+#divFiles input{
+	width: 300px !important;
+}
+
+
+/*#Main #i8_cp{
+	width:auto !important;
+}*/
+
+div#UtilDialogBody.win_bckg #DivHeader.caja-header{
+	width: 700px !important;
+}
+
+#tbPaperless font{
+	color:#000000 !important;
+}
+#UtilDialog.mainWin .dialogButton font,
+#UtilDialog.mainWin .dialogButton img,
+#UtilDialog.mainWin .dialogButton span{
+	position: absolute !important;
+}
+#UtilDialog.mainWin .dialogButton font{
+	width:10px !important;
+	white-space: nowrap !important;
+}
+#UtilDialog.mainWin .dialogButton img{
+	/*float: right !important;
+	left: 0px !important;*/
+}
+#UtilDialog.mainWin .dialogButton span{
+	/*float:left !important;
+	position: relative !important;*/
+	left: 90px !important;
+}
+#UtilDialog.mainWin .dialogButton{
+	width:100% !important;
+	float:left;
+}
+#c_cuentaID,#c_carrierID,#c_numeroTelefono{
+	left: 187px !important
+}
+#UtilDialog.mainWin .reciboLeft{
+	width:200px !important;
+}
+#UtilDialog.mainWin .confirmData .reciboLeft{
+	width:auto !important;
+}
+
+/*fieldset.notas{
+	height: inherit !important;
+    position: absolute !important;
+}*/
+td.dheader{
+	padding-top: 2px !important;
+}
+/*fieldset.notas font{
+ 	white-space:pre;
+}*/
+
+#headerImage{
+	height:57px !important;
+}
+.ieWhite{
+	color: #FFFFFF !important;
+}
+.borderTable{
+	border: 2px solid;
+	border-color: black;
+}
+DIV.mainOperations{
+	left: 1% !important;
+	width: 96% !important;
+}
+DIV.mainOperations .caja-header img.linked{
+	left: 94% !important;
+}
+.oprpLabels div{
+	display:none !important;
+}
+BUTTON,.btn_stu{
+	border-top: #CCC 0px solid !important;
+	border-bottom: #CCC 4px solid !important;
+	border-left: #CCC 0px solid !important;
+	border-right: #CCC 4px solid !important;
+  	zoom: 1;
+}
+.ieTabDivs{
+	height: auto !important;
+}
+.oprap font.header4, .oprap font.header3{
+	color: #ffffff !important;
+    font-size: 10px !important;
+    font-weight: bold !important;
+    left: 35px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    top: 9px !important;
+    white-space: nowrap;
+    width: 136px;
+}
+DIV.mainOperations div
+{
+	width: 100% !important;
+	border-spacing: 0px !important;
+	padding: 0px !important;
+	margin: 0px !important;
+}
+.mainOperations div table,.mainOperations div table td{
+	border-spacing: 0px !important;
+	padding: 0px !important;
+	margin: 0px !important;
+	border-collapse: collapse;
+}
+.mainOperations table{
+	width: 100% !important;
+}
+td.oprap{
+	padding:1px 5px 0px 5px !important;
+}
+div.ieSubHeader{
+	background-color: #e6e6e6 !important;
+}
+#spnt div.ieSubHeader font{
+	color: #333333 !important;
+	left: 22px !important;
+	font-weight: normal !important;
+	top: 6px !important;
+}
+div.ieSubHeader img{
+	display:none;
+}
+div.ieSubHeader img.linked{
+	display:block !important;
+}
+.utilWnd td.dheader font {
+    font-family: Verdana !important;
+    font-size: 16px;
+    font-weight: 400;
+    left: 40px !important;
+}
+.ieTab,.msdr,.ieOprp{
+	background-color: transparent !important;
+}
+
+.ieTabPgs.ieTab .utilBody div .mainOperations,
+.ieTabTran.ieTab .utilBody div .mainOperations,
+.ieTabBpriv.ieTab .utilBody div .mainOperations,
+.ieTabDire.ieTab .utilBody div .mainOperations,
+.ieAdmin.ieTab .utilBody div .mainOperations,
+.ieTabInve.ieTab .utilBody div .mainOperations{
+	border-style: none !important;
+}
+.linksdiv{
+	background-color: transparent !important;
+}
+.ieTab .utilBody div .mainOperations .caja-header{
+	background-color:#F00 !important;
+	color:#FFF !important;
+	height: 24px !important;
+}
+.ieTab .utilBody div .mainOperations .caja-header font{
+	top: 4px !important;
+}
+.ieTab .utilBody div .mainOperations div div.mainOperations{
+	left: 0px !important;
+	margin-bottom: 6px !important;
+	border: 1px solid #efeff1 !important;
+}
+.ieTab .utilBody div .mainOperations div div.mainOperations .caja-header{
+	color: #6f6f6f !important;
+	font-family: Verdana !important;
+	background-position: 5px -634px;
+    background-repeat: no-repeat !important;
+    background-color: #efeff1 !important;
+    background-repeat: repeat-x;
+    color: #6f6f6f !important;
+    height: 32px !important;
+    width: 100% !important;
+}
+
+table.confirmData td a{
+	background-image: url('../img/icon-list-inactive.gif');
+    background-position: 13px center;
+    background-repeat: no-repeat;
+    padding: 2px 2px 2px 35px !important;
+    float: left !important;
+    width:100% !important;
+    /*height: 50px !important;*/
+}
+table.confirmData td a:hover{
+	background-image: url('../img/list-icon-active.gif');
+}
+table.confirmData td a{
+	color: #6f6f6f !important;
+    font-family: Verdana !important;
+    font-size: 11px;
+    text-decoration: none !important;
+}
+table.confirmData td.all{
+	display: none !important;
+}
+.ieTab .utilBody div .mainOperations div div.mainOperations .caja-header font{
+	top: 8px !important;
+}
+.ieTab .utilBody div .mainOperations div div.mainOperations .caja-header img.linked{
+	left: 94% !important;
+	top: 7px !important;
+}
+ .ieOprp .utilWnd .title table td.dheader.ieImgBack font{
+	font-size: 0px !important;
+}
+.ieOprp .utilWnd .title table td.dheader.ieImgBack{
+	background-image:url("../img/operacionesRapidas.jpg") !important;
+	background-repeat:no-repeat;
+	background-position:center;
+	height:60px !important;
+}
+
+.ieLeftTab{
+	left: 9px !important;
+}
+.utilBody > div.mainOperations > .caja-header > img.linked{
+	float:right !important;
+	left:0px !important;
+	right:15px !important;
+}
+.indraUnderMenu #mainFecha{
+	left:0px !important;
+	float: right !important;
+	position:relative !important;
+	margin-right: 20px !important;
+}
+.ivMenu>div{
+	width:auto !important;
+}
+#jbscreen.layer,#jbscreenAlert.layer,#jbscreenLoading.layer{
+	position:absolute !important;
+}
+
+div.ieTabDivs,div.ieTab{
+	padding-bottom: 12px !important;
+	position: relative !important;
+}
+.ieTransparent{
+	background-color:transparent !important;
+}
+div.ieTabDivs{
+	background-color:transparent !important;
+}
+div.ieTabDivs>div>.utilWnd>.title{
+	left: -1px !important;
+    top: -1px !important;
+    width: calc(100% + 2px) !important;
+}
+div.ieTabDivs>div{
+	margin-top:0px !important;
+	background-color: #d7d7d7 !important;
+	float:left;
+}
+div.ieTabDivs>div,div.ieTabMSDR>div{
+	height: auto !important;
+	position: relative !important;
+}
+div.ieTabDivs>div{
+	float: left;
+}
+div.ieTabDivs>div.msdr{
+	left:22px !important;
+}
+div.ieTabMSDR>div.msdr>div.utilWnd>.utilBody{
+	min-height:684px;
+}
+div.ieTabDivs>div>.utilWnd{
+	height:auto !important;
+	position: relative !important;
+	float:left;
+}
+div.ieTabDivs>div>.utilWnd>.utilBody{
+	height: auto !important;
+	position: relative !important;
+	float: left;
+	width: 100% !important;
+}
+
+.msdr .mainOperations .caja-header {
+	/*background-image: url("../img/sprite-icons-misc.gif");*/
+	background-position: 5px -595px;
+	background-repeat: no-repeat !important;
+}
+div.ieTabDivs > div[id="spnt.tabdivs.bpriv"] > .utilWnd > .utilBody > div{
+	min-height: 300px !important;
+}
+
+div.ieTabDivs>div>.utilWnd>.utilBody>div{
+	position: relative !important;
+	height:auto !important;
+	float:left;
+	min-height:600px !important;
+	left: initial !important;
+}
+div.ieTabDivs>div>.utilWnd>.utilBody>div>.mainOperations>div>.linksdiv{
+	height:auto !important;
+}
+
+#spnt .footer{top: 150px !important;}
+
+
+.indraUnderMenu img{left: 441px !important; top: 7px !important;}
+.ieMensajes{left: 466px !important; top:11px !important;}
+.ieOcultar{display: none !important;}
+.ieFechaAcceso{top: 25px !important;}
+.ieBanda,.ieNombre{top: 7px !important;}
+.ieNombre{
+	font-weight: 700 !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    top: 10px !important;
+    white-space: nowrap;
+    width: 340px !important;
+}
+.indraUnderMenu .ieImg{top:8px !important;}
+.indraUnderMenu .ieCfdi{left: 850px !important;}
+.indraUnderMenu .ieImprimir{left: 760px !important;}
+.indraUnderMenu .ieEdocta{left: 651px !important;}
+.indraUnderMenu .ieConstanciasFiscales{left: 538px !important;}
+.indraUnderMenu .ieNvaSnet{left: 440px !important;display: none;}
+
+#zone8,#promoCampanas{border-top: solid 6px #FF0000 !important;}
+#promoCampanas{top: 160px !important;}
+
+/*Consultas*/
+div.ieIcoConsultas{
+	background-image: url("../img/sprite-icons-misc.gif");
+	background-position: 5px -595px;
+	background-repeat: no-repeat !important;
+}
+.footer font{
+	left: 17px !important;
+}
+#lblTipoTarjeta,
+#lblTipoTarjetaA,
+#lblNumTarjetaA,
+#lblTitularA,
+#lblAliasB,
+#lblAliasA{
+	width:165px !important
+}
+
+.oprap .mainOperation div table.eTable font.linkunder{
+	color: #333333 !important;
+}
+
+/*SAA Vector 08/01/2016 Modificaci�n para Movimientos*/
+.iMovs,.iMovs .title,.iMovs .title .inTitle{
+	width:100% !important;
+}
+.iMovs .title .inTitle font{
+	color: #ff0000 !important;
+    font-size: 14px !important;
+    font-weight: normal !important;
+}
+.iMovs .main,.iMovs .subtitle{
+	left: 10px !important;
+}
+.iMovs .main{
+	top: 66px !important;
+}
+.iMovs .subtitle{
+	top: 40px !important;
+}
+.iMovs .subtitle .inSubtitle span{
+	top: 3px !important;
+}
+.iMovs .main{
+	background-color: #FFFFFF !important;
+}
+.iMovs .main div{
+	background-color: transparent !important;
+}
+.iMovs .main .filters .inFilters{
+	background-color: #efeff1 !important;
+}
+.iMovs .main .filters .inFilters .filterHeading{
+	background-color: #FF0000 !important;
+}
+.iMovs .main .filters .inFilters .filterHeading font{
+	color: #FFFFFF !important;
+}
+.iMovs .main .filters .inFilters .filterHeading font{
+	font-weight: bold !important;
+}
+.iMovs .main font.dialogLabelBold{
+	font-size: 12px !important;
+    font-weight: bold !important;
+}
+.iMovs .main font{
+	color: #333333 !important;
+}
+.iMovs .main .ieInfoAccount font.dialogLabelBold{
+	left: auto !important;
+    right: 200px !important;
+    color: #333333 !important;
+    font-size: 12px !important;
+    font-weight: bold !important;
+
+}
+ .iMovs .main .ieInfoAccount font.infoAccount{
+ 	left: 640px !important;
+ }
+.iMovs .main .rel .subtitle{
+	top: 0px !important;
+	background-color: #e9e9e9 !important;
+}
+.iMovs .main .rel .subtitle .inSubtitle font.dialogLabelBold{
+	color: #FF0000 !important;
+	font-size: 14px !important;
+}
+.iMovs .main .rel font.linkUnder{
+	color: #333333;
+    font-size: 11px !important;
+    overflow: hidden;
+    padding-left: 25px;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 360px;
+}

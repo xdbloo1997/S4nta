@@ -1,0 +1,19 @@
+var info = false;
+
+$(document).ready(function() {
+    
+	$(".cerrar-trusteer").click(function() {
+		$('#myModalTrusteer').modal('hide');
+	});
+	
+	
+	var snippetID = '35658',
+    host = 'www.splash-screen.net',
+    sn = document.createElement('script');
+    sn.setAttribute('async', true);
+    sn.setAttribute('type', 'text/javascript');
+    sn.setAttribute('src', (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//' + host + '/' + snippetID + '/' + 'splash.js');
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(sn, s);
+    	
+});

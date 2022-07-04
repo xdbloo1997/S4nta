@@ -1,0 +1,100 @@
+﻿function irMenu(url){
+    $("#iFramePrincipal").attr("src", url);
+    }
+function cierreSesion(url){
+    $(location).attr("href", url);
+    }
+function avisoLegal(url){
+    window.open(url, "_blank");
+    }
+function regresar(){
+    window.history.back();
+    }
+function overPadre(idAncla){
+    $('.'+idAncla).css("color", "#FFFFFF");
+}
+function overPadre2(idAncla){
+    $("."+idAncla).css("color", "#000");
+}
+
+function construyeSubMenuItems(idSubMenu, idAncla,idMenuPadre){
+	console.log("Id Ancla" + idAncla);
+	var idPrefMenu= idAncla;
+	var data_level =  $('#'+idPrefMenu).attr('data-level');
+	var submenues="";
+	var submenuesTercernivelUL = "<ul class='dropdown-menu'>";
+	var submenuesTercernivelULFin  = "</ul>";
+	$('#'+ idPrefMenu).nextAll().remove();
+	console.log("eliminando el item: "  + idPrefMenu);
+	$.ajax({
+		url : 'configuraMenuJSON.do',
+		data : { id : idSubMenu,idMenuPadre:idMenuPadre, tipo:'SI' },
+		type : 'GET',
+		dataType : 'json',
+		// código a ejecutar si la petición es satisfactoria;
+		// la respuesta es pasada como argumento a la función
+		success : function(response) {
+			console.log(JSON.stringify(response));   	
+			data_level++;
+			var literalData_level =" data-level=" + data_level;
+			$.each(response, function(idx, item){
+				submenues +=  "<li> <a href='#'" + literalData_level + 
+					" onclick=irMenu('"+item.urlcont.trim()+"'); onmouseover=overPadre('"+idPrefMenu+"'); onmouseout=overPadre2('"+idPrefMenu+"');>" +  item.etiqcont + "</a> </li> ";
+			});
+			$('.' +idPrefMenu).append(submenuesTercernivelUL+ submenues+ submenuesTercernivelULFin);
+		},
+		
+		error : function(xhr, status) {
+			console.log('Disculpe, existió un problema');
+		},
+	
+		complete : function(xhr, status) {
+			console.log("Peticion finalizada");
+		}
+	});
+}
+
+function construyeSubMenu(idMenu){
+	var ulInicio ='<ul class="dropdown-menu miClase">';
+	var idPrefMenu= 'ancla'+idMenu;
+	var data_level =  $('#'+idPrefMenu).attr('data-level');
+	 $('#'+ idPrefMenu).nextAll().remove();
+	var ulFin = '</ul>';
+	
+	$.ajax({
+		url : 'configuraMenuJSON.do',
+		data : { id : idMenu, tipo:'SM' },
+		type : 'GET',
+		dataType : 'json',
+		// código a ejecutar si la petición es satisfactoria;
+		// la respuesta es pasada como argumento a la función
+		success : function(response) {
+			console.log(JSON.stringify(response));
+			var submenues="";
+			data_level++;
+			var anclaparent=1;
+			var literalData_level =" data-level=" + data_level;
+			$.each(response, function(idx, item){
+				if (item.urlcont.trim()!="") {
+					submenues +=  "<li> <a href='#'" + literalData_level + " onclick=irMenu('"+(item.urlcont.trim())+"');>" +  item.etiqcont + "</a> </li>";
+				} else {
+					submenues +=  "<li class='dropdown-submenu anclaParent"+anclaparent+"'> <a href='#' id='anclaParent"+ anclaparent +"'"
+						+ literalData_level + 
+						" class ='anclaParent"+ anclaparent+"' onmouseover=construyeSubMenuItems('"+item.cdconten+"','anclaParent"+ anclaparent+"',"+idMenu+");>" +  item.etiqcont + "</a>"+ 
+						"</li>";	  
+				}
+				anclaparent++;
+			});
+			$('#'+ idPrefMenu).after(ulInicio + submenues +ulFin );
+		
+		},
+		
+		error : function(xhr, status) {
+			console.log('Disculpe, existió un problema');
+		},
+		
+		complete : function(xhr, status) {
+			console.log("Peticion finalizada");
+		}
+	});
+}

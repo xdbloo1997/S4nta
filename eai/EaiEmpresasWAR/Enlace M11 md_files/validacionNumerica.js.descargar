@@ -1,0 +1,157 @@
+//Valida que el campo contenga únicamente números enteros
+function validarNumerico(valorValidar){
+	var reg =/^\d*$/;
+	try{
+		if("" !== valorValidar){
+			return (reg.test(valorValidar));
+		}else{
+			return true;
+		}
+			
+	}
+     catch(err){
+     	return false;
+     }
+}
+
+//Valida que el campo contenga únicamente números decimales
+function validarDecimal(valorValidar){
+	var reg = /^\d*\.\d*$/;
+	try{
+		if("" !== valorValidar){
+			return (reg.test(valorValidar));
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+
+// Valida que el campo contenga únicamente números, back space y suprimir
+function validarNumericoEspeciales(valorValidar){
+	var reg = /^\d*$/;
+	try{
+		if("" !== valorValidar){
+			return (reg.test(valorValidar));	
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+
+//Valida que el campo contenga únicamente números, punto, coma, back space y suprimir
+function validarNumericoEspecialesExtra(valorValidar){
+	var reg = /^([0-9 ,.]{1,})$/i;
+	try{
+		if("" !== valorValidar){
+			return (reg.test(valorValidar));
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+
+//Valida que el valor del campo sea mayor que cero en Recaudaciones
+function validarValorMayorQueCeroRecaudaciones(valorValidar, campoComparar){
+	try{
+		var campo1 = parseFloat(campoComparar);
+		if("" === valorValidar) return true;
+		valorValidar = parseFloat(valorValidar);
+		return valorValidar > campo1;
+	}
+     catch(err){
+     	return false;
+     }
+}
+
+//Valida que el valor del campo sea mayor que el campo a comparar, especial para pago sat
+function validarValorMayorQueCeroSAT(valorValidar, campoComparar){
+	try{
+		return valorValidar>campoComparar;
+	}
+    catch(err){
+ 	   return false;
+    }
+}
+
+//Valida que el valor del campo sea mayor que el campo a comparar
+function validarValorMayorQue(valorValidar, campoComparar){
+	try{
+		var campo1= $("#"+campoComparar).val();
+		if("" === campo1 && "" === valorValidar){
+			return true;
+		}else if("" === campo1 || "" === valorValidar){
+			return false;
+		}else{
+			
+			return parseInt(valorValidar)>parseInt(campo1);
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+
+//Valida que el valor del campo sea mayor o igual que el campo a comparar
+function validarValorMayorIgualQue(valorValidar, campoComparar){
+	try{
+		var campo1= $("#"+campoComparar).val();
+		if(valorValidar === "" && campo1 === ""){
+			return true;
+		}else{
+			if(valorValidar !== "" && campo1 !== ""){
+				return parseFloat(valorValidar)>=(campo1);
+			}else{
+				return false;
+			}		
+		}		
+	}
+     catch(err){
+     	return false;
+     }
+}
+
+//Valida que el valor del campo sea menor que el campo a comparar
+function validarValorMenorQue(valorValidar, campoComparar){
+	try{
+		return valorValidar<campoComparar;
+	}
+     catch(err){
+     	return false;
+     }
+}
+
+//Valida que el valor del campo sea menor o igual que el campo a comparar
+function validarValorMenorIgualQue(valorValidar, campoComparar){
+	try{
+		return valorValidar<=campoComparar;
+	}
+     catch(err){
+     	return false;
+     }
+}
+//modificacion 27/11/2018 @autor-AMAGUAS Stefanini
+//valida que el valor del campo sea menor que el valor del campo a comparar
+function validaValorMenorQueConfirming(valorValidar, campoComparar){
+	try{
+		var campo1= $("#"+campoComparar).val();
+		//si uno de los 2 campos esta vacio no hace la comparacion
+		if(valorValidar === "" || campo1 === ""){
+			return true;
+		}else{
+				return parseFloat(valorValidar)<parseFloat(campo1);		
+		}		
+	}
+     catch(err){
+     	return false;
+     }
+
+}

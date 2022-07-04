@@ -1,0 +1,88 @@
+$(window).ready(function() {
+    startTime();
+    window.parent.initializeTimer('../ventanaOperativa/cerrarSesion.do');
+
+    $( document ).ajaxComplete(function( event, xhr, settings ) {
+        if(settings.url != undefined){
+            if(!settings.url.includes("mostrarIcoDescarga.do") && 
+                !settings.url.includes("cerrarSesionInactividad.go")){
+                window.parent.initializeTimer('../ventanaOperativa/cerrarSesion.go');
+            }       
+        }
+    });
+    
+});
+
+function startTime(){
+var d=new Date();
+var day=d.getDate();
+var month=d.getMonth()+1;
+var year=d.getFullYear();
+if(day.toString().length===1){
+	day="0"+day;
+}
+if(month.toString().length===1){
+	month="0"+month;
+}
+
+$('.fechaActualLblText').each(function() {
+    $(this).text(day+"/"+month+"/"+year);
+});
+var hour=d.getHours();
+var minutes=d.getMinutes();
+if(hour.toString().length===1){
+	hour="0"+hour;
+}
+if(minutes.toString().length===1){
+	minutes="0"+minutes;
+}
+$('.horaActualLblText').each(function() {
+	$(this).text(hour+":"+minutes);
+});
+t=setTimeout('startTime()',1000);
+}
+function checkTime(i){
+if (i<10) {
+    i="0" + i;
+}
+return i;
+}
+
+/**
+ * Variable formateo de importes
+ */
+ var fNumber = {
+sepMil: ",", // separador para los miles
+sepDec: '.', // separador para los decimales
+formatear:function (num){
+num +='';
+var splitStr = num.split('.');
+var splitLeft = splitStr[0];
+var splitRight = splitStr.length > 1 ? this.sepDec + splitStr[1] : '';
+var regx = /(\d+)(\d{3})/;
+while (regx.test(splitLeft)) {
+splitLeft = splitLeft.replace(regx, '$1' + this.sepMil + '$2');
+}
+return splitLeft + splitRight;
+},
+go:function(num){
+return this.formatear(num);
+}
+}
+
+/**
+ * Funcion formateo de importes en tablas
+ */
+function formatearImporteTabla(){
+	$( "td" ).each(function( index ) {
+	  if ( $( this ).hasClass( "formateaImporte" ) ) {
+		var value = $( this ).text().split(' ');
+		var format = fNumber.go(value[0]);
+		if (value.length > 1){
+		$( this ).text(format + ' ' + value[1]);
+		}else{
+		$( this ).text(format);
+		}
+	  }
+	});
+}

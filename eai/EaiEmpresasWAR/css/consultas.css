@@ -1,0 +1,99 @@
+.titpag {
+	FONT-WEIGHT: bold; FONT-SIZE: 16px; COLOR: #003366; FONT-STYLE: italic; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.texencrut {
+	FONT-SIZE: 11px; COLOR: #999999; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.texencfec {
+	FONT-WEIGHT: bold; FONT-SIZE: 11px; COLOR: #000000; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.texenchor {
+	FONT-WEIGHT: bold; FONT-SIZE: 11px; COLOR: #000000; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.texenccon {
+	FONT-SIZE: 11px; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.texencconbol {
+	FONT-WEIGHT: bold; FONT-SIZE: 11px; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.tittabdat {
+	FONT-WEIGHT: bold; FONT-SIZE: 11px; FONT-FAMILY: Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #a4bee4
+}
+.textabdatobs {
+	FONT-WEIGHT: normal; FONT-SIZE: 10px; FONT-FAMILY: Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #cccccc
+}
+.textabdatcla {
+	FONT-WEIGHT: normal; FONT-SIZE: 10px; FONT-FAMILY: Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #ebebeb
+}
+.tabfonbla {
+	BACKGROUND-COLOR: #ffffff
+}
+.tabfonazu {
+	BACKGROUND-COLOR: #a4bee4
+}
+.tittabtotcla {
+	FONT-WEIGHT: bold; FONT-SIZE: 11px; FONT-FAMILY: Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #ebebeb
+}
+.tittabtotobs {
+	FONT-WEIGHT: bold; FONT-SIZE: 11px; FONT-FAMILY: Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #cccccc
+}
+.tabmovtex {
+	FONT-SIZE: 10px; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.textabref {
+	FONT-WEIGHT: normal; FONT-SIZE: 10px; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.tittabcom {
+	FONT-WEIGHT: bold; FONT-SIZE: 11px; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.textabcom {
+	FONT-WEIGHT: normal; FONT-SIZE: 9px; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.titenccom {
+	FONT-WEIGHT: bold; FONT-SIZE: 12px; COLOR: #003366; FONT-STYLE: italic; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.tabmovtexbol {
+	FONT-WEIGHT: bold; FONT-SIZE: 11px; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.texliganeg {
+	FONT-SIZE: 10px; FONT-FAMILY: Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #cccccc; TEXT-DECORATION: underline
+}
+.texfootpagneg {
+	FONT-SIZE: 11px; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.texfootpaggri {
+	FONT-SIZE: 11px; COLOR: #999999; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.titadmcont {
+	FONT-WEIGHT: bold; FONT-SIZE: 12px; COLOR: #000000; FONT-STYLE: italic; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.tabmovtex11 {
+	FONT-SIZE: 11px; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.texresalbol {
+	FONT-WEIGHT: bold; FONT-SIZE: 10px; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.tabmovbro {
+	FONT-SIZE: 11px; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.tittabcenazu {
+	FONT-WEIGHT: bold; FONT-SIZE: 11px; COLOR: #ffffff; FONT-FAMILY: Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #34689a
+}
+.textabcen {
+	FONT-WEIGHT: normal; FONT-SIZE: 10px; FONT-FAMILY: Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #e5e5e5
+}
+.tabtexcal {
+	FONT-SIZE: 11px; COLOR: #000000; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: none
+}
+.tabtexcal2 {
+	FONT-SIZE: 12px; COLOR: #ff0000; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: none
+}
+.textittab {
+	FONT-WEIGHT: bold; FONT-SIZE: 11px; FONT-FAMILY: Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #dddddd
+}
+.tabmovtex1 {
+	FONT-SIZE: 12px; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.texencconx {
+	FONT-SIZE: 13px; COLOR: #000000; FONT-FAMILY: Arial, Helvetica, sans-serif
+}

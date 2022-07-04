@@ -1,0 +1,2 @@
+(function(r,o,c,k){if(r.rocketanalytics)return;n=r.rocketanalytics=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};n.push=n;n.loaded=!0;n.version='1.0';n.queue=[];t=o.createElement(c);t.async=!0;t.src=k;s=o.getElementsByTagName(c)[0];s.parentNode.insertBefore(t,s)})(window,document,'script','https://cdn-omega-2.rocket.la/pixel/pixel.min.js');
+rocketanalytics('configure', {'account': 'f669f447-7d86-441a-b5a9-04474e330ec2'});

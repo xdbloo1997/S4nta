@@ -1,0 +1,864 @@
+/**
+ * FUNCIONES GENERALES JAVASCRIPT
+ * VECTOR SOFTWARE FACTORY
+ * SAUL ADAME APREZA
+ * 07/10/2016
+ */
+
+$(document).ready(function(){
+	vsf_finput();
+	vsf_fire_print();
+	bet_vsf_addRow();
+	validaCollapsables();
+	listenerTesoreriaXport();
+	
+});
+
+function getSiteLanguaje(){
+	var idioma = "";
+	window.parent.window.location.href.split("?")[1]!=undefined ? 
+			(obtenerIdioma(window.parent.window.location.href.split("?")[1].split("&")))==="en" ? idioma="en_US" : idioma="es_ES" 
+			: idioma="es_ES";
+	return idioma;
+}
+
+function vsf_fire_print(){
+    $(".icon-boton-imprimir").click(function function_name () {
+    	if($("#tabConsulta").hasClass("active")	&& !$("#mostrarResultadosRTTL").hasClass("oculto")){
+			 event.stopPropagation();
+			 console.log("--------> INICIA IMPRESION "+new Date()+" <--------");
+			 printPantallaCheques();
+		}else if( $("#formRegistrosArchivos2").length) {
+			event.stopPropagation();
+		 	console.log("--------> INICIA IMPRESION ARCHIVOS "+new Date()+" <--------");
+		 	printPantallaArchivos();
+		}else if( $("#printPantallaDiv").length) {
+			event.stopPropagation();
+		 	console.log("--------> INICIA IMPRESION DIV DETERRMINADO "+new Date()+" <--------");
+		 	printPantallaDiv();
+		}else if( $("#compAltaPagoArchivo").length) {
+			event.stopPropagation();
+		 	console.log("--------> INICIA IMPRESION CONFIRMACION ALTA "+new Date()+" <--------");
+		 	printPantallaConfirmacion();
+		}else {
+			 console.log("--------> INICIA IMPRESION "+new Date()+" <--------");
+			 //printPAge();
+    		window.print();
+		 }
+
+   	
+    });
+    
+    $(".imprimirPantalla").click(function function_name(){
+        window.print();
+    });
+
+    $(".boton-imprimir-cheques").click(function function_name () {
+    	console.log("--------> INICIA IMPRESION "+new Date()+" <--------");
+    	//printPAge();
+    	PrintElem("bodyCheques");
+    	
+    });
+}
+
+function vsf_print_canvas(canvas,title){  
+    //var dataUrl = document.getElementById('anycanvas').toDataURL(); //attempt to save base64 string to server using this var  
+    var dataUrl = canvas.toDataURL();
+    console.log(canvas);
+    var windowContent = '<!DOCTYPE html>';
+    
+    windowContent += '<html>'
+    windowContent += '<head><title>Impresion - '+title+'</title>';
+    windowContent += '<style type="text/css media="print">';
+    windowContent += '@page{ size: landscape;}';
+    windowContent += '</style>';
+    windowContent += '</head>';
+    //windowContent += '<body onload="document.body.appendChild('+canvas+');">'
+    //windowContent += canvas;
+    windowContent += '<img src="' + dataUrl + '">';
+    windowContent += '</body>';
+    windowContent += '</html>';
+    
+    sOptions = 'status=no,menubar=no,scrollbars=yes,resizable=no,toolbar=no';
+    sOptions = sOptions + ',width=' + (screen.availWidth*0.7).toString();
+    sOptions = sOptions + ',height=' + (screen.availHeight*0.8 - 122).toString();
+    sOptions = sOptions + ',screenX=0,screenY=0,left='+Math.round((screen.availWidth/2) - (screen.availWidth*0.7/2)) +',top=0';
+    
+    var printWin = window.open('', title, sOptions );
+    printWin.document.open();
+    printWin.document.write(windowContent);
+    printWin.document.close();
+    printWin.focus();
+    printWin.print();
+    printWin.close();
+}
+
+function printPAge(){
+	html2canvas(window.parent.document.body, {
+		 onrendered: function(canvas) {
+			 //$(window.parent.document.body).find("#print").html("<img src='"+canvas.toDataURL()+"'/>");
+			 vsf_print_canvas2("<img src='"+canvas.toDataURL()+"'/>");
+		  }
+		});
+
+}
+
+
+function vsf_print_canvas2(html,title){  
+    //var dataUrl = document.getElementById('anycanvas').toDataURL(); //attempt to save base64 string to server using this var  
+    
+    var windowContent = '<!DOCTYPE html>';
+    
+    windowContent += '<html>'
+    windowContent += '<head><title>Impresión - '+title+'</title>';
+    windowContent += '<style type="text/css media="print">';
+    windowContent += '@page{ size: landscape;}';
+    windowContent += '</style>';
+    windowContent += '</head>';
+    windowContent += html;
+    windowContent += '</body>';
+    windowContent += '</html>';
+    
+    sOptions = 'status=no,menubar=no,scrollbars=yes,resizable=no,toolbar=no';
+    sOptions = sOptions + ',width=' + (screen.availWidth*0.7).toString();
+    sOptions = sOptions + ',height=' + (screen.availHeight*0.8 - 122).toString();
+    sOptions = sOptions + ',screenX=0,screenY=0,left='+Math.round((screen.availWidth/2) - (screen.availWidth*0.7/2)) +',top=0';
+    
+    var printWin = window.open('', title, sOptions );
+    printWin.document.open();
+    printWin.document.write(windowContent);
+    printWin.document.close();
+    printWin.focus();
+    console.log("--------> FINALIZA IMPRESION "+new Date()+" <--------");
+    printWin.print();
+    printWin.close();
+}
+
+
+
+
+
+
+/*************FAKE FUNCTIONS *****************/
+
+function descargarArchivo(contenidoEnBlob, nombreArchivo) {
+    var reader = new FileReader();
+    reader.onload = function (event) {
+        var save = document.createElement('a');
+        save.href = event.target.result;
+        save.target = '_blank';
+        save.download = nombreArchivo || 'archivo.dat';
+        var clicEvent = new MouseEvent('click', {
+            'view': window,
+                'bubbles': true,
+                'cancelable': true
+        });
+        save.dispatchEvent(clicEvent);
+        (window.URL || window.webkitURL).revokeObjectURL(save.href);
+    };
+    reader.readAsDataURL(contenidoEnBlob);
+};
+
+//Función de ayuda: reúne los datos a exportar en un solo objeto
+function obtenerDatos() {
+    return {
+        nombre: "Eduardo Meade Andrade",
+        telefono: "442 123 1212",
+        fecha: (new Date()).toLocaleDateString()
+    };
+};
+
+//Función de ayuda: "escapa" las entidades XML necesarias
+//para los valores (y atributos) del archivo XML
+function escaparXML(cadena) {
+    if (typeof cadena !== 'string') {
+        return '';
+    };
+    cadena = cadena.replace('&', '&amp;')
+        .replace('<', '&lt;')
+        .replace('>', '&gt;')
+        .replace('"', '&quot;');
+    return cadena;
+};
+
+//Genera un objeto Blob con los datos en un archivo TXT
+function generarTexto(datos) {
+    var texto = [];
+    texto.push('Datos Personales:\n');
+    texto.push('Nombre: ');
+    texto.push(datos.nombre);
+    texto.push('\n');
+    texto.push('Teléfono: ');
+    texto.push(datos.telefono);
+    texto.push('\n');
+    texto.push('Fecha: ');
+    texto.push(datos.fecha);
+    texto.push('\n');
+    //El contructor de Blob requiere un Array en el primer parámetro
+    //así que no es necesario usar toString. el segundo parámetro
+    //es el tipo MIME del archivo
+    return new Blob(texto, {
+        type: 'text/plain'
+    });
+};
+
+
+//Genera un objeto Blob con los datos en un archivo XML
+function generarXml(datos) {
+    var texto = [];
+    texto.push('<?xml version="1.0" encoding="UTF-8" ?>\n');
+    texto.push('<datos>\n');
+    texto.push('\t<nombre>');
+    texto.push(escaparXML(datos.nombre));
+    texto.push('</nombre>\n');
+    texto.push('\t<telefono>');
+    texto.push(escaparXML(datos.telefono));
+    texto.push('</telefono>\n');
+    texto.push('\t<fecha>');
+    texto.push(escaparXML(datos.fecha));
+    texto.push('</fecha>\n');
+    texto.push('</datos>');
+    //No olvidemos especificar el tipo MIME correcto :)
+    return new Blob(texto, {
+        type: 'application/xml'
+    });
+};
+
+
+function obtenerArchivo(){
+	var datos = obtenerDatos();
+	descargarArchivo(generarXml(datos), 'archivo.pdf');
+}
+
+function fakeExportadorTesoreria(formato){
+	var datos = obtenerDatos();
+	descargarArchivo(generarTexto(datos), 'archivo.'+formato);
+}
+
+function listenerTesoreriaXport(){
+	$(".vsf-tesoreria-export").click(function(){
+		var extencion=$(this).attr("data-format");
+		fakeExportadorTesoreria($(extencion).val());
+	})
+	console.info("Se cargo el exportador dummy para tesorería.");
+}
+
+/***************** FAKE FUNCTIONS ********************/
+
+
+/****Funcion Agregar Registros***/
+
+var htmlFormat= new Array();
+function bet_vsf_addRow(){ 
+
+	$(".bet-vsf-addRow").on("click",function(){
+		duplicadoFavorito();
+		if(banderaFavoritoDupli=="true"){
+			return;
+		}
+		if(validaCuentasDiferentes()){
+			var msjMisma=$("#msgMismasCuentas").val();
+			showModalOnce(msjMisma,"disableModalOnce()","Error");
+        	return false;
+        }
+		var fav = $(this).attr("favdisabled");
+		var operacion = $(this).attr("operation-code");
+		switch(operacion.charAt(0)) {
+	    case "1":
+	    	var validacion=validarTranferencias(operacion.charAt(1));
+	       
+	    	break;
+	    default:
+	       
+		} 
+		    
+	    var resultado=validacion.split(",");
+	    var flagRFFIMP = validaInputsCondicionados(operacion.charAt(1));
+	    var estdSwift = validaModuloD(operacion.charAt(1));
+	    var rfcMoral=validacionRFCMoral(operacion.charAt(1));
+	    //prueba
+	    if(operacion==="12"){
+	    	 asignaNomBancoM();
+	    }
+       
+	        if (validacionesGenerales(resultado[0], resultado[1]) === true && flagRFFIMP===true && estdSwift === true && rfcMoral===true) {
+	        		
+	        		consultaPaisMulidi($(this));
+	                agregarRegistroRow($(this),operacion,fav);
+	                var text = $($(this).attr("bet-vsf-lbl")).val();
+	                $("label.idMensajes").html(text);
+	                try{
+	                	$(".anadir-divisas").attr("disabled","disabled");
+	                }catch(error){
+	                	console.log("no esta en divisas");
+	                }
+	        }else{
+	        	cambiaValidaCuentas();
+	        	if(!flagRFFIMP){
+	        		validaInputsCondicionados(operacion.charAt(1));
+	        	}
+	        	if(!rfcMoral){
+	        		validacionRFCMoral(operacion.charAt(1));
+	        	}
+	        }
+	});
+	$(".bet-vsf-addRow-consultas").on("click",function(){
+	    var validacion=validarConsultasTransferencias();
+	    var resultado=validacion.split(",");
+	    
+	    if (validacionesGenerales(resultado[0], resultado[1]) === true) {
+	         agregarRegistroRow($(this),1);
+	    }   
+	});
+}
+
+
+
+function agregarRegistroRow(obj,operacion,fav){
+	 var idContenedorPadre = obj.attr("bet-vsf-ps");
+	    var htmlRow = "";
+	    var row_count = $(idContenedorPadre +" tbody tr").length;
+	    if(htmlFormat[idContenedorPadre.replace("#","")]===""||htmlFormat[idContenedorPadre.replace("#","")]===undefined){
+	        htmlRow = $(idContenedorPadre +" tbody").html();
+	      
+	        if(operacion.charAt(0)==="1"){
+	        	if(!$("#tab2").hasClass("active") && $("#tbNombreOperacionFavorita").attr("disabled")!=="disabled"){		        	
+		        		htmlRow = htmlRow.replace("agregar-favorito", "vsf_icon-favoritos");
+	        	}else if($("#tab2").hasClass("active") && $("#tbNombreOperacionFavorita2").attr("disabled")!=="disabled"){
+	        		htmlRow = htmlRow.replace("agregar-favorito", "vsf_icon-favoritos");
+	        	}
+	       }
+	        
+	        console.log(htmlRow);
+	        htmlFormat[idContenedorPadre.replace("#","")] = htmlRow;
+	        $(idContenedorPadre +" tbody tr").remove();
+	        row_count=row_count - 1;
+	    }else{
+	        htmlRow = htmlFormat[idContenedorPadre.replace("#","")];
+	        if(operacion.charAt(0)==="1"){
+	        	if($(fav).attr("disabled")=="disabled" && $(htmlRow).find("vsf_icon-favoritos")){
+	        		htmlRow = htmlRow.replace("vsf_icon-favoritos", "agregar-favorito");
+	        		$(fav).val("");
+	        	}else{
+	        	if(!$("#tab2").hasClass("active") && $(fav).attr("disabled")!=="disabled"){		        	
+	        		htmlRow = htmlRow.replace("agregar-favorito", "vsf_icon-favoritos");
+	        	}else if($("#tab2").hasClass("active") && $(fav).attr("disabled")!=="disabled"){
+	        		htmlRow = htmlRow.replace("agregar-favorito", "vsf_icon-favoritos");
+	        	}
+	       }
+	        console.log(htmlFormat[idContenedorPadre.replace("#","")]);
+	    }
+	    
+	    }
+	    htmlRow = bet_vsf_setData(bet_vsf_setArray(obj),htmlRow);    
+	    htmlRow = bet_vsf_newCollapse(htmlRow,row_count,idContenedorPadre);
+	    $(idContenedorPadre +" tbody").append(htmlRow);
+}
+
+//funcion para cambiar los id de cada nuevo registro
+function bet_vsf_newCollapse(htmlRow,row_count,contenedorPadre){
+//	var idAgregarFavorito ='id="agregarFavorito1"';
+	var idTabla = contenedorPadre.replace("#","");
+	var idAcordeon = 'id="mostrar_detalles1"';
+	var idAcordeon2 = 'id="mostrar_detalles1_1"';
+	var nameCheckbox = 'name="beneficiario2"';
+	var idCheckbox = 'id="beneficiario2"';
+	var forCheckbox = 'for="beneficiario2"';
+	var dataTarjet = 'data-target="{vsf-collapse}"';
+	var idCollapse = 'id="{vsf-collapse}"';	
+	var nameCheckbox2 = 'name="beneficiarioDisposicion"';
+	var idCheckbox2 = 'id="beneficiarioDisposicion"';
+	var forCheckbox2 = 'for="beneficiarioDisposicion"';
+	var idCodBanco = 'id="codBanco"';
+	
+//	var onclick = 'onclick="colapsar(\''+idAcordeon2+'\');"';
+	//var ondblick = 'ondblclick="colapsar(""'+idAcordeon+');"';
+//	htmlRow = htmlFormat[idContenedorPadre.replace("#","")];
+	
+		htmlRow = htmlRow.replace(idAcordeon, 'id="mostrar_detalles'+row_count+'"');
+		htmlRow = htmlRow.replace(nameCheckbox, 'name="beneficiario'+row_count+'"');
+		htmlRow = htmlRow.replace(idCheckbox, 'id="beneficiario'+row_count+'"');
+		htmlRow = htmlRow.replace(forCheckbox, 'for="beneficiario'+row_count+'"');
+		htmlRow = htmlRow.replace(dataTarjet, 'data-target="#'+idTabla+'collapse'+row_count+'"');
+		htmlRow = htmlRow.replace(idCollapse, 'id="'+idTabla+'collapse'+row_count+'"');
+		htmlRow = htmlRow.replace(idAcordeon2, 'id="mostrar_detalles1_'+row_count+'"')
+		
+		htmlRow = htmlRow.replace(dataTarjet, 'data-target="#collapse'+row_count+'"');
+		htmlRow = htmlRow.replace(idCollapse, 'id="collapse'+row_count+'"');
+		htmlRow = htmlRow.replace(nameCheckbox2, 'name="beneficiario'+row_count+'"');
+		htmlRow = htmlRow.replace(idCheckbox2, 'id="beneficiarioDisposicion'+row_count+'"');
+		htmlRow = htmlRow.replace(forCheckbox2, 'for="beneficiarioDisposicion'+row_count+'"');
+		htmlRow = htmlRow.replace(idCodBanco, 'id="codBanco'+row_count+'"');
+		//htmlRow = htmlRow.replace('onclick="colapsar(\'mostrar_detalles1\');"', onclick);
+		//htmlRow = htmlRow.replace('ondblclick="colapsar(\'mostrar_detalles1\');"', ondblick);
+return htmlRow;
+}
+
+//funcion para generar un json con los datos de todos los campos de la operativa
+function bet_vsf_setArray(element){
+var formulario = element.closest(".bet-form");
+var jsonString = "";
+var betFields = new Array();
+var cont = 0;
+
+formulario.find(".bet-field").each(function(){
+    betFields[cont] = new Object();
+    betFields[cont].id = "{" + $(this).attr("id") + "}";
+    betFields[cont].val = $(this).val();
+    cont++;
+});
+	jsonString = JSON.stringify(betFields);
+var obj = betFields;
+	for(i=0; i < obj.length; i++){
+		console.log(obj[i].id + " = " + obj[i].val);
+	}
+	
+	enviarParametros(betFields);
+return betFields;
+}
+
+function bet_vsf_setData(arrayDatos,codigoHtml){
+	var data = "";
+	var description = "";
+	var divisa;
+	for(i=0; i<arrayDatos.length; i++){
+		
+		
+	    data = arrayDatos[i].val.trim();
+	    description = arrayDatos[i].id.trim();
+	    
+	    if(description ==="{tbImporte}"||description ==="{tbImporte2}"){
+	    	divisa=data.substring(data.length-3,data.length);
+	    	data=formatAmount(data);
+	    }
+	    if(description ==="{importeUSDAUX}" || description ==="{tbImporteMXN}" || description ==="{tbImporteUSD}" || description ==="{tbImporteDivisa}" || description ==="{importeMXN}" || description ==="{importeUSD}" || description ==="{tbImporteIVA}"){
+	    	data=formatAmount(data);
+	    }
+	    if(description==="{tbcuentaCargo}"|description==="{tbcuentaAbono}"|description==="{tbcuentaCargo2}"|description==="{tbcuentaAbono2}"){
+	    	if(data.includes("/")){
+	    		codBanc = data.split("/")[6];
+		    	data = data.split("/")[0]+" - "+calcularPosiciones(data)[8];
+	    	}else{
+	    		codBanc = data.split(",")[7];
+		    	data = data.split(",")[0]+" - "+data.split(",")[1];
+	    	}
+	    	
+	    }
+	    if(description === "{tbBanco}"){
+	    	data = codBanc;
+	    }	  
+	   
+	    if(data===undefined){
+	    	data="";
+	    }
+	    codigoHtml = codigoHtml.replace(description,data);    
+	}
+	return codigoHtml;
+	}
+
+function validacionesGenerales(inputValidacion, inputMensaje) {
+    $(".ls-focus-error-input").each(function() {
+        $(this).removeClass("ls-focus-error-input");
+    });
+    $("#alertaMsjRequeridos").addClass("oculto");
+    var splitCampos = inputValidacion.split("|");
+    var cadenaValidacion = "[ { ";
+    for ( var i = 0; i < splitCampos.length; i++) {
+        var element = splitCampos[i];
+        var elementSplit = element.split("@");
+        var inputElement = elementSplit[0];
+        var reglasElement = elementSplit[1];
+        var reglasTotal = reglasElement.split(":");
+        cadenaValidacion = cadenaValidacion + inputElement + "  : [ {";
+        for ( var x = 0; x < reglasTotal.length; x += 2) {
+            var regla = reglasTotal[x];
+            var validacion = reglasTotal[x + 1];
+            cadenaValidacion = cadenaValidacion + regla + ":";
+            cadenaValidacion = cadenaValidacion + validacion;
+            if ((x + 1) < reglasTotal.length) {
+                cadenaValidacion = cadenaValidacion + ",";
+            }
+        }
+        cadenaValidacion = cadenaValidacion + "} ]";
+        if ((i + 1) < splitCampos.length) {
+            cadenaValidacion = cadenaValidacion + ",";
+        }
+    }
+    cadenaValidacion = cadenaValidacion + "} ]";
+    var cadenaJson = JSON.stringify(eval("(" + cadenaValidacion + ")"));
+    var jsonValidaciones = JSON.parse(cadenaJson);
+
+    var splitMensajes = inputMensaje.split("|");
+    var cadenaMensaje = "[ { ";
+    for ( var i = 0; i < splitMensajes.length; i++) {
+        var element = splitMensajes[i];
+        var elementSplit = element.split("@");
+        var inputElement = elementSplit[0];
+        var reglasElement = elementSplit[1];
+        var reglasTotal = reglasElement.split(":");
+        cadenaMensaje = cadenaMensaje + inputElement + "  : [ {";
+        for ( var x = 0; x < reglasTotal.length; x += 2) {
+            var regla = reglasTotal[x];
+            var mensaje = reglasTotal[x + 1];
+            cadenaMensaje = cadenaMensaje + regla + ":";
+            cadenaMensaje = cadenaMensaje + mensaje;
+            if ((x + 1) < reglasTotal.length) {
+                cadenaMensaje = cadenaMensaje + ",";
+            }
+        }
+        cadenaMensaje = cadenaMensaje + "} ]";
+        if ((i + 1) < splitCampos.length) {
+            cadenaMensaje = cadenaMensaje + ",";
+        }
+    }
+    cadenaMensaje = cadenaMensaje + "} ]";
+    var cadenaJsonMsj = JSON.stringify(eval("(" + cadenaMensaje + ")"));
+    var jsonIdMensajes = JSON.parse(cadenaJsonMsj);
+
+    if (validarCampos(jsonValidaciones, jsonIdMensajes, "idMensajes", true)) {
+        $('#alertaMsjRequeridos').addClass('oculto');
+        $(window).resize();
+        return true;
+    } else {
+        $('#alertaMsjRequeridos').removeClass('oculto');
+        $(window).resize();
+        return false;
+    }
+}
+function pruebaresolucion(){
+	//root-tplVentanaOperativa-ICabeceraPrincipal-cabSuperiorTitulo
+	//root-tplVentanaOperativa-genericaBody
+	var alto_contenedorPadre = $("#root-tplVentanaOperativa-genericaBody").css("height");
+	var alto_titulo = $("#root-tplVentanaOperativa-ICabeceraPrincipal-cabSuperiorTitulo").css("height");
+	var diferencia = alto_contenedorPadre.replace("px","") - alto_titulo.replace("px","");
+	console.log(alto_contenedorPadre+" - "+ alto_titulo+" = "+ diferencia);
+}
+function prueba2resolucion(){
+	//root-tplVentanaOperativa-genericaBody ventana principal
+	//root-tplVentanaOperativa-ICabeceraPrincipal-cabSuperiorTitulo Tittle Datos Personales
+	//cambioDatosContacto campo de en medio
+	var ventaOperativa = $("#root-tplVentanaOperativa-genericaBody").css("height");
+	var tituloDP = $("#root-tplVentanaOperativa-ICabeceraPrincipal-cabSuperiorTitulo").css("height");
+	var campoM = $("#cambioDatosContacto").css("height");
+	var diferencia2 = ventaOperativa.replace("px","") - tituloDP.replace("px","") - campoM.replace("px","");
+	console.log(ventaOperativa + " - " + tituloDP + " - " + campoM + " = " + diferencia2);
+}
+function condicionDresolucion(){
+	try {
+		$(".vsf-operativa-body").css("height", "auto");
+		var ventaOperativa = parseInt($("#root-tplVentanaOperativa-genericaBody").css("height").replace("px","")) - parseInt($("#root-tplVentanaOperativa-genericaBody").css("margin-bottom").replace("px",""));
+		var tituloDP = $("#root-tplVentanaOperativa-ICabeceraPrincipal-cabSuperiorTitulo").css("height");
+		var campoM = parseInt($(".vsf-operativa-body").css("height").replace("px","")) - parseInt($(".vsf-operativa-body").css("padding-top").replace("px",""));
+		
+		var bttnNuevo = $("#vsf_footer").css("height");
+		var encabezado_aux = $("#vsf_header_auxiliar").css("height");
+		//Aqui le estamos asignando diferencia2 la resta de todos los campos de la Ventana Operativa
+		var diferencia2 = ventaOperativa - (parseInt(tituloDP.replace("px","")) + parseInt(campoM) + parseInt(bttnNuevo.replace("px","")) + parseInt(encabezado_aux.replace("px","")));
+		
+		console.info("ventana operativa - extras ="+ventaOperativa +" - "+ (parseInt(tituloDP.replace("px","")) + parseInt(campoM) + parseInt(bttnNuevo.replace("px","")) + parseInt(encabezado_aux.replace("px",""))));
+		
+		// Se hace una condicion para poder hacer el risize dependiendo si la suma de los campos es mayor que el de la 	VentanaOperativa.
+		if(ventaOperativa < diferencia2 ){
+				console.log(ventaOperativa + " - " + tituloDP + " - " + campoM + " - " + bttnNuevo +  " = " + diferencia2);
+				console.log(parseInt(campoM) + parseInt(diferencia2));
+		}else{
+			console.info(parseInt(campoM) + parseInt(diferencia2));
+			console.info(ventaOperativa + " - " + tituloDP + " - " + campoM + " - " + bttnNuevo +  " = " + diferencia2);
+			$(".vsf-operativa-body").css("height", parseInt(campoM) + parseInt(diferencia2) - 10);
+		}
+	}catch(err){
+		console.warn("Problema en la funcion para reacomodo de footer, no se encuentra la estructura correcta para realizar esta accion.");
+	}
+}
+
+function vsf_finput(){
+	$('.vsf-btn-examinar').click(function() {
+		$($(this).attr("data-vsf-native-finput")).trigger('click');
+	});
+
+	$('input[type=file]').change(function() {
+		var url = $(this).val();
+		var fileName = url.split("\\")[url.split("\\").length-1];
+		$($(this).attr("data-vsf-url-input-dest")).val(fileName);
+	});
+}
+
+function validaCollapsables(){
+	var desicion="";
+	var cont=0;
+	$(document).on("click",".vsf-check-collapse",function(){
+		desicion=true;
+		$(this).find("tbody tr td[data-toggle=collapse]").each(function(){
+		
+			if($(this).attr("aria-expanded")=="true"){
+				desicion=false;
+				return false;
+			}
+		});
+		if(!desicion){
+			$($(this).attr("data-show-id")).addClass("collapse");
+			$($(this).attr("data-hide-id")).removeClass("collapse");
+			$($(this).attr("data-show-id")).addClass("hide");
+			$($(this).attr("data-hide-id")).removeClass("hide");
+			$($(this).attr("data-show-id")).removeAttr("style");
+			$($(this).attr("data-hide-id")).removeAttr("style");
+		}else{
+			$($(this).attr("data-hide-id")).addClass("collapse");
+			$($(this).attr("data-show-id")).removeClass("collapse");
+			$($(this).attr("data-hide-id")).addClass("hide");
+			$($(this).attr("data-show-id")).removeClass("hide");
+			$($(this).attr("data-show-id")).removeAttr("style");
+			$($(this).attr("data-hide-id")).removeAttr("style");
+		}
+	});
+}
+
+
+function vsf_exportador(iFormato,idFormatoExport,idTablaExport){
+//	 $(document).on("click",".exportarConsultas",function(){
+		 
+		 var valorExp = $("#formExport").val();
+		 
+		 if(iFormato=="TXT"){
+			 $(idFormatoExport).val("TXT");
+		 }else if(iFormato=="PDF"){
+			 $(idFormatoExport).val("PDF");
+		 }else{
+			 $(idFormatoExport).val("CSV");
+		 }
+		 
+		 
+		 var regSelec = [];
+		 var valSelec = {};
+		    $(idTablaExport+' tbody tr td.collapsible').parent().each(function () {
+		       
+		        var fechaAplicacion    = $(this).find("td").eq(1).html();
+		        var ctaCargo         = $(this).find("td").eq(2).html();
+		        var ctaAbono           = $(this).find("td").eq(3).html();
+		        var importeCargo          = $(this).find("td").eq(4).html();
+		        var refOperacion            = $(this).find("td").eq(5).html();
+		        var estatus       = $(this).find("td").eq(6).html();
+		        
+		        valSelec = {};
+		        
+		        valSelec.fechaAplicacion    = fechaAplicacion;
+		        valSelec.ctaCargo = ctaCargo;
+		        valSelec.ctaAbono = ctaAbono;
+		        valSelec.importeCargo = importeCargo;
+		        valSelec.refOperacion = refOperacion;
+		        valSelec.estatus =estatus;
+
+		        regSelec.push(valSelec);
+		        
+		    });
+		    var regSelecDos = [];
+			 var valSelecDos = {};   
+		    var i=0;
+		    $('#tablaCollapsables tbody tr td.detalle-td').parent().each(function (f) {
+
+					var tipoOperacion = $(this).find("strong").eq(0).html();
+					var concepto = $(this).find("strong").eq(1).html();
+					var refArchivo = $(this).find("strong").eq(2).html();
+					var refInterbancaria = $(this).find("strong").eq(3).html();
+					var bancoDestino = $(this).find("strong").eq(4).html();
+					var idFiscal = $(this).find("strong").eq(5).html();
+					var importeIVA = $(this).find("strong").eq(6).html();
+					var tipoCambio = $(this).find("strong").eq(7).html();
+					var importeMXN = $(this).find("strong").eq(8).html();
+					var importeUSD = $(this).find("strong").eq(9).html();
+					var claveAbaSwitf = $(this).find("strong").eq(10).html();
+					var banco = $(this).find("strong").eq(11).html();
+					var pais = $(this).find("strong").eq(12).html();
+					var ciudad = $(this).find("strong").eq(13).html();
+					var emailBeneficiario = $(this).find("strong").eq(14).html();
+												
+					valSelecDos = {};
+					valSelecDos.fechaAplicacion    = regSelec[i].fechaAplicacion;
+					valSelecDos.ctaCargo = regSelec[i].ctaCargo;
+					valSelecDos.ctaAbono = regSelec[i].ctaAbono;
+					valSelecDos.importeCargo = regSelec[i].importeCargo;
+					valSelecDos.refOperacion = regSelec[i].refOperacion;
+					valSelecDos.estatus = regSelec[i].estatus;
+					valSelecDos.tipoOperacion = tipoOperacion;
+					valSelecDos.concepto= concepto;
+					valSelecDos.refArchivo= refArchivo;
+					valSelecDos.refInterbancaria= refInterbancaria;
+					valSelecDos.bancoDestino= bancoDestino;
+					valSelecDos.idFiscal= idFiscal;
+					valSelecDos.importeIVA = importeIVA;
+					valSelecDos.tipoCambio= tipoCambio;
+					valSelecDos.importeMXN= importeMXN;
+					valSelecDos.importeUSD= importeUSD;
+					valSelecDos.claveAbaSwitf= claveAbaSwitf;
+					valSelecDos.banco= banco;
+					valSelecDos.pais = pais;
+					valSelecDos.ciudad= ciudad;
+					valSelecDos.emailBeneficiario= emailBeneficiario;
+					i++;
+					regSelecDos.push(valSelecDos);
+							
+			});
+
+		    
+			var jsonString = JSON.stringify(regSelecDos);
+			jsonString = replaceAll( jsonString, '\"', "\'" );
+			$("input#registros").val(jsonString);
+			
+			$("#formRegistros").attr("action", "exportarListaConsultas.do");
+			$("#formRegistros").submit();
+			
+		 	
+//	 });
+}
+
+
+
+/**
+ * validarExploradorWeb
+ * regresa true si es un navegador valido para operar con BANXICO, devuelve false si no es compatible
+ */
+function validarExploradorWeb() {
+  var ua = window.navigator.userAgent;
+
+  //Si es IE10+
+  var msie = ua.indexOf('MSIE ');
+  if (msie > 0) {
+    // IE 10 or older => return version number
+    var versionIE = parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+	if(versionIE >=10){
+		return true;
+	}else{
+		return false;
+	}
+  }
+  //Si es IE11+
+  var trident = ua.indexOf('Trident/');
+  if (trident > 0) {
+    return true;
+  }
+  //Si es IE12+ (Edge)
+  var edge = ua.indexOf('Edge/');
+  if (edge > 0) {
+    return true;
+  }
+  //Validar Chrome
+  var chrome = ua.indexOf('Chrome/');
+  if (chrome > 0) {
+    var versionChrome = parseInt(ua.substring(chrome + 7, ua.indexOf('.', chrome)), 10);
+	return (versionChrome>=28);
+  }
+
+  //Validar Firefox
+  var firefox = ua.indexOf('Firefox/');
+  if (firefox > 0) {
+    var versionFirefox = parseInt(ua.substring(firefox + 8, ua.indexOf('.', firefox)), 10);
+	return (versionFirefox>=23);
+  }
+  //Validar Safari
+  var safari = ua.indexOf('Safari/');
+  if (safari > 0) {
+	var indice = ua.indexOf('Version/');
+    var versionSafari = parseInt(ua.substring(indice + 8, ua.indexOf('.', indice)), 10);
+	return (versionSafari>=6);
+  }
+  // Cualquier otro explorador web sera invalido
+  return false;
+}
+function formatAmount (num) { 
+	if(num!==null){
+	    separador = ','; // separador para los miles
+	    sepDecimal = '.'; // separador para los decimales
+	    var split = num.split(' ');
+	    var tieneSimbolo = num.includes("$");
+	    var simbolo = "";
+	    var importe = "";
+	    var modena = "";
+	    if(tieneSimbolo){
+	    	simbolo = split[0];
+	    	importe = split[1];
+	    	if(split.length>2){
+	    		modena = split[2];
+	    	}
+	    }else{
+	    	importe = split[0];
+	    	if(split.length>1){
+	    		modena = split[1];
+	    	}
+	    }
+	    var splitStr = importe.split('.');
+	    var splitLeft = splitStr[0];
+	    var splitRight = splitStr.length > 1 ? sepDecimal + splitStr[1] : '';
+	    var regx = /(\d+)(\d{3})/;
+	    while (regx.test(splitLeft)) {
+	        splitLeft = splitLeft.replace(regx, '$1' + separador + '$2');
+	    }
+	    return simbolo +' '+ splitLeft + splitRight +' '+ modena;
+	}else{
+		return num;
+	}
+}
+
+function PrintElem(elem) {
+	$("#tableImprimir").html(document.getElementById(elem).innerHTML);
+    var mywindow = window.open('', 'PRINT', 'height=500,width=650');
+    $("#tableImprimir").find(".image-check").remove();
+    $("#tableImprimir").find("#linkVerPosicion").remove();
+    $("#tableImprimir").find(".container").remove();
+    $("#tableImprimir").find(".posicion").remove();
+    $("#tableImprimir").find(".btn-linkNumCuenta").remove();
+    mywindow.document.write('<html><head><title></title>');
+    mywindow.document.write('</head><body style="padding-top: 0; margin-top:0;">');
+    mywindow.document.write(document.getElementById("tableImprimir").innerHTML);
+    mywindow.document.write('</body></html>');
+
+    mywindow.document.close(); // necessary for IE >= 10
+    mywindow.focus(); // necessary for IE >= 10*/
+
+    mywindow.print();
+    mywindow.close();
+
+    return true;
+}
+function calcularPosiciones(cadena){
+		var resultado= cadena.split("/");
+		var elementosCargo= cadena.split("/");
+		var recorreElementos = 0;
+		var i=0;
+		if(elementosCargo.length>16) {
+			desc="";
+			recorreElementos= elementosCargo.length-16;
+			for(i=0;i<recorreElementos+1;i++) {
+				desc = desc + elementosCargo[8+i] +"/";
+			}
+			var tam=desc.length-1;
+			resultado[8] = desc.substring(0, tam);
+			for(i=9;i<16;i++) {
+				resultado[i] = elementosCargo[i+recorreElementos];
+			}
+		}
+		return resultado;
+}
+function printPantallaDiv() {
+    addAjaxLoader();
+    //addAjaxLoader();
+    var headerConte = $("#root-tplVentanaOperativa-genericaContHeaderSecundaryUser",window.parent.document).clone();
+    headerConte.find("#root-tplVentanaOperativa-genericaParHeaderSecondaryUserInfoNameText").attr("style","width: 230px;");
+    var logoTitleSantander =  $("#logoTitleSantander").clone();
+    var acceso =  $("#root-tplVentanaOperativa-ICabeceraPrincipal-cabSuperiorTitulo").clone();
+    acceso.find(".icon-boton-imprimir").addClass("hide");
+    acceso.find(".icon-boton-info").addClass("hide");
+    var formBusqueda =  $("#printPantallaDiv").clone();
+    var divPrint = document.createElement("div");
+    divPrint.setAttribute("id",'bodyprint');
+    logoTitleSantander.removeClass("oculto");;
+    logoTitleSantander.children().append(headerConte[0]);
+    divPrint.append(logoTitleSantander[0]);
+    divPrint.append(acceso[0]);
+    divPrint.append(formBusqueda[0]);
+    document.body.appendChild(divPrint);
+    $("#formularioHide").addClass('hide');
+    window.print();
+    $("#bodyprint").remove();
+    $("#formularioHide").removeClass('hide');
+    removeAjaxLoader();
+}

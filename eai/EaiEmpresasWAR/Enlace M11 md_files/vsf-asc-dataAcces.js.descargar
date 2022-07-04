@@ -1,0 +1,254 @@
+/*
+ *	libreria cargar datos en una tabla via Ajax
+ *	Factoría:		Vector FSW 
+ *	Desarrollador:	Elizabeth Trejo
+ *	Fecha creación:	21/09/2016
+ */
+
+var bet_vsf_htmlFormat = new Object();
+var completeHTML = "";
+var tablaActiva="";
+
+
+function bet_vsf_ajax2Table(){
+	$(".bet-vsf-ajaxToTable").on("click",function(){
+		var selectorForm = $(this).attr("bet-vsf-form");
+		var formularioSerializado = $(selectorForm).serialize();
+		var urlActual = $(this).attr("bet-vsf-urlAjax");
+		$(this).attr("bet-vsf-urlAjax",urlActual+"?"+formularioSerializado);
+		bet_vsf_ajax2Table_NEW($(this));
+	});
+}
+
+function bet_vsf_ajax2Table_NEW(vsf_obj){
+	
+	//Comentarios para adición de validaciones
+	//$(".bet-vsf-ajaxToTable").on("click",function(){
+		
+		var ibtn = vsf_obj;
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		var urlAjax = vsf_obj.attr("bet-vsf-urlAjax");
+		var numRegistros =  $(ibtn.attr("bet-vsf-ps") +" tbody tr").length;
+		var idForm = vsf_obj.attr("bet-vsf-form");
+		tablaActiva = vsf_obj.attr("bet-vsf-ps");
+		if(urlAjax === undefined || urlAjax === ""){
+			
+			console.warn("[bet_vsf_ajax2Table] :: Ingresar URL en el atributo [bet-vsf-urlAjax] del boton al que se dio click");
+//			alert("[bet_vsf_ajax2Table] :: Error en la funcion, revisa tu LOG js");
+			return 0;
+			
+			
+		}		
+		
+		if(ibtn.attr('bet-vsf-ps') === undefined  || ibtn.attr('bet-vsf-ps')  === ""){
+			
+			console.warn("[bet_vsf_ajax2Table] :: Ingresar parametros del contenedor padre en el atributo ['bet-vsf-ps'] del boton al que se dio click");	
+//			alert("[bet_vsf_ajax2Table] :: Error en la funcion, revisa tu LOG js");
+			return 0;
+			
+		}
+		if(numRegistros <=0 ){
+			
+			console.warn("[bet_vsf_ajax2Table] :: No existe renglon pivote en la tabla ["+ ibtn.attr('bet-vsf-ps')+ "]");	
+//			alert("[bet_vsf_ajax2Table] :: Error en la funcion, revisa tu LOG js");
+			return 0;
+		}
+		var htmlCode = bet_vsf_htmlFormat[ibtn.attr("bet-vsf-ps").replace("#","")];
+		
+		if(htmlCode==undefined || htmlCode==""){
+			bet_vsf_htmlFormat[ibtn.attr("bet-vsf-ps").replace("#","")] = "";
+		}
+		
+		addAjaxLoader();
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			// Elementos necesarios para evitar CSFR
+			
+			beforeSend: function (request)
+	        {
+				if(token){
+					request.setRequestHeader(header, token);
+				}
+	        },
+			cache: false,
+			url : urlAjax,
+			data: $(idForm).serializeArray(),
+			success : function(response) {
+				//Se agrega este bloque de codigo para el control de errores, controlandolos
+				//y mostrandolos en una ventana modal con el error correspondiente
+				if(response.codError !== "" && response.codError !== undefined){
+					
+					if(response.codError === "TM1000"){
+					try{
+						//SE LLAMAN LOS INPUT QUE CONTIENEN LOS TEXTOS DE LA VENTANA MODAL.
+						
+						var titulo    = $("#msjmasmil").val();
+						var dtxt      = $("#exporttxt").val(); 
+						var dcsv      = $("#exportcsv").val();
+						var dpdf      = $("#exportpdf").val();
+						var regresar  = $("#botonregresar").val();
+						var descargar = $("#botondescarga").val();
+						removeAjaxLoader();
+						vsf_modal_export("icon-modal-alert",titulo,'<label class="custom-rbtn active"><input checked="" name="exporttxt" id="exporttxt" type="radio" value="01"> <span>&nbsp;</span><span>&nbsp;'+dtxt+'</span></label> <label class="custom-rbtn"><input checked="" name="exportcsv" id="exportcsv" type="radio" value="02"> <span>&nbsp;</span><span>&nbsp;'+dcsv+'</span></label>  <label class="custom-rbtn"><input checked="" name="exportpdf" id="exportpdf" type="radio" value="03"> <span>&nbsp;</span><span>&nbsp;'+dpdf+'</span></label>',regresar+"|"+descargar,"javascript:console.log()|javascript:console.log()");	
+						}catch(e){
+						console.log("Error No se encuentra la funcion en el JS cargado actualmente");	
+						}
+					}else{
+	        			removeAjaxLoader();
+	        			var msjError = "No se han obtenido resultados por lo siguiente:";
+	        			var alerError = response.descError;
+	        			var opciones = 1;
+	        			vsf_modal("icon-modal-alert", msjError , alerError , Cerrar ,"javascript:console.log()");
+					}
+				}else{
+				//Fin  del codigo agregado control de errores 09/02/2017 by OIMG
+				var elemento = vsf_obj.attr("bet-consultas-toggle");
+				var labelmostrar = vsf_obj.attr("bet-consultas-mostrar");
+					
+				if ($(elemento).hasClass("hide")) {
+
+					$(elemento).removeClass("hide");
+					$(labelmostrar).removeClass("hide");
+					$(window).resize();
+				}
+				bet_vsf_llenaTabla(response,ibtn);				
+//				$(ibtn.attr("bet-vsf-ps")).closest(".panel-default").removeClass("hide");	
+				$(ibtn.attr("bet-vsf-cont")).closest(".panel-default").removeClass("collapse");
+	
+				setTimeout(function(){removeAjaxLoader();},1000);
+				$(window).trigger("resize");
+				}
+				try{
+				habilitarlink();
+				valoresinterb();
+				}catch(e){
+				console.log("Error No se encuentra la funcion en el JS cargado actualmente");	
+				}
+				
+			},
+			error : function(e) {
+				console.warn('Error: ' + e.responseText);
+				setTimeout(function(){removeAjaxLoader();},1000);
+			}
+		});		
+		
+	//})
+	
+	
+}
+function bet_vsf_llenaTabla(obj,btn){
+	//07-11-2016 modificacion para adicion de encabezados a tablas de forma dinamica
+	var laLista; //Variable para seteo de objeto que va a llenar la tabla
+	if(Array.isArray(obj[Object.keys(obj)])){
+		//Si el objeto inmediato es un array, procedemos al llenado de la tabla sin los datos extra
+		laLista = obj[Object.keys(obj)[0]];
+	}else{
+		var padre = Object.keys(obj)[0];
+		for(k=0; k<Object.keys(obj[Object.keys(obj)[0]]).length;k++){
+			//console.info(Object.keys(obj[Object.keys(obj)[0]])[k]);
+			//console.info(obj[padre][Object.keys(obj[Object.keys(obj)[0]])[k]]);
+			//console.info(Array.isArray(obj[padre][Object.keys(obj[Object.keys(obj)[0]])[k]]));
+			if(Array.isArray(obj[padre][Object.keys(obj[Object.keys(obj)[0]])[k]])){
+				laLista = obj[padre][Object.keys(obj[Object.keys(obj)[0]])[k]];
+			}else{
+				//Seteo de datos extra
+				$("#"+Object.keys(obj[Object.keys(obj)[0]])[k]).text(obj[padre][Object.keys(obj[Object.keys(obj)[0]])[k]]);
+			}
+		}
+	}
+	//var nombreLista = JSON.stringify(obj).split(":[{")[0].replace(/"/g,"").replace('{',"");
+	
+	var idContenedorPadre = btn.attr("bet-vsf-ps");
+	var indicadorTipoTabla = $(idContenedorPadre).hasClass("tabla-acordeon-uno")?2:1;
+	var primeraVez = true;
+	completeHTML = "";
+	//for(j=0; j<obj[nombreLista].length; j++){
+//	if(laLista.length === 0){
+//		
+//		//bet_vsf_htmlFormat[ibtn.attr("bet-vsf-ps").replace("#","")] = $(ibtn.attr("bet-vsf-ps").replace("#","")).find("tbody").html();
+//		bet_vsf_htmlFormat[btn.attr("bet-vsf-ps").replace("#","")] = $(btn.attr("bet-vsf-ps")).find("tbody").html();
+//		$(ibtn.attr("bet-vsf-ps")+" tbody").html("");
+//		
+//	}else{
+	for(j=0; j<laLista.length; j++){
+		
+		var htmlRow = "";
+		var row_count = $(idContenedorPadre +" tbody tr").length;
+		if(bet_vsf_htmlFormat[idContenedorPadre.replace("#","")]==="" && indicadorTipoTabla===1 && primeraVez){
+			//se cambio la linea 99 para poder tomar todo el contenido del tbody en este caso todos sus tr y no como estaba antes que era el ultimo tr del tbody
+			htmlRow = "" + $(idContenedorPadre +" tbody").html() + "";			
+			bet_vsf_htmlFormat[idContenedorPadre.replace("#","")] = htmlRow;
+			$(idContenedorPadre +" tbody tr").remove();
+			row_count=row_count - 1;
+			primeraVez = false;
+		}else if((bet_vsf_htmlFormat[idContenedorPadre.replace("#","")]==="" && indicadorTipoTabla===2 && primeraVez)){
+			
+			htmlRow2 = "" + $(idContenedorPadre +" tbody").html() + "";
+			$(idContenedorPadre +" tbody tr").remove();
+			htmlRow2 = htmlRow2.replace("collapse0","collapse"+idContenedorPadre.replace("#","")+j)
+//			htmlRow = '<tr class="accordion-toggle tituloRegistro" id="mostrar_detalles'+idContenedorPadre.replace("#","")+j+'">' + $(idContenedorPadre +' tbody tr').html() + '</tr>';
+			htmlRow = htmlRow.replace("collapse0","collapse"+idContenedorPadre.replace("#","")+j);
+			
+			htmlRow += htmlRow2;
+			
+			bet_vsf_htmlFormat[idContenedorPadre.replace("#","")] = htmlRow;
+			$(idContenedorPadre +" tbody tr").remove();
+			row_count=row_count - 1;
+			primeraVez = false;
+		}else{
+			htmlRow = bet_vsf_htmlFormat[idContenedorPadre.replace("#","")];
+			
+			htmlRow = htmlRow.replace("mostrar_detalles"+idContenedorPadre.replace("#","")+"0","mostrar_detalles"+idContenedorPadre.replace("#","")+j);
+			htmlRow = htmlRow.replace("collapse"+idContenedorPadre.replace("#","")+"0","collapse"+idContenedorPadre.replace("#","")+j);
+			htmlRow = htmlRow.replace("collapse"+idContenedorPadre.replace("#","")+"0","collapse"+idContenedorPadre.replace("#","")+j);
+			htmlRow = htmlRow.replace("border"+idContenedorPadre.replace("#","")+"0","border"+idContenedorPadre.replace("#","")+j);
+			htmlRow = htmlRow.replace("beneficiario0","beneficiario"+idContenedorPadre.replace("#","")+j);
+			htmlRow = htmlRow.replace("beneficiario0","beneficiario"+idContenedorPadre.replace("#","")+j);
+			htmlRow = htmlRow.replace("beneficiario0","beneficiario"+idContenedorPadre.replace("#","")+j);
+			htmlRow = htmlRow.replace("check0","check_"+idContenedorPadre.replace("#","")+j);
+			htmlRow = htmlRow.replace("check0","check_"+idContenedorPadre.replace("#","")+j);
+			htmlRow = htmlRow.replace("check0","check_"+idContenedorPadre.replace("#","")+j);
+			
+			//console.log(bet_vsf_htmlFormat);
+			if(j===0){
+				$(btn.attr("bet-vsf-ps")+" tbody").html("");
+			}
+		}
+		
+		htmlRow = bet_vsf_mapeoDatos(laLista,htmlRow,j);
+		
+		
+		//console.log(row_count);
+			
+		completeHTML+= htmlRow;
+	 }
+    //} 
+	console.info("HTML armado correctamente para: "+idContenedorPadre);
+	$(idContenedorPadre+" tbody").append(completeHTML);
+	
+	// SOLO ENTRA SI LA TABLA CONSULTADA ES DE INVERSION VISTA - MOVIMIENTOS
+	if(idContenedorPadre === "#tbResVistaMov" ){
+		ocultaCheckBox();
+	}
+}
+
+function bet_vsf_mapeoDatos(objeto,html,idRow){
+
+	var jsonStr2 = JSON.stringify(objeto);
+	//var objResult = jsonStr2.split(":[{")[0].replace(/"/g,"").replace('{',"");
+	var fila = objeto[idRow];
+	var arrayField=JSON.stringify(fila).replace(/{/g,"").replace(/}/g,"").split('","');
+	var indice="";
+	var regex ="";
+	for(y=0;y<arrayField.length;y++){
+		
+		indice = arrayField[y].replace(/"/g,"").split(":")[0];
+		//console.log(indice);
+		regex = new RegExp("{"+indice+"}","g");
+		html = html.replace(regex,fila[indice]);	
+	}
+	return html;
+	
+}

@@ -1,0 +1,331 @@
+/**
+ * Ventana modal para páginas de ayuda
+ * Vector FSW 
+ * 29/09/2016
+ * Saúl Adame Apreza
+ */
+
+var mhwTitle ="";
+
+jQuery( document ).ready(function( $ ) {
+	modalHelpWindow();
+	
+	$("#root-icon-boton-cerrar")
+	.click(function() {
+		ir_a('formCerrar', $(this).attr("ref"));
+	});
+	
+	habilitarRadioBotones();
+})
+
+function ir_a(form, urlDestino) {
+		var jIdForm = "#" + form;
+		$(jIdForm).attr('action', urlDestino);
+		$(jIdForm).submit();
+}
+var vm_help;
+function modalHelpWindow(){
+	$(".vm_help,.icon-boton-info").click(function(){
+		
+		var id_flow = $(this).attr("ref");
+		padre = $(window.parent.document);
+		vm_help = padre.find('.bet-help-window');
+		
+		vm_help.find(".modal-title").text(mhwTitle);
+		//vm_help.css("display","block");
+		//vm_help.addClass("in");
+		padre.find("body").css("overflow","hidden");
+		
+		
+		vm_help.find("button").click(function(){
+			vm_help.removeClass("in");
+			vm_help.addClass("out");
+			vm_help.css("display","none");
+			padre.find("body").css("overflow","auto");
+		})
+		vm_help.find("").text(mhwTitle);
+		if($(this).attr("help-code")!==undefined && $(this).attr("help-code")!==""){
+			var codigo = $(this).attr("help-code");
+			var idioma = "";
+			
+			/*Validaion de idioma*/
+			window.parent.window.location.href.split("?")[1]!=undefined ? 
+					(obtenerIdioma(window.parent.window.location.href.split("?")[1].split("&")))==="en" ? idioma="en_US" : idioma="es_ES" 
+					: idioma="es_ES";
+			
+			
+			commitAjax(codigo,idioma);
+			//vm_help.find(".modal-body").html(getHTMLHelp(codigo,idioma));
+			
+		}else{
+			if($(this).attr("action-code")!==undefined && $(this).attr("action-code")!==""){
+				var action = $(this).attr("action-code");
+				vm_help.css("display","block");
+				vm_help.addClass("in");
+				
+				(action==="plazos") ? modalPlazos($(this)) : '';
+				
+			}else{
+				console.error("No existen los atributos action-code ni help-code, para el boton cliqueado.")
+			}
+		}
+		
+	});
+}
+
+function modalPlazos(obj){
+	
+	vm_help.find("#botonera-gral").addClass("hide");
+	vm_help.find("#botonera-plazo").removeClass("hide");
+	//alert(varlblPlazo);
+	vm_help.find(".modal-title").text(varlblPlazo.replace("(","").replace(")","").replace("*","").replace(":",""));
+	
+	vm_help.find("#botonera-plazo button").click(function(){
+		vm_help.find("#botonera-gral").removeClass("hide");
+		vm_help.find("#botonera-plazo").addClass("hide");
+	})
+	
+	vm_help.find(".btn.btn-primary").click(function(){
+		vm_help.find("input[name=plazos]").each(function(){
+			if($(this).prop("checked")){
+//				alert($(this).val());
+				var valInteres = $(this).val().split("|")[1];
+				obj.find("#interesDisposicion").val(valInteres.trim());				
+			}
+		})
+		
+	});
+	
+	vm_help.on('change','input[type=radio]',function(){
+        if($(this).attr("name")!=""){
+            vm_help.find("input[name="+$(this).attr("name")+"]").parent().removeClass("active");
+            if($(this).prop("checked")){
+            	$(this).parent().removeClass("ellipsis");
+                $(this).parent().addClass("active");
+            }
+        }
+	});
+	// Elementos necesarios para evitar CSFR
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	addAjaxLoader();
+	var credito = $("#credDispoP1").text();
+	var dato = {credito:credito};
+	var datos = JSON.stringify(dato);
+	$.ajax({
+		type: "GET",
+		dataType: "text",
+		// Elementos necesarios para evitar CSFR
+		beforeSend: function (request)
+        {
+			if(token){
+				request.setRequestHeader(header, token);
+			}
+        },
+		cache: false,
+		url : window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1]+"/tesoreriaCredito/modalDias.do",
+		 data : {
+			 		datosConsulta: datos 
+			 		
+	        } ,
+		success : function(response) {			
+		
+			var htmlr=response;				
+			var padre = $(window.parent.document);
+			var mensaje = creaMsgValidacion();
+			padre.find(".bet-help-window .modal-dialog .modal-body #contenido").html(htmlr+mensaje);			
+			removeAjaxLoader();
+			vm_help.css("display","block");
+			vm_help.addClass("in");
+			vm_help.find("button[id=a]").unbind( "click" );
+			
+			
+            // vuelve a setear el evento 
+			vm_help.find("button").click(function(){
+				vm_help.find("input[name=dias]").val();
+				var dia =vm_help.find("input[name=dias]").val().toString();
+				var menor="", mayor="", mayorT="",menorT="";
+				var dias =  parseInt(dia.toString());
+				vm_help.find("input[name=plazos]").each(function(){
+					if($(this).prop("checked")){
+//						alert($(this).val());
+						
+						var valInteres = $(this).val().split("|")[1];
+						menor = $(this).val().split("|")[2].trim();
+						mayor = $(this).val().split("|")[3].trim();
+						menorT = parseInt(menor.toString());
+						mayorT =  parseInt(mayor.toString());
+						obj.find("#interesDisposicion").val(valInteres.trim());		
+						
+					}
+				})
+				if($(this).hasClass("validaPlazos")){
+                	//validacion de campos?
+                    if(dias >= menorT && dias <= mayorT){
+                    	obj.find("input[type=text]").val(dias);
+                    	vm_help.removeClass("in");
+                    	vm_help.addClass("out");
+                    	vm_help.css("display","none");
+                      padre.find("body").css("overflow","auto");
+                       
+                    }else{
+                    	var msg =vm_help.find("input[name=mensaje]").val();
+                    	$(window.parent.document).find("#msgPlazos").html(msg);
+		            		$(window.parent.document).find("#alertPazos").removeClass("hidden");
+		            		window.parent.resizeMe();
+                    }
+                }
+                
+            });
+			window.parent.resizeMe();
+		},
+		error : function(e) {
+			alert('Error: ' + e.responseText);
+			removeAjaxLoader();	
+			
+		}
+	});
+	
+}
+function obtenerIdioma(array){
+	for(i=0; i<array.length; i++){
+		if(array[i].split("=")[0]==="lang"){
+			return array[i].split("=")[1];
+		}
+	}
+	return "es";
+}
+function commitAjax(idfuncionalidad,language){
+	// Elementos necesarios para evitar CSFR
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	addAjaxLoader();
+	$.ajax({
+		type: "POST",
+		dataType: "json",
+		// Elementos necesarios para evitar CSFR
+		beforeSend: function (request)
+        {
+			if(token){
+				request.setRequestHeader(header, token);
+			}
+        },
+		cache: false,
+		url : window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1]+"/ayuda/consultaAyuda.do",
+		 data : {
+			 		id: idfuncionalidad,
+			 		language: language
+	        } ,
+		success : function(response) {			
+		
+			var htmlr=response.responseHTML.responseHTML;				
+			var padre = $(window.parent.document);
+			
+			
+			padre.find(".bet-help-window .modal-dialog .modal-body #contenido").html(htmlr);			
+			removeAjaxLoader();
+			vm_help.css("display","block");
+			vm_help.addClass("in");
+			window.parent.resizeMe();
+		},
+		error : function(e) {
+			alert('Error: ' + e.responseText);
+			removeAjaxLoader();	
+			
+		}
+	});
+}
+function getHTMLHelp(codigoAyuda,idioma){
+	var html = "";
+	return HTML;
+}
+function addAjaxLoader(){
+	var html = "<div class='myAjaxLoader'></div>";
+	$(window.parent.document).find("body").append(html);
+	
+}
+function removeAjaxLoader(){
+	
+	$(window.parent.document).find(".myAjaxLoader").remove();	
+	
+	
+}
+/******* FAKE *********/
+function descargarArchivoCliente(referencia, uri, nomFichero){
+	$("#modalHelper").css("display", "none");
+	$("#myModal").css("display", "none");
+	$("#referenciaArchivo").val(referencia);
+	$("#uriArchivo").val(uri);
+	$("#nomFicheroArchivo").val(nomFichero);
+	$(this).parent().addClass("oculto");
+	$("#frmBanner").attr("action", "../posicionGlobal/descargaExportacion.do");
+	if(validNavigation!=null){
+		validNavigation = true;
+	}
+    $("#frmBanner").submit();
+	
+}
+
+function navegarFlujo(cod_Layout, referencia){
+	
+	//Elementos necesarios para evitar CSFR
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    $.ajax({
+        type : "POST",
+        beforeSend : function(request) {
+            if (token) {
+                request.setRequestHeader(header,token);
+            }
+        },
+        url : window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1]+"/posicionGlobal/navegarFlujos.do",
+        data : {referencia: cod_Layout , ref: referencia}
+        ,
+        success : function(response) {
+        	console.log(response.referencia);
+        	var url = response.referencia;
+        	var referencia = response.ref;
+        	var codLayout = response.codLayout;
+        	addAjaxLoader();
+        	document.getElementById("iFramePrincipal").contentWindow.enviarFormulario(url, referencia, codLayout);
+//        	$("#myModal").addClass("hide");
+        	$("#modalHelper").css("display", "none");
+        	$("#myModal").css("display", "none");
+        	setTimeout(function(){removeAjaxLoader();},20000);
+        },
+            //CONTROL DE ERRORES
+            error : function() {
+            	
+            }
+    });
+}
+
+function habilitarRadioBotones(){
+	$(document).on('change','input[type=radio]',function(){
+        if($(this).attr("name")!=""){
+            $("input[name="+$(this).attr("name")+"]").parent().removeClass("active");
+            if($(this).prop("checked")){
+            	$(this).parent().removeClass("ellipsis");
+                $(this).parent().addClass("active");
+            }
+        }
+	});
+}
+
+function creaMsgValidacion(){
+	var msgVar= "<br>"+
+				"<br>"+
+				"<br>"+
+				"<br>"+
+				    "<div class='col-xs-12'>"+
+				    	"<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 margin-left-frame-rojo alert alert-danger hidden' id='alertPazos'>"+
+				    		"<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 padding-left-0 padding-right-0'>"+
+				    			"<img class='col-xs-2 col-sm-2 col-md-1 col-lg-1 warnning-advice-ico'/>"+
+				    			"<label class='col-xs-10 col-sm-10 col-md-11 col-lg-11 no-bold idMensajes ' id='msgPlazos'></label>"+
+				    		"</div>"+
+				"</div>"+
+			"</div>";
+	
+	return msgVar;
+}
+/******* FAKE *********/

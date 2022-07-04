@@ -1,0 +1,26 @@
+$(document).ready(function(){
+
+  
+ $("#aviso").dialog({
+  
+      position: [50,100],
+	  
+	  open: function (event, ui) {
+      $('#aviso').css('overflow', 'hidden');
+      $(".ui-dialog-titlebar-close").hide();
+      $(".ui-dialog-titlebar").hide()
+      },
+      
+      height: "350",
+		       
+      width: "auto",
+
+      modal: true,
+
+      resizable: false	  
+      
+  }); 
+  
+   
+
+});

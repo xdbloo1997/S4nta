@@ -1,0 +1,593 @@
+/**
+ * Javascript Signature Pattern AUTOR: SADAME 
+ * FACTORY: VECTOR ITC GROUP 
+ * FECHA DE CREACION: 09/12/2016
+ */
+
+var jsonResponse;
+var boolPatron;
+
+
+var patron = patron || {};  
+
+patron = {
+		byPassByOperativa2: {url: window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1]+"/patronFirma/byPassPorOperativa"},
+		stepStartV1: {url : window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1]+"/patronFirma/stepStart"},
+		stepRSA1V1: {url : window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1]+"/patronFirma/stepRSA1"},
+		stepRSA2V1: {url : window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1]+"/patronFirma/stepRsa2"},
+		stepPingV1: {url : window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1]+"/patronFirma/stepPing"},
+		stepCancelV1: {url : window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1]+"/patronFirma/stepCancel"},
+		stepLoadV1: {url : window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1]+"/patronFirma/stepLoad"},
+		stepFileDataV1: {url: window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1]+"/patronFirma/stepFileData"},
+		
+		stepResume: {url : "/PatronFirmaWeb/v1/stepResume"},
+		stepFileData: {url : window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1]+"/patronFirma/stepFileData"},
+		stepOTP: {url : "/PatronFirmaWeb/v1/stepOtp"},
+		stepFinal: {url : "/PatronFirmaWeb/v1/stepFinal"},
+		token: $("meta[name='_csrf']").attr("content"),
+		header: $("meta[name='_csrf_header']").attr("content"),
+		languaje: getSiteLanguaje(),
+		devicePrint: getDevicePrint(),
+//		formSelector: "#selector",
+		numPasos: 3,
+		codOperativa: "",
+		fnExecV1:function(idObjeto, action){
+				
+				idObjeto = patron.fnExec.obj;
+				action = patron.fnExec.fn;
+				
+//				console.info("---->> Ejecutando $("+idObjeto+")."+action+"()");
+				removeAjaxLoader();
+				try{
+					$(idObjeto)[action]();
+//					console.info("---->> Ejecutando $("+idObjeto+")."+action+"()");
+				}catch(e){
+					if(action!=undefined){
+						self[action]();
+//						console.info("---->> Ejecutando self["+action+"]()");
+					}
+				}
+			
+			
+		},
+		fnExec:{obj:""},
+		fnExec:{fn:""},
+		
+		byPass: "",
+		loadByFile: false,
+		idForm: "",
+		actividad: false,
+		
+		start: function(numPasos,object,action,idForm){
+			
+			numPasos	==	""	||	numPasos	==	undefined	?	patron.numPasos	=	3	:	patron.numPasos	=	numPasos;
+			patron.idForm		= 	idForm;
+			patron.fnExec.fn	=	action;
+			patron.fnExec.obj	=	object;
+			
+			//Eliminando cookies
+			if((numPasos>0 || numPasos=="")){
+				if(numPasos==="2"){
+					if(codError!="" && codError!=undefined && $("#pf_operation").val()!=""){
+						$("#pf_operation").val($.cookie('pf_op'));
+						numPasos=0;
+						patron.numPasos=0;
+					}else{
+						$.removeCookie('pf_op',{path:'/'});
+						$.removeCookie('pf_ids',{path:'/'});
+						$.removeCookie('pf_dataForm',{path:'/'});
+						$.removeCookie('pf_otp',{path:'/'});
+						$.removeCookie('pf_validations',{path:'/'});
+						$.removeCookie('pf_timeOnline',{path:'/'});
+						$.removeCookie('pf_op');
+						$.removeCookie('pf_validations');
+						$.removeCookie('pf_ids');
+						$.removeCookie('pf_dataForm');
+						$.removeCookie('pf_otp');
+						$.removeCookie('pf_timeOnline');
+					}
+				}else{
+					$.removeCookie('pf_op',{path:'/'});
+					$.removeCookie('pf_ids',{path:'/'});
+					$.removeCookie('pf_dataForm',{path:'/'});
+					$.removeCookie('pf_otp',{path:'/'});
+					$.removeCookie('pf_validations',{path:'/'});
+					$.removeCookie('pf_timeOnline',{path:'/'});
+					$.removeCookie('pf_op');
+					$.removeCookie('pf_validations');
+					$.removeCookie('pf_ids');
+					$.removeCookie('pf_dataForm');
+					$.removeCookie('pf_otp');
+					$.removeCookie('pf_timeOnline');
+				}
+			}
+			
+			(numPasos>0 || numPasos=="") ? patron.byPassByOperativa($("#pf_operation").val()) : 
+				($.cookie("pf_op")!=undefined) ? patron.byPassByOperativa($.cookie("pf_op")) : console.info("Se omite petición a byPassByOperativa por cantidad de pasos: "+numPasos);
+//			patron.sendRequest("/EnlaceBETWeb/patronFirma/startPattern","GET","","","text/plain");
+			
+			console.info("Signature Pattern is on.");
+			//Listeners para detectar actividad y tirar stepping
+			$(function(){
+				$(window).mousemove(function(){
+//					console.log('Accion del mouse');
+					patron.actividad = true;
+				});
+				$(window).keypress(function(){
+//					console.log('Accion del teclado');
+					patron.actividad = true;
+				});
+			}); 
+			
+		},
+		byPassByOperativa: function(operation){
+			var headers = {'Access-Control-Allow-Origin':'*'};
+			patron.sendRequest(patron.byPassByOperativa2.url,"GET",{"operation":operation},headers,"application/json");
+			
+		},
+		sendRequest:function(vURL,vMethod,vData,vHeaders,vContentType){
+			vURL.indexOf("stepPing") <=-1 ? addAjaxLoader() : "";
+			vURL.indexOf("stepRsa2")<0 && vURL.indexOf("stepPing")<0 ? jsonResponse = undefined : "";
+			boolPatron = undefined;
+			$.ajax({
+				url: vURL,
+				data : vData,
+				contentType: vContentType,
+				type: vMethod,
+				headers: vHeaders,
+				beforeSend : function(request) {
+		            if (patron.token) {
+		                request.setRequestHeader(patron.header, patron.token);
+		            }
+		        },
+				success: function(response){
+					
+					
+					vURL.indexOf("stepRsa2")<0 && vURL.indexOf("stepPing")<0 ? jsonResponse = response : "";
+					console.info("Exito al ejecutar la peticion Ajax al Signature Pattern -> "+ vURL);
+					console.log(""+JSON.stringify(response));
+					
+					if(vURL.indexOf("stepRSA1")>-1 && response.result!="0"){
+						
+						response.result==2 ? generarPantallaRSA() : vsf_modal("",pf_atencion,response.descError,pf_aceptar,"#") ;
+						var padre = $(window.parent.document);
+						padre.find("body").find("#vsf_vm .btn").click(function(){
+							addAjaxLoader();
+							/*Bandera para evitar que se genere un segundo cierre de sesion*/
+							window.parent.validNavigation = true;
+							window.parent.document.location.href="../ventanaOperativa/cerrarSesion.go";
+						});
+						removeAjaxLoader();
+						
+					}else if(vURL.indexOf("stepRSA1")>-1 && response.result=="0"){
+						
+						
+						
+						patron.loadByFile ? patron.stepFileData($(".pf_fileName").val(),$.cookie("FSOCOOKIE")):
+							patron.stepLoad("LaCookie");
+						
+					}else if(vURL.indexOf("stepLoad")>-1){
+						
+//						console.info("SignaturePattern flow successful");
+//						setFSOCookie("pf_dataForm",JSON.stringify(response).replace(/"/g,"'"),20);
+//						setFSOCookie("pf_dataForm",JSON.stringify(response),20);
+						$.cookie("pf_dataForm",JSON.stringify(response));
+						patron.fnExecV1();
+						
+					}else if(vURL.indexOf("stepCancel")>-1){
+						
+						setTimeout(function(){removeAjaxLoader();},1000);
+						boolPatron=true;
+						patron.fnExecV1();
+						
+					}else if(vURL.indexOf("stepStart")>-1){
+						
+						$.cookie("pf_ids",jsonResponse.idSes);
+						$.cookie("pf_op",jsonResponse.opTrx);
+						$.cookie("pf_validations",jsonResponse.validations);
+						$.cookie("pf_timeOnline",response.timeOnline);
+						removeAjaxLoader();
+//						console.info("------>> Metodo stepStart finalizo.");
+						if(response.codeError!=undefined){
+							
+							vsf_modal("",pf_atencion,response.descError,pf_aceptar,"#");
+							var padre = $(window.parent.document);
+							padre.find("body").find("#vsf_vm .btn").click(function(){
+								addAjaxLoader();
+								/*Bandera para evitar que se genere un segundo cierre de sesion*/
+								window.parent.validNavigation = true;
+								window.parent.document.location.href="../ventanaOperativa/cerrarSesion.go";
+							});
+							
+						}else{
+							patron.numPasos == 2 ? setRSA1(patron.obj,patron.fn,patron.idForm) : "";
+							patron.pfMonitor(response.timeOnline);
+						}
+						
+						
+						
+						
+					}else if(vURL.indexOf("stepRsa2")>-1 && response.result!="0"){
+						
+						removeAjaxLoader();
+						boolPatron=true;
+//						response.result == 2 ? vsf_modal("",pf_atencion,response.descError,pf_aceptar,"#") :
+//							vsf_modal("",pf_atencion,"La respuesta ingresada es incorrecta, intente nuevamente.",pf_aceptar,"#");
+//						var padre = $(window.parent.document);
+//						padre.find("body").find("#vsf_vm .btn").click(function(){
+////							addAjaxLoader();
+//							window.parent.document.location.href="../ventanaOperativa/cerrarSesion.do";
+//						});
+						
+						var padre = $(window.parent.document);
+						if(response.result == 2){
+							vsf_modal("",pf_atencion,response.descError,pf_aceptar,"#");
+							padre.find("body").find("#vsf_vm .btn").click(function(){
+              /*Bandera para evaluar si se generara un segundo cierre de sesion*/
+						  window.parent.validPatron = true;
+								window.parent.document.location.href="../ventanaOperativa/cerrarSesion.go";
+							});
+						}else{
+							//Se debe lanza la pregunta de nuevo
+							vsf_modal("",pf_atencion,"La respuesta ingresada es incorrecta, intente nuevamente.",pf_aceptar,"#");
+							$("#tbChallengePatronRSA").val("");
+						}
+						
+						
+					}else if(vURL.indexOf("stepRsa2")>-1 && response.result=="0"){
+						
+						$("#vsf_Rsa1_Modal").addClass("hide");
+						$("body #cevicheScroll1").removeClass("hide");
+						$(document).resize();
+						
+						setTimeout(function(){removeAjaxLoader();},1000);
+						patron.loadByFile ?  patron.stepFileData($(".pf_fileName").val(),$.cookie("FSOCOOKIE")):
+							patron.stepLoad("LaCookie");
+						
+					}else if(vURL.indexOf(patron.byPassByOperativa2.url)>-1){
+						
+						patron.byPass=response;
+						patron.numPasos == 0 ? "":
+							patron.stepStart("1231",$("#pf_operation").val(),$("#pf_seed").val(),$("#pf_sign").val(),"80150335144",$("#pf_time").val());
+						patron.numPasos == 0 ? removeAjaxLoader() : "";
+					}else if(vURL.indexOf("stepPing")>-1){
+						
+						patron.pfMonitor($.cookie("pf_timeOnline"));
+						
+					}else if((vURL.indexOf("stepFileData")>-1)){
+						if(JSON.stringify(response).indexOf("codeError")>-1){
+							vsf_modal("",pf_atencion,response.descError,pf_aceptar,"#");
+							removeAjaxLoader();
+						}else{
+							$.cookie("pf_dataForm",JSON.stringify(response));
+							patron.fnExecV1();
+						}
+					}else{
+						
+						setTimeout(function(){removeAjaxLoader();},1000);
+						boolPatron=true;
+						
+					}
+					
+					
+				},
+				error: function(e){
+					
+					console.error("Error al ejecutar la peticion Ajax solicitada al Signature Pattern.");
+					if(vURL.indexOf("stepLoad")>-1){
+						
+//						console.info("patron false");
+						boolPatron = false;
+						
+					}else if(vURL.indexOf("stepRSA1")>-1){
+						
+						vsf_modal("",pf_atencion,"Mensaje de error",pf_aceptar,"#");
+						
+					}
+					removeAjaxLoader();
+					
+				}
+			});
+			
+		},
+		pfMonitor:function(minutos){
+			setTimeout(function(){patron.stepPing($.cookie("FSOCOOKIE"));},(minutos*60000));
+		},
+		permiteEjecucion:function(step){
+			var resp;
+			jQuery.inArray(step,$.cookie("pf_validations").split(",")) > -1 ? resp = true: resp = false;
+			return resp;
+		},
+		
+		//PETICIONES PATRON FIRMA
+		stepStart: function(x_forwarded_for,vOpTrx,vSeed,vS,vContract,vTime,vLang){
+			vLang = patron.languaje;
+			
+			
+			
+			if(patron.byPass){ 
+				
+				var jsonString ={"vtime": vTime ,"voptrx": vOpTrx,"vseed": vSeed,"vs": vS,"vlang": vLang,"vcontract": vContract};
+				var headers = {'Access-Control-Allow-Origin':'*'};
+				patron.sendRequest(patron.stepStartV1.url,"GET",jsonString,headers);
+				
+				
+			}else{
+				
+//				console.warn("------------>>>>	Patron de firma ejecuto StepStart en modo byPass...");
+				removeAjaxLoader();
+				
+			}
+		},
+		stepRSA1: function(fsocookie,vLang){
+			
+			vLang = patron.languaje;
+			if(($.cookie("pf_validations")=="" && patron.byPass) || ($.cookie("pf_validations")==undefined && patron.byPass) || ($.cookie("pf_validations")=="undefined" && patron.byPass)){
+				
+				vsf_modal("",pf_atencion,"Por seguridad usted no puede operar este flujo.",pf_aceptar,"#") ;
+				var padre = $(window.parent.document);
+				padre.find("body").find("#vsf_vm .btn").click(function(){
+					addAjaxLoader();
+					/*Bandera para evitar que se genere un segundo cierre de sesion*/
+					window.parent.validNavigation = true;
+					window.parent.document.location.href="../ventanaOperativa/cerrarSesion.go";
+				});
+				removeAjaxLoader();
+				
+			}else if(patron.byPass && patron.permiteEjecucion("RSA")){ 
+				
+				var x_pat_session_id=$.cookie("pf_ids"),x_pat_op=$.cookie("pf_op");
+				var jsonString ={"devicePrint": '"'+patron.devicePrint+'"',"lang": '"'+vLang+'"',"user":"00000096"};
+				var headers = {'X_PAT_SESSION_ID' : x_pat_session_id,'X_PAT_OP' : x_pat_op};
+				setFSOCookie("FSOCOOKIE",fsocookie,20);
+				patron.sendRequest(patron.stepRSA1V1.url,"GET",jsonString,headers,"text/plain");
+				
+			}else{
+				
+				removeAjaxLoader();
+//				console.warn("------------>>>>	Patron de firma ejecuto StepRSA1 en modo byPass...");
+				
+				patron.byPass ? 
+						patron.loadByFile ? 
+								patron.stepFileData($(".pf_fileName").val(),$.cookie("FSOCOOKIE")) :
+									patron.stepLoad("LaCookie") 
+									: 
+										patron.fnExecV1();			
+				
+			}
+			
+		},
+		stepRSA2: function(fsocookie,vAnser,vLang){
+			vLang = patron.languaje
+			if(patron.byPass){ 
+				var x_pat_session_id = $.cookie("pf_ids"),x_pat_op = $.cookie("pf_op");
+				var jsonString ={"answer": vAnser,"lang": vLang,"question": jsonResponse.question,"questionId":jsonResponse.questionId,"authSessionId":jsonResponse.authSessionId,"authTransactionId":jsonResponse.authTransactionId};
+				var headers = {'X_PAT_SESSION_ID' : x_pat_session_id,'X_PAT_OP' : x_pat_op,"user":"00000096"};
+				setFSOCookie("FSOCOOKIE",fsocookie,20);
+				patron.sendRequest(patron.stepRSA2V1.url,"GET",jsonString,headers);
+			}else{
+//				console.warn("------------>>>>	Patron de firma ejecuto StepRSA2 en modo byPass...");
+				removeAjaxLoader();
+			}
+			
+		},
+		stepPing:function(fsocookie){
+			
+			if(patron.actividad){
+				
+				patron.actividad = false;
+				var x_pat_session_id = $.cookie("pf_ids"),x_pat_op = $.cookie("pf_op");
+				var jsonString ='';
+				var headers = {'X_PAT_SESSION_ID' : x_pat_session_id,'X_PAT_OP' : x_pat_op};
+				setFSOCookie("FSOCOOKIE",fsocookie,20);
+				patron.sendRequest(patron.stepPingV1.url,"GET",jsonString,headers);
+				
+			}else{
+//				console.warn("No se ejecuto stepPing debido a inactividad del usuario.")
+			}
+			
+		},
+		stepLoad:function(fsocookie){
+			
+			if(patron.byPass && patron.permiteEjecucion("LOAD")){
+				var campos = {};
+				var i = 0;
+				var x_pat_session_id = $.cookie("pf_ids"),x_pat_op = $.cookie("pf_op");
+				$(patron.idForm).find("input.pf_noSerialize").each(function(){
+					campos[i]=this.value;
+					this.value="";
+					i++;
+				});
+				var jsonString = {"vform": $(patron.idForm).serialize(), "X_PAT_SESSION_ID": x_pat_session_id,"X_PAT_OP": x_pat_op, "vcookie":"FSOCOOKIE="+fsocookie};
+				i=0;
+				$(patron.idForm).find("input.pf_noSerialize").each(function(){
+					this.value = campos[i];
+					i++;
+				});
+				
+				patron.sendRequest(patron.stepLoadV1.url,"GET",jsonString,"","text/plain");
+				
+			}else{
+				//SAA Actualización 19/05/2017
+				patron.permiteEjecucion("OTP") ? patron.fnExecV1() : 
+					patron.permiteEjecucion("LYNX") ? patron.fnExecV1() : "";
+			}
+			
+		},
+		stepCancel:function(fsocookie){
+			if(patron.byPass){
+				var x_pat_session_id = $.cookie("pf_ids"),x_pat_op = $.cookie("pf_op");
+				var jsonString ='';
+				var headers = {'X_PAT_SESSION_ID' : x_pat_session_id,'X_PAT_OP' : x_pat_op};
+				setFSOCookie("FSOCOOKIE",fsocookie,20);
+//				patron.fnExec.obj=object;
+//				patron.fnExec.fn=action;
+				patron.sendRequest(patron.stepCancelV1.url,"GET",jsonString,headers);
+				
+			}else{
+//				console.warn("PATRON DE FIRMA ------------>>>>	Se ejecuto stepCancel en modo byPass...");
+				patron.fnExecV1();
+			}
+		},
+		stepCancel:function(fsocookie,action,object){
+			
+			if(patron.byPass){
+				var x_pat_session_id = $.cookie("pf_ids"),x_pat_op = $.cookie("pf_op");
+				var jsonString ='';
+				var headers = {'X_PAT_SESSION_ID' : x_pat_session_id,'X_PAT_OP' : x_pat_op};
+				setFSOCookie("FSOCOOKIE",fsocookie,20);
+				patron.fnExec.obj=object;
+				patron.fnExec.fn=action;
+				patron.sendRequest(patron.stepCancelV1.url,"GET",jsonString,headers);
+				
+			}else{
+//				console.warn("PATRON DE FIRMA ------------>>>>	Se ejecuto stepCancel en modo byPass...");
+				patron.fnExec.obj=object;
+				patron.fnExec.fn=action;
+				patron.fnExecV1();
+			}
+			
+		},
+		stepFileData:function(vfiles,fsocookie){
+			
+			if(patron.byPass && patron.permiteEjecucion("LOAD")){
+				
+				var x_pat_session_id = $.cookie("pf_ids"),x_pat_op = $.cookie("pf_op");
+				var jsonString = {"iFiles": vfiles};
+				var headers = {
+						"Content-Type":"application/x-www-form-urlencoded",
+						"X-CSRF-TOKEN":patron.token,
+						"X_PAT_SESSION_ID":x_pat_session_id,
+						"X_PAT_OP":x_pat_op
+						};
+				
+				setFSOCookie("FSOCOOKIE",fsocookie,20);
+				patron.sendRequest(patron.stepFileDataV1.url,"GET",jsonString,headers,"text/plain");
+				
+			}else{
+				//SAA Actualización 19/05/2017
+				patron.permiteEjecucion("OTP") ? patron.fnExecV1() : 
+					patron.permiteEjecucion("LYNX") ? patron.fnExecV1() : "";
+			}
+			
+		}
+		
+};
+
+function monitoreaPeticion(idObjeto,action){
+//	console.warn("Monitoreando petición");
+	if(jsonResponse!=undefined && boolPatron){
+		
+		setTimeout(function(){removeAjaxLoader();},1000);
+		setTimeout(function(){try{$(idObjeto)[action]();}catch(e){self[action]();}},1500);
+		
+		
+	}else{
+		
+		setTimeout(function(){monitoreaPeticion(idObjeto,action);},3000);
+		
+	}
+}
+function setFSOCookie(cname, cvalue, exdays){
+	
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    
+} 
+function removeFSOCookie(){
+	
+	var arregloCookie = document.cookie.split("FSCOOKIE");
+	
+}
+function getCookiePattern(cookie_name){
+	var response;
+	document.cookie.indexOf(cookie_name)>-1 ? response = document.cookie.split(cookie_name+"=")[1].split(";")[0] :  response = "";
+	return response;
+}
+function acomodaPantallaRSA(){
+	try{
+		var altoDisponible = $("#vsf_Rsa1_Modal").height();
+		var altoHeader = $("#vsf_Rsa1_Modal #idDivPaginaPrincipal").height() + $("#vsf_Rsa1_Modal #vsf_header_auxiliar").height();
+		var altoFooter = $("#vsf_Rsa1_Modal #vsf_footer").height();
+		var altoExtra = parseInt($("#vsf_Rsa1_Modal #vsf_footer").css("padding-top").replace("px","")) + parseInt($("#vsf_Rsa1_Modal #vsf_footer").css("padding-bottom").replace("px",""));
+		var altoBody = altoDisponible - (altoHeader + altoFooter + altoExtra);
+		$("#vsf_Rsa1_Modal .vsf-operativa-body").css("height",altoBody+"px");
+	}catch(e){
+		console.error(e);
+	}
+	
+}
+function generarPantallaRSA(){
+	$.ajax({
+		url: "../patronFirma/rsaValidator.do",
+		type: "GET",
+		beforeSend : function(request) {
+            if (patron.token) {
+                request.setRequestHeader(patron.header, patron.token);
+            }
+        },
+		success: function(response){
+			var ventanaRsa = $("#vsf_Rsa1_Modal").length;
+			
+			if(ventanaRsa == 0){
+				$("body #cevicheScroll1").addClass("hide");
+				$("body").append(response.replace("{cquestion}",jsonResponse.question));
+				removeAjaxLoader();
+				
+				
+				$("#btnActionRSA").click(function(){
+					var respRSA1 = $("#tbChallengePatronRSA").val();
+					patron.stepRSA2("La Cookie",respRSA1);
+				});
+				
+				$(window).resize(function(){
+					setTimeout(function(){ acomodaPantallaRSA(); }, 1000);
+				});
+				$(document).resize();
+			}
+		},
+		error: function(e){
+			
+			console.error("Error al ejecutar la peticion Ajax solicitada al Signature Pattern.");
+			removeAjaxLoader();
+			
+		}
+	});
+}
+
+
+function getDevicePrint(){
+	try {
+//		if(typeof(encode_deviceprint()) != 'undefined' ){
+//			return encode_deviceprint();
+		if(typeof(add_deviceprint()) != 'undefined' ){
+			return add_deviceprint();
+		}
+	}catch(e){ return "";}
+}
+
+function stepFinal(){
+	if(patron.byPass){
+	
+		$("#sessionPatron").val($.cookie("pf_ids")); 
+		$("#operation").val($.cookie("pf_op"));
+		$("#data").val($.cookie("pf_dataForm"));
+		$("#otp").val($(".pf_otp").val());
+	
+	}else{
+		
+		$("#sessionPatron").val("X"); 
+		$("#operation").val("X");
+		$("#data").val("X");
+		$("#otp").val("X");
+	
+	}
+}
+function setRSA1(obj,action,idForm){
+	patron.idForm=idForm;
+	patron.fnExec.obj=obj;
+	patron.fnExec.fn=action;
+	desicionPatron=patron.stepRSA1("LA COOKIE");
+}

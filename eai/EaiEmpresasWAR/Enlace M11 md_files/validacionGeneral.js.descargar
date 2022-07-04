@@ -1,0 +1,93 @@
+//Valida que el campo no sea vacío o contenga únicamente espacios o ceros.
+function validarRequerido(valorValidar, valorPosible){
+	try{
+		if(true === valorPosible){
+			var tieneSoloEspacios = /^\s+$/;
+			//var tieneSoloCeros = /^[0]+$/;
+			return !(valorValidar === null || valorValidar.length === 0 || tieneSoloEspacios.test(valorValidar));
+		}else{
+			return true;
+		}	
+	}
+     catch(err){
+     	return false;
+     }
+}
+
+//Valida que haya checkeados de una clase en especifico
+function validarRequeridoGrupoCheckPorClass(valorPosible){
+	try {
+		return !($("." + valorPosible + ":checked").size() === 0);
+	} catch (err) {
+		return false;
+	}
+}
+
+// Valida que dos campos no sean iguales
+function validarValoresDiferentes(valorValidar, campoComparar){
+	try{
+		return valorValidar.localeCompare(campoComparar)!==0;
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que los campos sean iguales
+function validarValoresIguales(valorValidar, campoComparar){
+	try{
+		return valorValidar.localeCompare(campoComparar)===0;
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que el correo tiene el formato correcto 
+function validarCorreo(valorValidar){
+	try{
+		if("" !== valorValidar){
+			var formatoCorreo = /^\w+([-.]\w+)*@\w+([-.]\w+)*(\.\w{2,10})+$/;
+			return formatoCorreo.test(valorValidar);
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que el campo contenga el nombre del archivo con las extensiones indicadas
+function validarFormatoArchivo(valorValidar, extensiones){
+	try{
+		var extension = valorValidar.substring(valorValidar.lastIndexOf('.')+1,valorValidar.length);
+		var arrayExtensiones = extensiones.split(',');
+		for (var i = 0; i < arrayExtensiones.length; i++) {
+			if(extension.toLowerCase().localeCompare(arrayExtensiones[i].toLowerCase())===0){
+				return true;
+			}
+		}
+		return false;
+	}
+     catch(err){
+     	return false;
+     }
+}
+
+//Valida que al menos unos de los dos campos cumpla con la validación de Requerido
+function validarUnoObligatorio(valorValidar, campoComparar){
+	try{
+		return (validarRequerido(valorValidar) === true || validarRequerido(campoComparar) === true);
+	}
+     catch(err){
+     	return false;
+     }
+}
+
+//Valida que esté seleccionada una opción del select diferente al valor enviado. Ejemplo "Seleccione"
+function validarRequeridoOpciones(valorValidar, campoComparar){
+	try{
+		return validarValoresDiferentes(valorValidar,campoComparar);
+	}
+     catch(err){
+     	return false;
+     }
+}

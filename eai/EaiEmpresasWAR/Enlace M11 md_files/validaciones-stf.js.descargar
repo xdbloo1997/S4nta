@@ -1,0 +1,281 @@
+var FORM_CONTRATOS = "formCambioContratos";
+var ESTBUC = "estbuc";
+var url='../inicio.do';
+$(document).ready(function() {
+   $("#idUl").mouseleave(function(){
+         $(".miClase").addClass('oculto');
+         $(".dropdown").removeClass('open');
+         $('a').blur();  
+      });
+   $("#flechaDesRoja").mouseleave(function(){
+         $("button").attr("aria-expanded","false");
+         $(".desplegable").removeClass("open");
+   });
+   $("#flechaDesRoja").click(function(){
+         $(window).resize();
+   });
+   $("#flechaDesRoja").on('click mouseover mouseup scroll', function(){
+      $(window).trigger('resize');
+      });
+   $("#menuDesp").click(function(){
+         $("#menuDesplegableMostrar").removeClass("oculto");
+   });
+   $("#menuDesplegableMostrar").mouseleave(function(){
+       $("#menuDesplegableMostrar").addClass('oculto');
+   });
+   $("#iconHeaderContact").click(function(){
+         $("#divContacto").removeClass("oculto");
+   });
+   $("#divContacto").mouseleave(function(){
+       $("#divContacto").addClass('oculto');
+   });
+   $("#btnRegreBuscadorCont").click(function(){
+      window.history.back();
+   });
+   $( "#btnSiguientePaso1" ).click(function() {
+      window.location = 'ConfirmacionPagos.html';
+   });
+   $( "#btnRegresarPaso2" ).click(function() {
+      window.location = 'AltaDePagos.html';
+   });
+   $( "#btnSiguientePaso2" ).click(function() {
+      window.location = 'ComprobanteAltaPagos.html';
+   });
+   $( "#root-tplVentanaOperativa-ICabeceraPrincipal-iconHeaderClose1" ).click(function() {
+      $('#root-tplVentanaOperativa-genericaBody').hide();
+   });
+   $( "#root-tplVentanaOperativa-ICabeceraPrincipal-iconHeaderClose2" ).click(function() {
+      $('#root-tplVentanaOperativa-genericaBody').hide();
+   });
+   $( "#root-tplVentanaOperativa-ICabeceraPrincipal-iconHeaderClose3" ).click(function() {
+      $('#root-tplVentanaOperativa-genericaBody').hide();
+   });
+   $( "#root-tplVentanaOperativa-ICabeceraPrincipal-iconHeaderPrint1" ).click(function() {
+      window.print();
+   });
+   $( "#root-tplVentanaOperativa-ICabeceraPrincipal-iconHeaderPrint2" ).click(function() {
+      window.print();
+   });
+   $( "#root-tplVentanaOperativa-ICabeceraPrincipal-iconHeaderPrint3" ).click(function() {
+      window.print();
+   });
+   $( "#root-tplVentanaOperativa-genericaContHeaderPrimary" ).click(function() {
+      $("#seleccionContratoVentana").val("");
+      $(".divBuscadores").addClass('oculto');
+      $("#idDivPaginaPrincipal").removeClass('oculto');
+   });
+   $( "#root-tplVentanaOperativa-genericaHeaderPrimaryTitleID" ).click(function() {
+      $("#seleccionContratoVentana").val("");   
+      $(".divBuscadores").addClass('oculto');
+      $("#idDivPaginaPrincipal").removeClass('oculto');
+   });
+   $( "#root-tplVentanaOperativa-genericaContMenuNavsViews" ).click(function() {
+      $("#seleccionContratoVentana").val("");
+      $(".divBuscadores").addClass('oculto');
+      $("#idDivPaginaPrincipal").removeClass('oculto');
+   });
+   $( "#root-tplVentanaOperativa-aIconHeaderAdmin" ).click(function() {
+      $("#seleccionContratoVentana").val("");
+      $(".divBuscadores").addClass('oculto');
+      $("#idDivPaginaPrincipal").removeClass('oculto');
+   });   
+   $('#seleccionContratoVentana').change(function(){
+      var option= $( "#seleccionContratoVentana option:selected" ).val();
+      if ('*' === option) {
+         calculaElementosCombos('seleccionContratoVentana', 'combosOriginalesContrato');
+         $(".divBuscadores").removeClass('oculto');
+         $("#confirmarContrato").modal("hide");
+         $("#idDivPaginaPrincipal").addClass('oculto');
+         $("#divBuscadorContrato").removeClass('oculto');
+         $(window).resize();
+      } else {
+         $("#confirmarContrato").modal("show");
+         $('#btnAceptar').click( function(){
+        	 addAjaxLoader();
+            var estBuc = sessionStorage.getItem(ESTBUC);
+            var option= $( "#seleccionContratoVentana option:selected" ).text();
+            var res = option.split(".");   
+            $('#idContratoVentOper').text(res[0]);
+            $('#idNoContratoVentOper').text(res[1]);
+            var optionDatos= $( "#seleccionContratoVentana option:selected" ).val();
+            var resDatos = optionDatos.split(".");
+             var parametros = {
+            		 	"contratoPartenon" : resDatos[0],
+                        "empresaPartenon" : resDatos[1],
+                        "centroPartenon" : resDatos[2],
+                        "productoPartenon" : resDatos[3],
+                        "cuentaPartenon" : resDatos[4],
+                        "empresaLocal" : resDatos[5],
+                        "centroLocal" : resDatos[6],
+                        "cuentaLocal" : resDatos[7],
+                        "productoLocal" : resDatos[8],
+                        "subProducto" : resDatos[9],
+                        "numeroPersona" : resDatos[10],
+                        "titularContrato" : resDatos[11]
+             
+                };
+             $.ajax({
+                    url :'../voCommons/updateContrato.do',
+                    data : parametros,
+                    dataType : 'json',
+                    success : function() {
+                    	$("#confirmarContrato").modal("hide");
+                        $(".divBuscadores").addClass('oculto');
+                        $("#idDivPaginaPrincipal").removeClass('oculto');
+                        sessionStorage.clear();
+                     	validRequest = true;
+                        $(location).attr("href", url);
+                    },
+                    error : function() {
+                        console.log("Ha fallado la peticion de datos para realizar cambio de contrato");
+                        removeAjaxLoader();
+                       }
+                });  
+         });
+         $(window).resize();
+      }
+   });
+   $(".icon-admin-menu-tools").click(function(){
+      var bandera= $("#banderaSmall").val();
+      $(this).toggleClass('icon-admin-menu-tools');
+      $(this).toggleClass('icon-admin-menu-tools-red');
+      if (bandera !==""){
+         $(".classresizeSB").addClass("slide-box");
+         $(".classresizeSL").addClass("slide");
+         $("#banderaSmall").val("");
+         }else{
+         $("#banderaSmall").val("1");
+         $(".classresizeSB").removeClass("slide-box");
+         $(".classresizeSL").removeClass("slide");   
+         }
+   });
+$( window ).resize(function() {
+      var tamano = $(window).width();
+      var restante;
+      if(tamano === 1200){
+         restante = 256;
+      }
+      else{
+         restante = 209;
+      }
+      width = tamano - restante;
+      var bandera = $("#banderaSmall").val();
+      if (bandera!==""){
+         $(".classresizeSB").addClass("slide-box");
+         $(".classresizeSL").addClass("slide");
+          $("#banderaSmall").val("");
+         }else if(bandera===""){
+         return false;
+         }else{
+      return false;   
+         }
+      });
+});
+
+function muestraModalContratos(){
+   $("#confirmarContrato").modal("show");
+
+   $('#btnAceptar').click( function(){
+      var option= $( "#seleccionContratoVentana option:selected" ).text();
+      $('#idContratoVentOper').text((option));
+      $("#confirmarContrato").modal("hide");
+   });
+   
+   
+}
+
+function ir(form, urlDestino) {
+   var jIdForm = "#" + form;
+   $(jIdForm).attr('action', urlDestino);
+   $(jIdForm).submit();
+}
+
+function cargaLocalStorage(cuenta) {
+   var parametros = {
+            "cuentaSto" : cuenta,
+            "cambioContrato" : "1"
+    };
+      $.ajax({
+           url :'../voCommons/cargaSessionStorage.do',
+           data : parametros,
+           dataType : 'json'
+       });   
+}
+
+function refreshSessionStorage(estBuc){
+	var app='/EnlaceBETWeb';
+	var parametros = {
+            "estBuc" : estBuc
+    };
+	$.ajax({
+        url : app+'/voCommons/cargaSessionStorage.do',
+        data : parametros,
+        dataType : 'json',
+        success : function(data) {
+        	var expira="3";
+        	var lang = "";
+        	var localDate = "";
+        	if("OK" === data.cargaSession){
+        		console.log("No hay sessionStorage por lo tanto se carga");
+        		if("BER0002" === data.codError){
+            		$form = $('<form id="formBet" action="'+app+'/error/500.do" method="GET"></form>');
+                	$('body').append($form);
+                	$form.submit(); 
+            	}else{
+            		if(data.expira!=null){
+            			expira=data.expira;
+            		} 
+            		sessionStorage.setItem('fchUltAccSto', data.fchUltAccSto);
+                	sessionStorage.setItem("fchPenAccSto", data.fchPenAccSto);
+                	sessionStorage.setItem("indBloqueoSto", data.indBloqueoSto);
+                	sessionStorage.setItem("entidadSto", data.entidadSto);
+                	sessionStorage.setItem("centroSto", data.centroSto);
+                	sessionStorage.setItem("cuentaSto", data.cuentaSto);
+                	sessionStorage.setItem("cuentaAnterior", data.cuentaAnterior);
+                	sessionStorage.setItem("productoSto", data.productoSto);
+                	sessionStorage.setItem("subproductoSto", data.subproductoSto);
+                	sessionStorage.setItem("aliasCmcSto", data.aliasCmcSto);
+                	sessionStorage.setItem("nombreSto", data.nombreSto);
+                	sessionStorage.setItem("apePatSto", data.apePatSto);
+                	sessionStorage.setItem("apeMatSto", data.apeMatSto);
+                	sessionStorage.setItem("UID", data.crgaSession);  
+                	sessionStorage.setItem("expira", expira); 
+                	sessionStorage.setItem(ESTBUC, estBuc); 
+                	if(data.lang === ''){
+                		setCookie('lang', 'es','1');
+                		setCookie('CookieExp', '100','1');
+                		setCookie('localDate', 'es_MX','1');
+                		lang = "es";
+                	}else{
+                		lang = data.lang;
+                		if("es" === lang){
+                			localDate = "es_MX";
+                		}else{
+                			localDate = "en_US";
+                		}
+                		setCookie('localDate', localDate,'1');
+                	}         
+                	sessionStorage.setItem("lang", lang);
+                	sessionStorage.setItem("localDate", localDate);
+                	$form = $('<form id="formBet" action="'+app+'/ventanaOperativa/configuraEntornoBET.do" method="GET"></form>');
+                	$form.append('<input type="hidden" name="lang" value='+ lang +'>');
+                	$form.append("<input type='hidden' name='expira' value='"+ expira +"'>");
+                	$('body').append($form);
+                	$form.submit(); 
+            	} 
+        	}else{
+        		console.log("Ya hay sessionStorage por lo tanto no se carga");
+        		var expira=sessionStorage.getItem("expira");
+            	var lang=sessionStorage.getItem("lang");
+            	$form = $('<form id="formBet" action="'+app+'/ventanaOperativa/configuraEntornoBET.do" method="GET"></form>');
+            	$form.append('<input type="hidden" name="lang" value="'+ lang +'">');
+            	$form.append("<input type='hidden' name='expira' value='"+ expira +"'>");
+            	$('body').append($form);
+            	$form.submit();  
+        	}
+        },
+        error : function(e) {
+            console.log("Ha fallado la peticion de datos para la sesion. Error: "+e);
+        }
+    });
+}

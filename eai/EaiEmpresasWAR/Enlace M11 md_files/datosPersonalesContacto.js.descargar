@@ -1,0 +1,465 @@
+$(document).ready(function(){
+	agregaRegistro();
+	datosContacto();
+//	regresaOperativaDatosP();
+	regresarAOperativa();
+	cerrarOperacion();
+	onChangeInput();
+	validarImporteKey();
+//	$("#inputToken").change(function(){
+//		var valToken=$("#inputToken").val();
+//		if(valToken.length === 8){
+//			$("#btnRegresarPeriodo").removeClass("disabled");
+//		}
+//});
+	$(window).trigger("resize");
+	var codOper = $("#hdCodigoOperadora").val();    
+    $("#codigoOperadora").val(codOper);
+    setUsuario();
+    if(codErrorSer!=""){
+    	vsf_modal("",pf_atencion,mensajeErrorSer,pf_aceptar,"#");
+		var padre = $(window.parent.document);
+		padre.find("body").find("#vsf_vm .btn").click(function(){
+			addAjaxLoader();
+			window.parent.document.location.href="../ventanaOperativa/cerrarSesion.go";
+		});
+	}
+});
+
+function onChangeInput(){
+	$("#btnModifica").click(function(){
+		var email = $("#correo").val();
+		var lada = $("#lada").val();
+		var celular = $("#numCelular").val();
+		var correoEmpresa = $("#correoEmpresa").val();
+//		var compania = $("#codigoOperadora:fist-child").text();
+		$("#correo").change(function(){
+			if(email !== $("#correo").val()){
+				$(".btn-siguiente-datosContacto").removeClass("disabled");
+			}
+		});
+		$("#lada").change(function(){
+			if(lada !== $("#correo").val()){
+				$(".btn-siguiente-datosContacto").removeClass("disabled");
+			}
+		});
+		$("#numCelular").change(function(){
+			if(celular !== $("#correo").val()){
+				$(".btn-siguiente-datosContacto").removeClass("disabled");
+			}
+		});
+		$("#correoEmpresa").change(function(){
+			if(correoEmpresa !== $("#correo").val()){
+//				if(validaTitular=='true'){
+					$(".btn-siguiente-datosContacto").removeClass("disabled");
+//				}				
+			}
+		});
+		
+		$("#codigoOperadora").change(function(){
+			$(".btn-siguiente-datosContacto").removeClass("disabled");
+		});
+		
+		valorCombo();
+	});
+}
+
+function agregaRegistro(){
+	var valOperadora = $("#hdCodigoOperadora").val();
+     $('#operadora option[value="'+valOperadora+'"]').attr("selected", "selected");
+	 
+	$(".bet-form .bet-form-add").click(function(){
+		llenarCampos($(this));
+		$(".icon-boton-cerrar").parent().attr("href",$(".icon-boton-cerrar").parent().attr("href").replace("#",""));
+		
+	});	 
+}
+
+function llenarCampos(element){
+	var formulario = element.closest(".bet-form");
+		
+    muestraEditables(formulario);    
+    if($("#dato8").text().trim()==="Si"){
+    	$("#indAleR").val("S");
+    	$("#radioSi").prop('checked','checked');
+    	$("#radioSi").change();
+    }else{
+    	$("#indAleR").val("N");
+    	$("#radioNo").prop('checked','checked');
+    	$("#radioNo").change();
+    }
+    
+    
+    $(window).trigger("resize");
+}
+
+
+function muestraEditables(formulario){		
+		formulario.find(".fields-modify").removeClass("hidden");		
+		formulario.find(".fields-read").addClass("hidden");	
+		if(validaTitular=='false'){
+			formulario.find("#correoEmpresa").addClass("hidden");
+			formulario.find("#dato7").removeClass("hidden");	
+		}
+}
+
+function datosContactoPatron(){
+//	var descOperadora = $("#codigoOperadora option:selected").html();
+//	
+//	$("#operadora").val(descOperadora);
+//	if(validaTitular=='true'){
+//		var correo = $("#isCheckCorreo");
+//		var sms = $("#isCheckSmsNot");
+//		if(correo[0].checked == true){
+//			$("#hdIsCheckSms").val("01");
+//			$("#codMedioNotif").val("01");
+//		}
+//		
+//		if(sms[0].checked == true){
+//			$("#hdIsCheckCorreo").val("02");
+//			$("#codMedioNotif").val("02");
+//		}
+//		
+//		if(correo[0].checked == true && sms[0].checked == true){
+//			$("#hdIsCheckSmsCorreo").val("03");
+//			$("#codMedioNotif").val("03");
+//			$("#hdIsCheckSms").val(false);
+//			$("#hdIsCheckCorreo").val(false);
+//		}
+//	}
+//	if(validaciones()){
+		$("#cambioDatosContacto").attr('action', "../datosPersonales/modificaDatosContactoS2.do");
+		$("#cambioDatosContacto").submit();
+//		$(this).closest("form").attr("action",$(this).attr("href").replace("#",""));
+//		$(this).closest("form").submit();
+//	}
+}
+function datosContacto(){	
+	
+	$(".btn-siguiente-datosContacto").click(function(){
+		//validaPatron("","datosContactoPatron");
+		var descOperadora = $("#codigoOperadora option:selected").html();
+		
+		$("#operadora").val(descOperadora);
+		if(validaTitular=='true'){
+			var correo = $("#isCheckCorreo");
+			var sms = $("#isCheckSmsNot");
+			if(correo[0].checked == true){
+				$("#hdIsCheckSms").val("01");
+				$("#codMedioNotif").val("01");
+			}
+			
+			if(sms[0].checked == true){
+				$("#hdIsCheckCorreo").val("02");
+				$("#codMedioNotif").val("02");
+			}
+			
+			if(correo[0].checked == true && sms[0].checked == true){
+				$("#hdIsCheckSmsCorreo").val("03");
+				$("#codMedioNotif").val("03");
+				$("#hdIsCheckSms").val(false);
+				$("#hdIsCheckCorreo").val(false);
+			}
+		}
+		if(validaciones()){
+			validaPatron("","datosContactoPatron");
+//			$(this).closest("form").attr("action",$(this).attr("href").replace("#",""));
+//			$(this).closest("form").submit();
+		}
+	});
+	   
+	$(".btn-siguiente-confirmar").click(function(){
+		$("#sessionPatron").val($.cookie("pf_ids"));
+		$("#operation").val($.cookie("pf_op"));
+		$("#otp").val("12345678");
+		$("#data").val($.cookie("pf_dataForm"));
+		if(valFuncToken()){
+//			$(this).closest("form").attr("action",$(this).attr("href").replace("#",""));
+			$("#confirmaContacto").attr('action', "../datosPersonales/modificaDatosContactoS3.do");
+			$(".btn-siguiente-confirmar").attr('disabled', 'disabled');
+			$(".btn-regresar-datos").attr('disabled', 'disabled');
+//			$(this).closest("form").submit();
+			stepFinal();
+			$("#confirmaContacto").submit();
+		}
+		
+	});
+	
+	$(".btn-regresar-datosContacto").click(function(){
+		$(this).closest("form").attr("action",$(this).attr("href").replace("#",""));
+		$(this).closest("form").submit();
+	});
+	
+	$(".btn-regresar-datos").click(function(){
+		patron.stepCancel("","regresar",undefined);
+//		vsf_modal("icono-notificacion",Vsf_vm_cab_cancelar,Vsf_vm_msj_cancelar,"No|Si","javascript:return 0;|javascript:irMenu('../datosPersonales/datosContacto.do')");
+	});
+		
+}
+function regresar() {
+	vsf_modal("icono-notificacion",Vsf_vm_cab_cancelar,Vsf_vm_msj_cancelar,"No|Si","javascript:return 0;|javascript:irMenu('../datosPersonales/datosContacto.do')");
+}
+
+function regresarAOperativa(){
+	$(".bet-form .bet-form-back").click(function(){
+		$("#hdCorreo").val("");
+		$("#hdCorreoEmpresa").val("");
+		$("#hdLada").val("");
+		$("#hdNumCelular").val("");
+		$("#hdOperadora").val("");
+		$("#hdCorreoInicio").val("");
+		
+		var formulario = $(this).closest(".bet-form");
+		formulario.find(".fields-modify").addClass("hidden");		
+		formulario.find(".fields-read").removeClass("hidden");
+		$(window).trigger("resize");
+		$(".icon-boton-cerrar").parent().attr("href","#"+$(".icon-boton-cerrar").parent().attr("href"));
+	});	
+}
+
+function regresaOperativaDatosP(){
+	var valCorreo = $("#hdCorreo").val();
+	var valCorreoEmpresa = $("#hdCorreoEmpresa").val();
+	var valLada = $("#hdLada").val();
+	var valNumCel = $("#hdNumCelular").val();
+	var valOperadora = $("#hdOperadora").val();
+		
+	var varCheckOperacion =$("#hdIsCheckOper").val();
+	var valCheckCorreo = $("#hdIsCheckCorreo").val();
+	var valCheckSms = $("#hdIsCheckSms").val();
+	
+	if($("#hdCorreo").val()!=undefined && $("#hdCorreo").val()!=""){
+		$("#btnModifica").click();
+		
+		$("#correo").val(valCorreo);		
+		$("#hdCorreo").val("");
+		
+		$("#correoEmpresa").val(valCorreoEmpresa);		
+		$("#hdCorreoEmpresa").val("");
+		
+		$("#lada").val(valLada);		
+		$("#hdLada").val("");
+		
+		$("#numCelular").val(valNumCel);		
+		$("#hdNumCelular").val("");
+		
+		$("#operadora").val(valOperadora);		
+		$("#hdOperadora").val("");
+		
+		
+		
+					
+		if(valCheckCorreo == 'true'){
+			$("#lblCorreo").attr("class","active");
+			$("#hdIsCheckCorreo").val("");
+		}else{
+			$("#lblCorreo").attr("class","");
+			$("#hdIsCheckCorreo").val;
+		}
+		
+		if(valCheckSms == 'true'){
+			$("#lblSms").attr("class","active");
+			$("#hdIsCheckSms").val("");
+		}else{
+			$("#lblSms").attr("class","");
+			$("#hdIsCheckSms").val("");
+		}			
+		
+	}
+}
+
+function cerrarOperacion(){
+    
+    $("#root-icon-boton-cerrar").on("click",function(){        
+        $("#formRegresarMenu").attr("action", "configuracionAccesos.do");    
+        $("#formRegresarMenu").submit();
+        
+    });
+}
+
+
+function validaciones(){
+	
+	var jsonValidaciones = [
+	    {
+	    	 "correo":[
+	    	 {
+	    	  "requerido": true,
+	    	  "longitudMinima": 0,
+              "longitudMaxima": 60,
+              "correo": true
+	    	 }
+	        ],
+	        "lada":[
+	          {      
+	          "numerico": true,
+	          "longitudMinima": 2,
+              "longitudMaxima": 3
+	          }
+	        ],
+	    	"numCelular":[
+	    	  {
+	    		  "numerico": true,
+	    		  "longitudMinima": 7,
+	    		  "longitudMaxima": 8
+	    	  }
+	    	]
+//	    ,
+//	    	"correoEmpresa":[
+//	    	   {
+//	    		  "requerido": true,
+//	 	    	  "longitudMinima": 0,
+//	              "longitudMaxima": 60,
+//	              "correo": true
+//	    	   }
+//	    	 ]
+	    }
+	];
+	
+	var jsonIdMensajes = [
+	    {
+	    	"correo":[
+	    	  {
+	    		"requerido": "CorreoRequerido",
+	    		"longitudMinima": "CorreoMinimimo",
+	    		"longitudMaxima":"CorreoMaximo",
+	    		 "correo": "correo"
+	    	  }
+	    	],
+	    	"lada":[
+	    	 {
+	           "numerico": "LadaNumerico",
+	           "longitudMinima": "LadaMinima",
+	           "longitudMaxima": "LadaMaxima"
+	    	 }
+	    	],
+	    	"numCelular":[
+	    	 {
+	    	   "numerico": "CelNumerico",
+	    	   "longitudMinima": "CelMinima",
+	    	   "longitudMaxima": "CelMaxima",
+	    	 }
+	    	],
+	    	"correoEmpresa":[
+	    	  {
+	    		"requerido": "CorreoRequerido",
+		    	"longitudMinima": "CorreoMinimimo",
+		    	"longitudMaxima":"CorreoMaximo",
+		    	"correo": "correo"
+	    	  }
+	    	]
+	    }
+	];
+	
+	if(validarCampos(jsonValidaciones,jsonIdMensajes,"idMensajes", true)){
+		return true;
+	}else{
+		return false;
+	}
+	
+	
+}
+
+
+function valFuncToken(){
+	var jsonValidaciones = [
+        {
+        	"inputToken" : [
+                {
+                	"requerido" : true,
+                	"numerico" : true,
+                	"longitud" : 8
+                }
+            ]
+        }
+    ];
+	
+	var jsonIdMensajes = [
+      {
+    	  "inputToken" : [
+              {
+            	  "requerido" : msjToken,
+            	  "numerico" : "numerico",
+            	  "longitud" : "Longitud del token incorrecta"
+              }
+          ]
+      }
+    ];
+	if(validarCampos(jsonValidaciones, jsonIdMensajes,"idMensajes", true)){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+function setUsuario(){
+	var nombre = sessionStorage.getItem("nombreSto");
+	var aPaterno = sessionStorage.getItem("apePatSto");
+	var aMaterno = sessionStorage.getItem("apeMatSto");
+	var nombreUsuario= nombre+' '+aPaterno+' '+aMaterno;
+	$("#nombreUsuario").val(nombreUsuario);
+}
+
+function validaPatron(obj,action){
+	patron.idForm="#cambioDatosContacto";
+	patron.fnExec.obj=obj;
+	patron.fnExec.fn=action;
+	desicionPatron=patron.stepRSA1("LA COOKIE");
+}
+function cerrarVentana(){
+	var objWin = window.top;
+	objWin.open('../ventanaOperativa/cerrarSesion.go','_top','');
+}
+
+function valorCombo(){
+    if($("#radioSi").is(':checked')) {  
+    	$("#indAleR").val("S");
+    	$("#isCheckCorreo").removeAttr("disabled");
+    	$("#isCheckSmsNot").removeAttr("disabled");
+    }else if($("#radioNo").is(':checked')){
+    	$("#indAleR").val("N");
+//    	$("#isCheckCorreo").prop('checked','checked');
+//    	$("#isCheckSmsNot").removeAttr("checked");
+    	$("#isCheckCorreo").prop("disabled", true);
+    	$("#isCheckSmsNot").prop("disabled", true);    	
+    }
+}
+
+function validarImporteKey(){
+    jQuery('#lada,#numCelular').keypress(function (e) { 
+        
+        var field = $(this);
+
+       var valor = field.val();
+        
+        key = e.keyCode ? e.keyCode : e.which;
+
+       if (key == 8)  return true;
+        if (key > 47 && key < 58) {
+          if (field.val() === "") return true;
+          var existePto = (/[.]/).test(field.val());
+//          if (existePto === false){
+              regexp = /.[0-9]{15}$/;
+//          }
+//          
+//          else {
+//              
+//              var pos = valor.lastIndexOf(".");
+//                  regexp = /.[0-9]{2}$/;
+//                  
+//          }
+          return !(regexp.test(field.val()));
+
+       }
+
+       if (key == 46) {
+          if (field.val() === "") return false;
+          regexp = /^[0-9]+$/;
+          return regexp.test(field.val());
+        }
+
+       return false;
+        
+       
+    });
+}

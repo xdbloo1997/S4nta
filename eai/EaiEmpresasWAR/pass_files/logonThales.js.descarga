@@ -1,0 +1,391 @@
+    var _gPort = 1993;
+    var _gSocket;
+    var _signedApduTextArea;
+    var otp = "";
+    var idiomaPagina = $("#root-seguridad-aIconHeaderLanguageEsp").attr('class'); 	
+ // ------------------ SConnect Browser Detection -----------
+	/**
+	 * SConnectBrowserDetect
+	 * 
+	 * @private
+	 * @ignore
+	 */
+	var SConnectBrowserDetect = {
+	    /*
+	     * @private
+	     * @ignore
+	     */
+	    init: function () {
+	        this.browser = this.searchString(this.dataBrowser) || "An unknown browser";
+	        this.version = this.searchVersion(navigator.userAgent) || this.searchVersion(navigator.appVersion) || "an unknown version";
+	        this.OS = this.searchString(this.dataOS) || "an unknown OS";
+
+	        this.isWindows = (this.OS == "Windows");
+	        this.isLinux = (this.OS == "Linux");
+	        this.isMac = (this.OS == "Mac");
+
+	        this.isFirefox = (this.browser == "Firefox");
+	        this.isIE = (this.browser == "Explorer");
+	        this.isChrome = (this.browser == "Chrome");
+	        this.isSafari = (this.browser == "Safari");
+	        this.isOpera = (this.browser == "Opera");
+			this.isEdge = (this.browser == "Edge");
+			this.isMobile = (navigator.userAgent.match(/mobi/i));
+	    },
+
+	    /*
+	     * @private
+	     * @ignore
+	     */
+	    abbr: function () {
+	        if (this.isFirefox) {
+	            return '-ff';
+	        }
+	        if (this.isIE) {
+	            return '-ie';
+	        }
+	        if (this.isChrome) {
+	            return '-cr';
+	        }
+	        if (this.isSafari) {
+	            return '-sf';
+	        }
+	        if (this.isOpera) {
+	            return '-op';
+	        }
+			if (this.isEdge) {
+				return '-ed';
+			}		
+	        return '';
+	    },
+
+	    /*
+	     * @private
+	     * @ignore
+	     */
+	    searchString: function (data) {
+	        for (var i = 0; i < data.length; i++) {
+	            var dataString = data[i].string;
+	            var dataProp = data[i].prop;
+	            this.versionSearchString = data[i].versionSearch || data[i].identity;
+	            if (dataString) {
+	                if (dataString.indexOf(data[i].subString) != -1) {
+	                    return data[i].identity;
+	                }
+	            } else {
+	                if (dataProp) {
+	                    return data[i].identity;
+	                }
+	            }
+	        }
+	    },
+	    /*
+	     * @private
+	     * @ignore
+	     */
+	    searchVersion: function (dataString) {
+
+	        var index = dataString.indexOf(this.versionSearchString);
+	        if (index == -1) {
+	            return;
+	        }
+
+	        var ver = dataString.substring(index + this.versionSearchString.length + 1);
+
+	        index = ver.indexOf(' ');
+	        if (index != -1) {
+	            ver = ver.substring(0, index);
+	        }
+
+	        return parseFloat(ver);
+	    },
+
+	    /*
+	     * @private
+	     * @ignore
+	     */
+	    dataBrowser: [
+	        {
+	            string: navigator.userAgent,
+	            subString: "Edge",
+	            identity: "Edge",
+	            versionSearch: "Edge"
+	        },
+	        {
+	            string: navigator.userAgent,
+	            subString: "OPR",
+	            identity: "Opera",
+	            versionSearch: "OPR"
+	        },
+	        {
+	            string: navigator.userAgent,
+	            subString: "Chrome",
+	            identity: "Chrome",
+	            versionSearch: "Chrome"
+	        },
+	        {
+	            string: navigator.vendor,
+	            subString: "Apple",
+	            identity: "Safari",
+	            versionSearch: "Version"
+	        },
+	        {
+	            string: navigator.userAgent,
+	            subString: "Firefox",
+	            identity: "Firefox",
+	            versionSearch: "Firefox"
+	        },
+	        {
+	            string: navigator.userAgent,
+	            subString: "MSIE",
+	            identity: "Explorer",
+	            versionSearch: "MSIE"
+	        },
+	        {
+	            string: navigator.userAgent,
+	            subString: "Trident",
+	            identity: "Explorer",
+	            versionSearch: "rv"
+	        }
+	    ],
+
+	    /*
+	     * @private
+	     * @ignore
+	     */
+	    dataOS: [
+	        {
+	            string: navigator.platform,
+	            subString: "Win",
+	            identity: "Windows"
+	        },
+	        {
+	            string: navigator.platform,
+	            subString: "Mac",
+	            identity: "Mac"
+	        },
+	        {
+	            string: navigator.platform,
+	            subString: "Linux",
+	            identity: "Linux"
+	        }
+	    ]
+
+	};
+	SConnectBrowserDetect.init();
+ // ------------------ SConnect Install UIs -----------
+	downloadInstaller = function () {  
+  	  let extSource = "";
+  	  var exeName = "WebConnect.msi";
+  	  var explore ="WebConnect.zip";
+  		//PATH PARA SERVIDOR 
+  	 var extPath ="/LOGBET_ENS/EarEstatico/LOGBET_ENS/logbet/common/pgs/res/sconnect/extensions/";
+  	 //var extPath ="/LOGBET_ESCE/logbet/common/pgs/res/sconnect/extensions/";   
+  	        
+            if (SConnectBrowserDetect.isMac) {
+                exeName = "WebConnect.pkg";
+            }else{
+          	  extSource = extPath + exeName; 
+            }   
+        //realizamos la descarga        
+        if(SConnectBrowserDetect.isIE){
+      	  document.location.href = extPath + explore;      	  
+        }else{
+      	  var ifr = document.createElement('iframe');
+            ifr.src = extSource;
+            ifr.style.display = 'none';
+            document.body.appendChild(ifr);
+        }        
+  };         
+  signedApduTextArea= "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";
+  //funcion que indica si se navega a validar otp   
+    function runAbout() {
+        launchURI("webconnect:about");
+    }
+    //obtener sesion
+	function genId() {
+	// Date timestamp to base 36, concatenated with 9 chars long String of randomized characters & numbers	
+	return (Date.now().toString(36) + Math.random().toString(36).substr(2, 9));
+	}		
+    function runSample() {      
+        // generacion de URI
+        let uri = generateURI();
+        console.log(uri);
+        // ejecutamos Web Connect via URI
+        launchURI(uri);        
+        // conectamos el Web Socket server entregado por Web Connect app
+        connectWebSocket();
+       
+    }  
+   
+    // Generates the URI that trigger the Web Connect app
+    function generateURI() {
+        //preparamos el objeto para la URI, 
+        // en este ejemplp, todos los valores son simulados
+    	var idioma = "es";
+		if(idiomaPagina !=='language-selected'){
+			idioma = "eng";
+        }    	
+    	let sessionNumber = genId();
+        let uri_object = JSON.stringify({
+            "session": sessionNumber,
+            "port": String(_gPort),
+            "lang": idioma,
+        });        
+        // transform the object to URI
+        return "webconnect:" + btoa(uri_object);
+    }    
+    // carga la URI que genero el Web Connect app
+    function launchURI(uri) {
+        let oldIframe = document.getElementById('uriIframe');
+        if( oldIframe != null ) {
+            console.log("Removing old iframe");
+            oldIframe.parentNode.removeChild(oldIframe);
+        }
+
+        let iframe = document.createElement('iframe');
+        iframe.id = "uriIframe";
+        iframe.src = uri;
+        iframe.width = "1px";
+        iframe.height = "1px";
+        iframe.style="visibility: hidden";
+        document.body.appendChild(iframe);
+
+    }
+    
+    //Intenta conectarse al WebSocket que debe crear la aplicación Web Connect
+    
+    function connectWebSocket(currentAttempt) {
+        currentAttempt = currentAttempt || 0; // starting at 0
+        maxAttempt = 5; // max attempt by default
+
+        _gSocket = new WebSocket("wss://127.0.0.1:" + String(_gPort));
+       // _gSocket = new WebSocket("wss://localhost:" + String(_gPort));
+        _gSocket.onmessage = onMessageListener;
+        console.log("WebSocket.onerror ( attempt", currentAttempt, ")");
+
+        // handling retries and timeout
+        _gSocket.onerror = function (e) {
+            console.log("WebSocket.onerror ( attempt", currentAttempt, ")");
+
+            currentAttempt++;
+            if (currentAttempt < maxAttempt) {
+                console.warn("[WebSocket] Will try reconnecting " + (maxAttempt - currentAttempt) + " more times");
+                setTimeout(function () { connectWebSocket(currentAttempt) }, .5 * 1000); // retry
+            } else {
+                console.warn("[WebSocket] Timeout, stopped reconnecting after " + currentAttempt + " retries");
+                $("#root-InstalarModal-modal").show();   
+                downloadInstaller();
+            }
+        }
+        _gSocket.onopen = function (e) {
+            console.log("WebSocket open");
+            _gSocket.onerror = function(e) {
+                console.warn("WebSocket error:",e);
+            }
+        }
+        _gSocket.onclose = function(e) {
+             console.log("WebSocket closed");
+             console.log(e, e.code, e.reason);
+        }
+    }
+    
+    // Generates the command that is sent the app after receiving INSTALLED message
+    function generateCommandMessage() {
+        let result = { 
+            subject : "command",
+            operation : "flextoken"
+        };
+           result.signedApdu = signedApduTextArea;        
+        return result;
+    }
+     
+    // Handles the messages coming from Web Connect over the WebSocket
+    function onMessageListener(message) {
+    	console.log("[WebSocket] Message received");
+        try {
+            message = JSON.parse(message.data);
+        } catch (err) {
+            console.error("[WebSocket] Message received is not formatted properly and cannot be read");
+            return
+        }
+
+        if (message.timestamp) {
+            try {
+                let d = new Date(message.timestamp);
+            } catch (err) {
+                console.error("[WebSocket] Message received contains an invalid timestamp")
+            }
+        } else {
+            console.log("No timestamp in message?");
+        }
+
+        logIncomingSocketMessage(message);
+        switch (message.subject) {
+        case "installed":
+            // on 'installed' message from Web Connect respond with the flextoken command 
+        	// on 'installed' message from Web Connect respond with the selected command message
+            let commandMessage = generateCommandMessage();
+            logOutgoingSocketMessage(commandMessage);
+            _gSocket.send(JSON.stringify(commandMessage));
+            break;
+        case "encrypted_otp":            	
+        	 $("#root-messages").hide();
+        	 $("#uriIframe").remove();
+        	 otp = message.body;
+        	 asignarOTP(otp);
+            break;
+        case "request_timeout":            	
+        	console.log("request_timeout");
+            break;
+        case "internal_server_error":            	
+        	console.log("internal_server_error");
+            break;
+        case "cancel_no_token":            	
+        	console.log("cancel_no_token");
+            break;
+        case "unexpected":            	
+        	console.log("unexpected");
+            break;
+        case "token_op_failed":           	
+        	console.log("token_op_failed");
+            break;
+        case "busi":            	
+        	console.log("busi");
+            break;
+        case "token_op_canceled": 
+        	console.log("token_op_canceled");       	 	
+            break;
+        default:
+        }
+    }  
+    // Logs the given message in the DOM as an element
+    function logMessage(message) {
+        let formattedMessage = "[" + new Date().toISOString() + "] " + message;
+        let pElement = document.createElement("p");
+        pElement.innerText = formattedMessage;
+        $("#root-messages").append(pElement);
+    }
+
+    // Logs a message received from Web Connect
+    function logIncomingSocketMessage(socketMessage) {
+        console.log("Incoming message", socketMessage.subject.toUpperCase(), socketMessage);
+        let message = "received message from Web Connect: " + socketMessage.subject.toUpperCase();
+    }
+
+    // Logs a message sent to Web Connect
+    function logOutgoingSocketMessage(socketMessage) {
+        console.log("Outgoing message", socketMessage.subject.toUpperCase(), socketMessage);
+
+        let message = "sending message to Web Connect: " + socketMessage.subject.toUpperCase();
+    }
+    
+    function asignarOTP(valor){
+    	if(valor !== ''){
+    		navegaOtp = true;
+    		$(".btn-primary").click();	    		
+    	}    			
+    }    
+function obtenerOtp(){
+	return otp;	
+}

@@ -1,0 +1,34 @@
+_satellite.getVar("setTMSFunctions");
+function s_getLoadTime() {
+    if (typeof(performance) !== 'undefined' && typeof(performance.timing) == 'object') {
+        var timing = performance.timing;
+
+        // fall back to less accurate milestones
+        var startTime = performance.timing.redirectStart ||
+            performance.timing.fetchStart ||
+            performance.timing.requestStart;
+        var endTime = performance.timing.domContentLoadedEventEnd ||
+            performance.timing.domInteractive ||
+            performance.timing.domComplete ||
+            performance.timing.loadEventEnd;
+
+        if (startTime && endTime && (startTime < endTime)) {
+            // console.log((endTime - startTime)/100);
+            return Math.round((endTime - startTime)/100);
+        }
+    }
+    return 'data not available';
+}
+
+// function s_getLoadTime() {
+//     if (!window.s_loadT) {
+//         var b = new Date().getTime(),
+//             o = window.performance ? performance.timing : 0,
+//             a = o ? o.requestStart : window.inHeadTS || 0;
+//         s_loadT = a ? Math.round((b - a) / 100) : ''
+//     }
+//     return s_loadT
+// }
+
+_satellite.setVar("loadTime", s_getLoadTime());
+

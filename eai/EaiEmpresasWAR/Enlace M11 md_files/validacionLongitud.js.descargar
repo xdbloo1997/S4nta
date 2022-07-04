@@ -1,0 +1,117 @@
+//Valida la longitud exacta de caracteres
+function validarLongitud(valorValidar, longitud){
+	try{
+		if("" !== valorValidar){
+			return valorValidar.length === longitud;
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida la longitud mínima de caracteres
+function validarLongitudMinima(valorValidar, minimo){
+	try{
+		if("" !== valorValidar){
+			return valorValidar.length >= minimo;
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida la longitud máxima de caracteres
+function validarLongitudMaxima(valorValidar, maximo){
+	try{
+		if("" !== valorValidar){
+			return valorValidar.length <= maximo;
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida Longitud máxima de la parte entera
+function validarLongitudMaximaEntero(valorValidar, maximo){
+	try{
+		if("" !== valorValidar){
+			var reg = /^([0-9 .]{1,})$/i;
+			if(reg.test(valorValidar)){
+				var pointIndex = (valorValidar.includes('.'))?valorValidar.indexOf('.'):valorValidar.length;
+				return valorValidar.substring(0,pointIndex).length<=maximo-1;
+			}
+			else{
+				return false;
+			}
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida Longitud máxima de la parte decimal
+function validarLongitudMaximaDecimal(valorValidar, maximo){
+	try{		
+		if("" !== valorValidar){
+			var reg = /^\d*\.\d*$/;
+			if(reg.test(valorValidar)){
+				return valorValidar.substring(valorValidar.indexOf('.')+1,valorValidar.length).length<=maximo;
+			}
+			else{
+				return false;
+			}
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida Longitud mínima de la parte entera
+function validarLongitudMinimaEntero(valorValidar, minimo){
+	try{
+		if("" !== valorValidar){
+			var reg = /^([0-9 .]{1,})$/i;
+			if(reg.test(valorValidar)){
+				var pointIndex = (valorValidar.includes('.'))?valorValidar.indexOf('.'):valorValidar.length;
+				return valorValidar.substring(0,pointIndex).length>=minimo;
+			}
+			else{
+				return false;
+			}
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida Longitud mínima de la parte decimal
+function validarLongitudMinimaDecimal(valorValidar, minimo){
+	try{		
+		if("" !== valorValidar){
+			var reg = /^\d*\.?\d*$/;
+			if(reg.test(valorValidar)){
+				return valorValidar.substring(valorValidar.indexOf('.')+1,valorValidar.length).length>=minimo;
+			}
+			else{
+				return false;
+			}
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}

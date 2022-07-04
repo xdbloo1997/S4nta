@@ -1,0 +1,60 @@
+/**
+JS Dedicado a timer de expiracion de sesion
+**/
+$(document).ready(function() {
+    $('#root-tplVentanaOperativa-genericaBody').mouseover(function() {
+    	   //stopTimer();
+    	});
+    $('#btnAceptarInactividad').click(function() {
+        $(location).attr("href", '../ventanaOperativa/cerrarSesionInactividadRedirect.go');
+     });
+        $('#root-tplVentanaOperativa-seguridadContHeaderSecundaryLogOff').click(function() {
+		validRequest = true;
+        $(location).attr("href", '../ventanaOperativa/cerrarSesion.go');
+     });
+});
+
+/**
+	Funcion que para el timer, lo elimina y genera nuevamente
+**/
+function stopTimer(){
+	if(typeof window.parent.timerID === 'undefined'){
+		window.parent.timerID = 0;
+	}
+	console.log("stopTimer -> " + window.parent.timerID);
+	clearTimeout(window.parent.timerID);
+	window.parent.timerID=null;
+    startTheTimer('../ventanaOperativa/cerrarSesion.go');
+}
+/**
+	Funcion que inicializa el timer de cierre de sesion
+**/
+function startTheTimer(url){
+        window.parent.timerID = window.parent.setInterval("seTerminoSession()",1200000); 
+}
+
+function stopTheClock(){
+	window.parent.clearInterval(window.parent.timerID);
+}
+
+function seTerminoSession(){
+	window.parent.clearInterval(window.parent.timerID);
+	 stopTheClock();
+	 cerrarSession();
+     show();
+}
+
+function show() {
+    $("#modalInactividad").modal("show");
+}
+
+function initializeTimer(url){
+    console.log("initializeTimer timerID Previo ->" + window.parent.timerID);
+    stopTheClock();
+    startTheTimer(url);
+    fchTimer = new Date();
+    console.log("initializeTimer [" + + window.parent.timerID + "]  Inicio ->" + fchTimer);
+    fchTimer.setMinutes(fchTimer.getMinutes() + 20);
+    console.log("initializeTimer  [" + + window.parent.timerID + "] Fin    ->" + fchTimer);
+    
+}

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="23px" height="17px" viewBox="0 0 23 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>Page 1</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="4.13861653e-16 12.653581 4.13861653e-16 0.342580952 15.926272 0.342580952 15.926272 12.653581"></polygon>
+    </defs>
+    <g id="mOLB-consulta-saldos-Prop-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="mOLB-SM-Saldos-Consolidados-2" transform="translate(-13.000000, -162.000000)">
+            <rect id="Rectangle-2-Copy-2" fill="#FFFFFF" x="0" y="152" width="320" height="38"></rect>
+            <text id="Elizabeth-Juárez-Gar" font-family="OpenSans, Open Sans" font-size="10" font-weight="normal" line-spacing="11">
+                <tspan x="98.6987305" y="171.521484" fill="#999999">Elizabeth Juárez Garrido</tspan>
+                <tspan x="215.803223" y="173" fill="#C2C2C2"></tspan>
+                <tspan x="82.5585938" y="184" font-family="Arial-ItalicMT, Arial" font-size="8" font-style="italic" letter-spacing="1" fill="#999999">Último Acceso: 20 Nov 2017 13:47</tspan>
+            </text>
+            <g id="Page-1" transform="translate(13.000000, 162.000000)">
+                <g id="Group-3">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <g id="Clip-2"></g>
+                    <path d="M11.472512,0.342580952 C6.808192,0.342580952 3.219072,3.88786667 3.011072,8.62977143 L-0.000128,8.62977143 L4.026752,12.653581 L8.053632,8.62977143 L4.932352,8.62977143 C5.133952,4.9452 7.893632,2.19972381 11.472512,2.19972381 C12.693632,2.19972381 13.884672,2.5259619 14.916352,3.14377143 L15.926272,1.5639619 C14.590592,0.764771429 13.050112,0.342580952 11.472512,0.342580952" id="Fill-1" fill="#5A5B5A" mask="url(#mask-2)"></path>
+                </g>
+                <path d="M11.44096,16.9995654 C16.10528,17.0444848 19.73088,13.6026831 19.9888,8.95534034 L23,8.98387027 L19.01536,5 L14.94688,8.90617175 L18.06752,8.93652273 C17.82752,12.5482899 15.03968,15.2131064 11.4608,15.1785063 C10.23968,15.1669729 9.05248,14.8355401 8.02656,14.2200222 L7,15.7594241 C8.32736,16.555834 9.86336,16.9843899 11.44096,16.9995654" id="Fill-4" fill="#5A5B5A"></path>
+            </g>
+        </g>
+    </g>
+</svg>

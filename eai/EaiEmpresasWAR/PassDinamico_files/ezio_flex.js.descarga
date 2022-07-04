@@ -1,0 +1,240 @@
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// GUI FUNCTIONS
+//
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// E-BANKING FUNCTIONS
+//
+///////////////////////////////////////////////////////////////////////////////
+
+
+// Create a callback to treat the return
+var onConnectionFunctionToExecute = null,
+    resultCallback = {
+        success : function (a_oConnection, a_sToken) {
+            'use strict';
+            console.log(onConnectionFunctionToExecute);
+            // Preapare to message to prompt
+            var message = "Result: ";           
+            onConnectionFunctionToExecute = null;    
+            asignarOTP(a_sToken);
+            $('#root-modalEnciendeToken-modal').hide();
+            $('#root-modalBack').hide();
+               
+           },
+        
+        failure : function (a_oConnection, a_oError) {console.log('resultCallback:failure');            
+            'use strict';
+            onConnectionFunctionToExecute = null;            
+            if (a_oError.errorCode === "69F0") {   
+            	var idioma = $("#root-tplSeguridad-aIconHeaderLanguageEsp").attr('class');
+            	if(idioma ==='language-selected'){
+            		 a_oError.message = "Transacción rechazada por usario"; 
+                }else{
+                	 a_oError.message = "Transaction rejected by user";
+                }               
+                a_oError.errorCode = undefined;
+            }
+            showResult("Operation rejected", displayError(a_oError));
+        }
+    };
+
+function asignarOTP(valor){
+	/*asigna el valor a la pantalla token**/
+	if($("#root-tplSeguridad-seguridadGapBody-inputContrasenaDinamica").val() === '' || $("#root-tplSeguridad-seguridadGapBody-inputContrasenaDinamica").val() === ''){
+		$("#root-tplSeguridad-seguridadGapBody-inputContrasenaDinamica").val(valor);
+		$(".btn-primary").click();
+	}
+	/*asigna el valor a la pantalla de activar Token*/
+	if($("#root-ISeguridad-seguridadGapBody-idContrasenaDinamica").val() === '' || $("#root-ISeguridad-seguridadGapBody-idContrasenaDinamica").val() !== ''){
+		$("#root-ISeguridad-seguridadGapBody-idContrasenaDinamica").val(valor);
+		$(".btn-primary").click();
+	}
+	
+	/*asigna el valor a la pantalla de enrolamiento*/
+	if($("#root-seguridad-IToken-inputNIPDinamicoToken").val() === '' || $("#root-seguridad-IToken-inputNIPDinamicoToken").val() !== ''){
+		$("#root-seguridad-IToken-inputNIPDinamicoToken").val(valor);
+		$(".btn-primary").click();
+	}
+			
+}
+function bloquear(){
+	if(BANDERA_PLUGIN === "S"){
+	/*bloquea el  el valor a la pantalla token**/
+		if($("#root-tplSeguridad-seguridadGapBody-inputContrasenaDinamica").val() === '' || $("#root-tplSeguridad-seguridadGapBody-inputContrasenaDinamica").val() === ''){
+			$("#root-tplSeguridad-seguridadGapBody-inputContrasenaDinamica").prop("disabled", true);
+	
+		}
+		/*bloquea el  el valor a la pantalla de activar Token*/
+		if($("#root-ISeguridad-seguridadGapBody-idContrasenaDinamica").val() === '' || $("#root-ISeguridad-seguridadGapBody-idContrasenaDinamica").val() !== ''){
+			$("#root-ISeguridad-seguridadGapBody-idContrasenaDinamica").prop("disabled", true);
+	
+		}
+	
+		/*bloquea el  el valor a la pantalla de enrolamiento*/
+		if($("#root-seguridad-IToken-inputNIPDinamicoToken").val() === '' || $("#root-seguridad-IToken-inputNIPDinamicoToken").val() !== ''){
+			$("#root-seguridad-IToken-inputNIPDinamicoToken").prop("disabled", true);
+		
+		}
+	}
+}
+
+function desbloquear(){
+	/*bloquea el  el valor a la pantalla token**/
+	if($("#root-tplSeguridad-seguridadGapBody-inputContrasenaDinamica").val() === '' || $("#root-tplSeguridad-seguridadGapBody-inputContrasenaDinamica").val() === ''){
+		$("#root-tplSeguridad-seguridadGapBody-inputContrasenaDinamica").removeAttr("disabled");
+	
+	}
+	/*bloquea el  el valor a la pantalla de activar Token*/
+	if($("#root-ISeguridad-seguridadGapBody-idContrasenaDinamica").val() === '' || $("#root-ISeguridad-seguridadGapBody-idContrasenaDinamica").val() !== ''){
+		$("#root-ISeguridad-seguridadGapBody-idContrasenaDinamica").removeAttr("disabled");
+	
+	}
+	
+	/*bloquea el  el valor a la pantalla de enrolamiento*/
+	if($("#root-seguridad-IToken-inputNIPDinamicoToken").val() === '' || $("#root-seguridad-IToken-inputNIPDinamicoToken").val() !== ''){
+		$("#root-seguridad-IToken-inputNIPDinamicoToken").removeAttr("disabled");
+	}
+}
+
+
+
+function promptForTokenConnection() {
+    'use strict';
+    var idioma = $("#root-tplSeguridad-aIconHeaderLanguageEsp").attr('class');
+    if(idioma ==='language-selected'){
+    	showResult("Tu token no está conectado", "Presione la tecla 7 en su token para conectarse");
+    }else{
+    	showResult("Your token is not connected", "Press key 7 on your token to connect");
+    }
+    
+}
+function promptForConfirmation() {console.log('promptForConfirmation');
+    'use strict';
+    var idioma = $("#root-tplSeguridad-aIconHeaderLanguageEsp").attr('class');
+    if(idioma ==='language-selected'){
+    	showResult("Se requiere confirmación en su token", "Presione OK para confirmar (o C para rechazar) la transacción");
+    }else{
+    	showResult("Confirmation required on your token", "Press OK to confirm (or C to reject) the transaction data");
+    }
+    
+}
+function onConnection(a_ConnectionObject) {
+    'use strict';
+    var idioma = $("#root-tplSeguridad-aIconHeaderLanguageEsp").attr('class');
+    if ((null !== a_ConnectionObject) && (undefined !== a_ConnectionObject)) {          
+        if(idioma ==='language-selected'){
+        	toastOpen('Dispositivo Conectado'); 
+        }else{
+        	toastOpen('Device Connected'); 
+        }
+        if (onConnectionFunctionToExecute !== null) {        
+            onConnectionFunctionToExecute();
+        }
+    } else {
+    	 if(idioma ==='language-selected'){
+    		 toastOpen('EWC no se pudo conectar el dispositivo !!!');
+         }else{
+        	 toastOpen('EWC failed to connect to the device !!!');
+         }
+        
+    }
+}
+
+/*
+* LOGIN
+*/
+function login() {
+    'use strict';
+    var cnx = enex.getConnection(),
+        // Set the size of the Ezio Flex screen
+        displaySizes = [[12, 2], [12, 2]],
+        application = enex.SWYS_APPLICATION_DEVICE_CONFIGURATION,
+        algo = enex.SWYS_ALGO_GEMALTO,
+        data = [["FREE_TEXT", [ "GEMALTO DEMO", "LOGIN ?"]]],
+        message;
+
+    try {
+        if (cnx) {
+            promptForConfirmation();
+            cnx.swys(resultCallback, application, data, algo, displaySizes);
+        }
+
+    } catch (e) {
+        message = "Caught exception";
+        message += " name: " + e.name;
+        message += " message: " + e.message;
+    }
+}
+
+
+
+/*
+* HOTP / TOTP
+*/
+function otp() {
+    'use strict';
+
+    var cnx = enex.getConnection(),
+        authenticationCode = $('#authenticationCode').val(),
+        message;
+
+    try {
+        if (cnx) {
+            promptForConfirmation();
+            
+            // Get the authnetication code
+            
+            cnx.hotp_totp(resultCallback, authenticationCode);
+        }
+
+    } catch (e) {
+        message = "Caught exception";
+        message += " name: " + e.name;
+        message += " message: " + e.message;
+        showResult("Error", message);
+    }
+}
+
+
+function token(){
+	// Get the connection object to communicate with the device
+    var cnx = enex.getConnection();
+    if(getActivoExt !==""){
+    	// The device is not ready ? Perform the signing later when the 'onConnection' callback will be invoked
+    	if ((null === cnx) || (typeof (cnx) === "undefined")) {
+    		// Display a message to the end-user to activate the device
+    		promptForTokenConnection();
+    		// Save the function to invoke when the device will be connected
+    		onConnectionFunctionToExecute = otp;
+    		return;
+    	}
+    // The device is ready ? Perform the signing directly
+    otp();
+    }
+}
+// create a custom hardware filter
+function ezioFlexHardwareFilter(a_ReaderName, a_SmartCardATR) {
+    'use strict';
+
+    // Here is a filter to only accept a reader with a name containing "GEMALTO VIRTUAL SMARTCARD READER"
+    //if ((a_ReaderName.toUpperCase().search("GEMALTO VIRTUAL SMARTCARD READER") >= 0) && (a_SmartCardATR.toUpperCase().search("3B6900005A454E20544F4B454E") >= 0)) {
+    
+    // Here is a filter to only accept a reader with a fixed ATR dedicated to the Ezio Flex token
+    if (a_SmartCardATR.toUpperCase().search("3B6900005A454E20544F4B454E") >= 0) {
+    
+        return true;
+    }
+    return false;
+}
+
+function initializeEzioFlex() {
+    'use strict';
+    
+    // Initialize EWC with the custom hardware filter
+    initialize(ezioFlexHardwareFilter);
+}

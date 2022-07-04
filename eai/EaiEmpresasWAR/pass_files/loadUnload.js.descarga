@@ -1,0 +1,19 @@
+var BANDERA_PLUGIN = "N";
+function encenderPlugin() {
+	
+        initializeEzioFlex(); 
+    // Finalize the EWC library when the web page is closed
+    window.onunload = function( ) {
+        //alert('window.onunload');
+        finalize( );
+    	};
+	}
+function thales(){
+	if(BANDERA_PLUGIN === "S"){
+		 encenderPlugin();
+		    setTimeout(function(){
+		          token();
+		  }, 3000);
+	}
+   
+}

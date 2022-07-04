@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="367px" height="367px" viewBox="0 0 367 367" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.3 (67297) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 7</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M23.1136364,0 C10.3086818,0 0,11.01875 0,24.348875 L0,139.65625 C0,152.98125 10.3086818,164 23.1136364,164 L202.8915,164 C215.696455,164 226,152.98125 226,139.65625 L226,24.348875 C226,11.01875 215.696455,0 202.8915,0 L23.1136364,0 Z M10.2727273,24.348875 C10.2727273,16.528125 16.1435909,10.25 23.1136364,10.25 L202.8915,10.25 C209.856409,10.25 215.727273,16.528125 215.727273,24.348875 L215.727273,41.035875 L10.2727273,41.035875 L10.2727273,24.348875 Z M10.2727273,81.892375 L215.727273,81.892375 L215.727273,51.285875 L10.2727273,51.285875 L10.2727273,81.892375 Z M10.2727273,139.65625 L10.2727273,92.142375 L215.727273,92.142375 L215.727273,139.65625 C215.727273,147.471875 209.856409,153.75 202.8915,153.75 L23.1136364,153.75 C16.1435909,153.75 10.2727273,147.471875 10.2727273,139.65625 Z" id="path-1"></path>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard-Copy" transform="translate(-1966.000000, -1718.000000)">
+            <g id="Group-7" transform="translate(1966.000000, 1718.000000)">
+                <g id="Group-6-Copy" fill="#EB0000">
+                    <circle id="Oval-Copy-7" cx="183.5" cy="183.5" r="183.5"></circle>
+                </g>
+                <g id="Group-4" transform="translate(70.000000, 99.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <g id="Clip-2"></g>
+                    <polygon id="Fill-1" fill="#000000" mask="url(#mask-2)" points="-25 190 252 190 252 -25 -25 -25"></polygon>
+                    <polygon id="Fill-3" fill="#FFFFFF" mask="url(#mask-2)" points="-36 231 262 231 262 -66 -36 -66"></polygon>
+                </g>
+                <path d="M101.5,74 L285.727273,293.05" id="Line" stroke="#FFFFFF" stroke-width="11" stroke-linecap="square"></path>
+            </g>
+        </g>
+    </g>
+</svg>

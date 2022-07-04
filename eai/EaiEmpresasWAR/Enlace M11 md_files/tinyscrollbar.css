@@ -1,0 +1,87 @@
+/* Tiny Scrollbar */
+#scrollbar1 { width: 99%; margin: 20px 0 10px; -ms-user-select: none;}
+#scrollbar1 .viewport { width: 99%; height: 20px; overflow: hidden; position: relative; }
+#scrollbar1 .overview { width: 100%; list-style: none; position: absolute; left: 0; top: 0; padding: 0; margin: 0; }
+#scrollbar1 .scrollbar{ background-color: #868481; position: relative; background-position: 0 0; float: right; width:4px; }
+#scrollbar1 .track { background: transparent 0 100%; height: 80%; width:13px; position: relative; padding: 0 1px; }
+#scrollbar1 .thumb { background-color: #552021; height: 20px; width: 8px; cursor: pointer; overflow: hidden; position: absolute; top: 0; left: -2px; }
+#scrollbar1 .thumb .end { background: transparent 50% 0; overflow: hidden; height: 5px; width: 25px; }
+#scrollbar1 .disable { display: none; }
+
+#cevicheScroll1 { width: calc(100% - 4px); margin:0px; -ms-user-select: none; }
+#cevicheScroll1 .cviewport { width: calc(100% - 10px); height: 20px; overflow: hidden; position: relative; }
+#cevicheScroll1 .coverview { width: 100%; list-style: none; position: absolute; left: 0; top: 0; padding: 0; margin: 0; }
+#cevicheScroll1 .cscrollbar{ float: right; width:8px; background-color: #F5F5F5;} /*Moificado ancho de barra que sostiene scroll NC*/
+#cevicheScroll1 .ctrack { position: relative; padding: 0 1px; -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.9);border-radius: 10px;background-color: #CCCCCC;}
+#cevicheScroll1 .cthumb { width: 13px; cursor: pointer; overflow: hidden; position: absolute; left: -2px; border-radius: 10px;background-color: #D62929;background-image: -webkit-linear-gradient(90deg,transparent,rgba(0, 0, 0, 0.4) 50%,transparent,transparent);} /*Modificado color y ancho de primer scroll NC*/
+#cevicheScroll1 .cthumb .cend { background: transparent 50% 0; overflow: hidden; height: 5px; width: 25px; }
+#cevicheScroll1 .cdisable { display: none; }
+
+#scrollbar2 { width: 99%; margin: 0px 10px 10px; }
+#scrollbar2 .viewport2 { width: 99%; height: 300px; overflow: hidden; position: relative; }
+#scrollbar2 .overview2 { width: 100%; list-style: none; position: absolute; left: 0; top: 0; padding: 0; margin: 0; }
+#scrollbar2 .scrollbar2{ float: right; width:4px; background-color: #F5F5F5;}
+#scrollbar2 .track2 { position: relative; padding: 0 1px; -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.9);border-radius: 10px;background-color: #CCCCCC; width: 8px;}
+#scrollbar2 .thumb2 { width: 13px; cursor: pointer; overflow: hidden; position: absolute; left: -2px; border-radius: 10px;background-color: #D62929;background-image: -webkit-linear-gradient(90deg,transparent,rgba(0, 0, 0, 0.4) 50%,transparent,transparent); }
+#scrollbar2 .thumb2 .end2 { background: transparent 50% 0; overflow: hidden; height: 5px; width: 25px; }
+#scrollbar2 .disable2 { display: none; }
+
+#scrollbar3 { width: 100%; margin: 0px; }
+#scrollbar3 .viewport3 { width: 99%; height: 200px; overflow: hidden; position: relative; }
+#scrollbar3 .overview3 { width: 99%; list-style: none; position: absolute; left: 0; top: 0; padding: 0; margin: 0; }
+#scrollbar3 .scrollbar3{ background-color: #868481; position: relative; background-position: 0 0; float: right; width:4px; }
+#scrollbar3 .track3 { background: transparent 0 100%; height: 100%; width:13px; position: relative; padding: 0 1px; }
+#scrollbar3 .thumb3 { background-color: #484848; height: 20px; width: 8px; cursor: pointer; overflow: hidden; position: absolute; top: 0; left: -2px; }
+#scrollbar3 .thumb3 .end3 { background: transparent 50% 0; overflow: hidden; height: 5px; width: 25px; }
+#scrollbar3 .disable3 { display: none; }
+
+[id*='cevicheScroll3vsf'] { width: 100%; margin: 0px; }
+[id*='cevicheScroll3vsf'] [class*='cviewport3vsf'] { width: 98%; max-height: 600px; overflow: hidden; position: relative; } /*Modificacion alto scroll tablas NC*/
+[id*='cevicheScroll3vsf'] [class*='cviewport3vsf'].paso2,
+[id*='cevicheScroll3vsf'] [class*='cviewport3vsf'].paso3 { width: 99%; height: 500px; overflow: hidden; position: relative; }
+
+[id*='cevicheScroll3vsf'] [class*='coverview3vsf'] { width: 99.9%; list-style: none; position: relative; left: 0; top: 0; padding: 0; margin: 0; }
+[id*='cevicheScroll3vsf'] [class*='cscrollbar3vsf']{float: right; width:8px; background-color: #F5F5F5;}
+[id*='cevicheScroll3vsf'] [class*='ctrack3vsf'] { position: relative; padding: 0 1px; -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.9);border-radius: 10px;background-color: #CCCCCC;}
+[id*='cevicheScroll3vsf'] [class*='cthumb3vsf'] { width: 13px; cursor: pointer; overflow: hidden; position: absolute; left: -2px; border-radius: 10px;background-color: #D62929;background-image: -webkit-linear-gradient(90deg,transparent,rgba(0, 0, 0, 0.4) 50%,transparent,transparent);} /*Modificacion color segundo scroll NC*/
+[id*='cevicheScroll3vsf'] [class*='cthumb3vsf'] [class*='cend3vsf'] { background: transparent 50% 0; overflow: hidden; height: 5px; width: 25px; }
+[id*='cevicheScroll3vsf'] [class*='cdisable3vsf'] { display: none; }
+
+#scrollbar4 { width: 100%; margin: 20px 0 10px; }
+#scrollbar4 .viewport4 { width: 95%; height: 50px; overflow: hidden; position: relative; }
+#scrollbar4 .overview4 { width: 95%; list-style: none; position: absolute; left: 0; top: 0; padding: 0; margin: 0; }
+#scrollbar4 .scrollbar4{ background-color: #868481; position: relative; background-position: 0 0; float: right; width:4px; }
+#scrollbar4 .track4 { background: transparent 0 100%; height: 100%; width:13px; position: relative; padding: 0 1px; }
+#scrollbar4 .thumb4 { background-color: #484848; height: 20px; width: 8px; cursor: pointer; overflow: hidden; position: absolute; top: 0; left: -2px; }
+#scrollbar4 .thumb4 .end4 { background: transparent 50% 0; overflow: hidden; height: 5px; width: 25px; }
+#scrollbar4 .disable4 { display: none; }
+
+.noSelect { user-select: none; -o-user-select: none; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; }
+/* Consultas de Medios */
+
+@media (max-width: 440px) {
+  #scrollbar1 .viewport { 
+  	width: 95%; 
+  }
+  #scrollbar1 .overview { 
+  	width: 99%;
+  }
+  #scrollbar2 .viewport2 { 
+  	width: 95%; 
+  }
+  #scrollbar2 .overview2 { 
+  	width: 99%;
+  }
+   #cevicheScroll1 .cviewport { 
+  	width: 98%;
+  }
+  [id*='cevicheScroll3vsf'] [class*='cviewport3vsf']{
+  	width: 96%;
+  }
+}
+@media (max-width: 667px) {
+	
+	 [id*='cevicheScroll3vsf'] [class*='cviewport3vsf']{
+  	width: 96%;
+  }
+}

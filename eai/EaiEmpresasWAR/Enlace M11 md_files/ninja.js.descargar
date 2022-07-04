@@ -1,0 +1,48 @@
+﻿
+$(document).ready(function() {
+
+
+/*MEG NINJA*/
+//si mueven la ventana, reacomodar lo gris
+$(window).resize(function(){
+	acomodar();
+});
+//pintar los divs que vamos a usar
+var image = "/img/ajax-loader.gif";
+var divfondo = "<div id='ninja' style='display:none;'><img src='" + image +"' id='ninjaImg' name='ninjaImg'/></div>";
+$("#ninja").hide();
+$("body").prepend(divfondo); //es importante que quede al principio del body
+
+
+});
+
+
+//Muestra la pantalla de espera de proceso.
+function verNinja() {
+	//gris (ocupar todo)
+	$("#ninja").show();
+	$("#ninja").bgiframe();
+	acomodar();
+	setTimeout("document.images['ninjaImg'].src=document.images['ninjaImg'].src", 1);
+}
+
+//Oculta la pantalla de espera
+function ocultarNinja() {
+//	alert('entrado a ocultar');
+	//console.log("STFANINI[08012014] Entrando  a Cerrar Ninja");
+	document.getElementById("ninja").style.display='none';
+	//console.log("STFANINI[08012014] Entrando  a Cerrar Ninja 2");
+	$("#ninja").hide();
+	//console.log("STFANINI[08012014] Entrando  a Cerrar Ninja 3");
+}
+
+//Acomoda el espacio cubierto por la pantalla de espera.
+function acomodar(){
+	//gris (ocupar todo)
+	$("#ninja").css("height", $(window).height()+"px");
+	$("#ninja").css("width", $(window).width()+"px");
+}
+
+/*MEG NINJA*/
+
+

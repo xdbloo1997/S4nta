@@ -1,0 +1,11 @@
+﻿/*
+	Externalización de la css del tema logbet.common.pgs.theme.Default
+*/
+@CHARSET "ISO-8859-1";
+#bannerEmergente {
+	Z-INDEX: 20000; POSITION: absolute; TOP: 370px
+}
+
+#supermod_intrusivo {
+	Z-INDEX: 2002; FILTER: alpha(opacity=60); LEFT: 0px; FLOAT: left; CURSOR: pointer; POSITION: absolute; TOP: 0px; BACKGROUND-COLOR: #000; opacity: 0.7; -moz-opacity: 0.7; -khtml-opacity: 0.7
+}

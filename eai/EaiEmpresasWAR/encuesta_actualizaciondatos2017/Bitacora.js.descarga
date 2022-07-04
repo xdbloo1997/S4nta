@@ -1,0 +1,278 @@
+var defaultEmptyOK = false;
+function isDigit (c)
+{   return ((c >= "0") && (c <= "9"))
+}
+
+function isEmpty(s)
+{   return ((s == null) || (s.length == 0))
+}
+
+function isInteger (s)
+
+{   var i;
+
+    if (isEmpty(s))
+       if (isInteger.arguments.length == 1) return defaultEmptyOK;
+       else return (isInteger.arguments[1] == true);
+
+
+    for (i = 0; i < s.length; i++)
+    {
+        var c = s.charAt(i);
+
+        if (!isDigit(c)) return false;
+    }
+
+    return true;
+}
+
+function isFloat (s)
+
+{   var i;
+    var seenDecimalPoint = false;
+
+    if (isEmpty(s))
+       if (isFloat.arguments.length == 1) return defaultEmptyOK;
+       else return (isFloat.arguments[1] == true);
+
+    if (s == ".") return false;
+
+    for (i = 0; i < s.length; i++)
+    {
+        // Check that current character is number.
+        var c = s.charAt(i);
+
+        if ((c == ".") && !seenDecimalPoint) seenDecimalPoint = true;
+        else if (!isDigit(c)) return false;
+    }
+
+    return true;
+}
+
+
+function isSignedInteger (s)
+
+{   if (isEmpty(s))
+       if (isSignedInteger.arguments.length == 1) return defaultEmptyOK;
+       else return (isSignedInteger.arguments[1] == true);
+
+    else {
+        var startPos = 0;
+        var secondArg = defaultEmptyOK;
+
+        if (isSignedInteger.arguments.length > 1)
+            secondArg = isSignedInteger.arguments[1];
+
+        if ( (s.charAt(0) == "-") || (s.charAt(0) == "+") )
+           startPos = 1;
+        return (isInteger(s.substring(startPos, s.length), secondArg))
+    }
+}
+
+
+function isPositiveInteger (s)
+{   var secondArg = defaultEmptyOK;
+
+    if (isPositiveInteger.arguments.length > 1)
+        secondArg = isPositiveInteger.arguments[1];
+
+    return (isSignedInteger(s, secondArg)
+         && ( (isEmpty(s) && secondArg)  || (parseInt (s) > 0) ) );
+}
+
+
+
+
+function checkValue(myobj){
+  if(myobj.value != ""){
+    if(!isPositiveInteger(myobj.value)){
+
+      myobj.value = "";
+      myobj.focus();
+      //alert("El valor debe ser numerico");
+	  cuadroDialogo("El valor debe ser num&eacute;rico",3);
+    }
+  }
+}
+
+function checkFloatValue(myobj){
+  if(myobj.value != ""){
+    if(!isFloat(myobj.value)){
+      myobj.value = "";
+      myobj.focus();
+      // alert("El valor debe ser numerico");
+	  cuadroDialogo("El valor debe ser num&eacute;rico",3);
+    }
+  }
+}
+
+
+function ImporteValido()
+{
+	var r= true;
+	if(document.Frmgetinfobit.Importe.value != "")
+	{
+		if(!isFloat(document.Frmgetinfobit.Importe.value))	r= false;
+    }
+	return r;
+}
+
+function ReferenciaValida()
+{
+	var r=true;
+	if(document.Frmgetinfobit.Refe.value != "")
+	{
+		if(!isPositiveInteger(document.Frmgetinfobit.Refe.value))	r=false;
+    }
+	return r;
+}
+
+
+// *************************************************
+
+   function arrayOfDaysInMonths(isLeapYear)
+{
+   this[0] = 31;
+   this[1] = 28;
+   if (isLeapYear)
+   		this[1] = 29;
+   this[2] = 31;
+   this[3] = 30;
+   this[4] = 31;
+   this[5] = 30;
+   this[6] = 31;
+   this[7] = 31;
+   this[8] = 30;
+   this[9] = 31;
+   this[10] = 30;
+   this[11] = 31;
+}
+
+function daysInMonth(month, year)
+{
+   // do the classic leap year calculation
+   var isLeapYear = (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0));
+   var monthDays  = new arrayOfDaysInMonths(isLeapYear);
+   return monthDays[month];
+}
+
+
+
+// *************************************************
+
+function PutDate1(){
+  var Nontoday = new Date();
+
+  //document.Frmfechas.strAnio.value = "2001";
+  //document.Frmfechas.strMes.value = "05";
+  //document.Frmfechas.strDia.value = "01";
+
+      Nontoday.setFullYear(document.Frmfechas.strAnio.value);
+      Nontoday.setMonth(document.Frmfechas.strMes.value - 1);
+      Nontoday.setDate(document.Frmfechas.strDia.value);
+  var today   = Nontoday;
+  if(parseInt(document.Frmfechas.strDia.value) == 1){
+    if(parseInt(document.Frmfechas.strMes.value) == 1){
+      today.setMonth(11);
+      today.setFullYear(today.getFullYear() - 1);
+      today.setDate(1);
+    }else{
+      today.setMonth(today.getMonth() - 1);
+      today.setDate(1);
+    }
+  }else{
+    today.setDate(1);
+  }
+  document.Frmgetinfobit.fecha1.value = today.getDate() + "/";
+  if(today.getDate() <= 9) document.Frmgetinfobit.fecha1.value = "0" + today.getDate() + "/";
+    if(today.getMonth() >= 9) {
+      document.Frmgetinfobit.fecha1.value = document.Frmgetinfobit.fecha1.value +       (today.getMonth()+1) + "/";
+    }else{
+      document.Frmgetinfobit.fecha1.value = document.Frmgetinfobit.fecha1.value + "0" + (today.getMonth()+1) + "/";
+    }
+    document.Frmgetinfobit.fecha1.value = document.Frmgetinfobit.fecha1.value + today.getFullYear();
+
+
+  // segunda fecha
+
+   var Nontoday1 = new Date();
+   Nontoday1.setFullYear(document.Frmfechas.strAnio.value);
+   Nontoday1.setMonth(document.Frmfechas.strMes.value-1);
+   Nontoday1.setDate(document.Frmfechas.strDia.value);
+  var today1 = Nontoday1;
+  if(parseInt(document.Frmfechas.strDia.value) == 1){
+     if(parseInt(document.Frmfechas.strMes.value) == 1){
+         today1.setMonth(11);
+         today1.setFullYear(today1.getFullYear() -1);
+         today1.setDate(31);
+      }else{
+         today1.setMonth(today1.getMonth() - 1);
+         today1.setDate(daysInMonth(today1.getMonth(),today1.getFullYear()));
+
+      }
+    }else{
+      today1.setDate(today1.getDate() - 1);
+    }
+   document.Frmgetinfobit.fecha2.value = today1.getDate() + "/";
+    if((today1.getDate() ) <= 9) document.Frmgetinfobit.fecha2.value = "0" + (today1.getDate()) + "/";
+    if(today1.getMonth() >= 9) {
+      document.Frmgetinfobit.fecha2.value = document.Frmgetinfobit.fecha2.value +       (today1.getMonth()+1) + "/";
+    }else{
+      document.Frmgetinfobit.fecha2.value = document.Frmgetinfobit.fecha2.value + "0" + (today1.getMonth()+1) + "/";
+    }
+    document.Frmgetinfobit.fecha2.value = document.Frmgetinfobit.fecha2.value + today1.getFullYear();
+
+}
+
+function PutDate(){
+  var today      = new Date();
+  today.setFullYear(document.Frmfechas.strAnio.value);
+  today.setMonth(document.Frmfechas.strMes.value-1);
+  today.setDate(document.Frmfechas.strDia.value);
+  document.Frmgetinfobit.fecha1.value = document.Frmfechas.strDia.value + "/";
+  document.Frmgetinfobit.fecha1.value = document.Frmgetinfobit.fecha1.value + document.Frmfechas.strMes.value + "/";
+  document.Frmgetinfobit.fecha1.value = document.Frmgetinfobit.fecha1.value + document.Frmfechas.strAnio.value;
+  document.Frmgetinfobit.fecha2.value = document.Frmgetinfobit.fecha1.value;
+}
+
+
+
+function FrmClean(){
+  document.Frmgetinfobit.deldia[0].checked = true;
+  document.Frmgetinfobit.usuario[0].selected = true;
+  document.Frmgetinfobit.textcuenta.value="";
+  document.Frmgetinfobit.ChkTranf.checked = false;
+  document.Frmgetinfobit.ChkInversiones.checked = false;
+  document.Frmgetinfobit.ChkInterbancario.checked = false;
+  document.Frmgetinfobit.ChkAceptadas.checked = false;
+  document.Frmgetinfobit.ChkRechazadas.checked = false;
+  document.Frmgetinfobit.ChkProgramadas.checked = false;
+  document.Frmgetinfobit.ChkPendientes.checked = false;
+  document.Frmgetinfobit.Importe.value = "";
+  document.Frmgetinfobit.Refe.value = "";
+  PutDate();
+}
+
+
+function DoPost()
+{
+	var f1 = document.Frmgetinfobit.fecha1.value;
+	var f2 = document.Frmgetinfobit.fecha2.value;
+	var folio = document.Frmgetinfobit.Refe.value;
+	var importe = document.Frmgetinfobit.Importe.value;
+	var aux1 = "";
+	var aux2 = "";
+	aux = f1.substring(6,10) + f1.substring(3,5) + f1.substring(0,2);
+	aux1 = f2.substring(6,10) + f2.substring(3,5) + f2.substring(0,2);
+
+	if(aux <= aux1)
+	{
+		document.getElementById("enviar").style.visibility="hidden";
+		document.getElementById("enviar2").style.visibility="visible";
+		document.Frmgetinfobit.submit();
+	}
+	else
+	{
+		cuadroDialogo("La fecha inicial debe ser menor o igual a la fecha final",3);
+	}
+}

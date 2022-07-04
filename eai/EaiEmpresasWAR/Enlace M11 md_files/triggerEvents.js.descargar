@@ -1,0 +1,87 @@
+/*
+ * Funcion  para emular  trigger  de Radio Buttons.
+ */
+
+$(document).ready(function() {
+	$(document).on('change','input[type=radio]',function(){
+        if($(this).attr("name")!=""){
+            $("input[name="+$(this).attr("name")+"]").parent().removeClass("active");
+            if($(this).prop("checked")){
+            	$(this).parent().removeClass("ellipsis");
+                $(this).parent().addClass("active");
+            }
+        }
+});
+	
+	$("input[type=radio]").each(function(){
+	      /*  if($(this).attr("name").indexOf(names)){
+	        }else{
+	            names=names+$(this).attr("name")+"|";
+	            $(this).change();
+	        }*/
+	        //MSIE
+	        if(navigator.userAgent.toLowerCase().indexOf("firefox")===-1){
+	            if(navigator.userAgent.toLowerCase().indexOf("chrome")===-1){
+	                $(this).parent().css("background-position-x",((($(this).parent().width()/2)+4)*-1)+"px");
+	            }
+	        }                    
+	    });
+	
+	
+});
+/*function radioButtonsBET(){
+    //Cambio radioButton
+    $("input[type=radio]").change(function(){
+        if($(this).attr("name")!=""){
+            $("input[name="+$(this).attr("name")+"]").parent().removeClass("active");
+            if($(this).prop("checked")){
+            	//alert("weweewwew" +   $("input[name="+$(this).attr("name")+"]").parent().attr("id"));
+            	$(this).parent().removeClass("ellipsis");
+                $(this).parent().addClass("active");
+            }
+            else
+            	{
+            	alert('false');
+            	}
+        }
+    });
+    //Habilitar un radiobutton de todos los arrays
+    var names = "";
+    $("input[type=radio]").each(function(){
+        //MSIE
+        if(navigator.userAgent.toLowerCase().indexOf("firefox")===-1){
+            if(navigator.userAgent.toLowerCase().indexOf("chrome")===-1){
+                $(this).parent().css("background-position-x",(($(this).parent().width()/2)*-1)+"px");
+            }
+        }                    
+    });
+}*/
+
+/*
+ * Funcion  para los comboBoxes
+ */
+function customSelect(){
+	$('.selectpicker').selectpicker();
+}
+
+
+/*
+ * Funcion para los check  de seleccionar  todo o desseleccionar.
+ */
+////////////////////////////////////
+$('#selectAll').click(function () {
+	var checkedStatus = this.checked;
+	$('.selectedBenef').prop('checked', checkedStatus);
+});
+
+/*
+ *Funcion  para  cuando se da clich en los checks y se chekea  o descheka
+ *el select all
+ */
+$('.selectedRegis').click(function(){
+	if($('.selectedRegis').length === $('.selectedRegis:checked').length){
+		$("#selectAll").prop("checked", true);
+	}else{
+		$('#selectAll').removeAttr("checked");
+	}
+});

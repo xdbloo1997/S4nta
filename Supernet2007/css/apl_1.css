@@ -1,0 +1,635 @@
+.oprap table.etable{
+	padding:0px 0px 0px 10px !important;
+}
+.ivOcultar{
+	display:none !important;
+}
+
+
+
+fieldset#c_instruccion td{
+	font-size:11px !important;
+}
+
+#c_calFecOpMulti fieldset{
+	left: auto !important;
+}
+
+#Main #enrroll_STUa{background-image:url("/Supernet2007/img/fondoSTU.gif"); background-size:100%;}
+div#divCuentasM1 #numero{width:200px !important;}
+
+.rmTDC{
+	left: 235px !important;
+}
+
+.pager{
+	text-align: right;
+}
+.pager font{
+	left: auto !important;
+	right: auto !important;
+	top: 7px !important;
+	position: relative !important;
+	margin-right: 10px;
+}
+*{-moz-box-sizing: border-box;box-sizing: border-box}
+BODY{
+    margin:0px;
+    padding:2px;
+    background:#d7d7d7 !important;
+    color:#000000;
+    z-index:1000;
+}
+
+div#i9 div#divMail,
+div#i9 div#divCom,
+div#i9 div#divMail,
+div#i9 div#divCel,
+div#i9 div#divMedioNot{
+	text-align:left !important;
+}
+div#i9 div#divMail font,
+div#i9 div#divCom font,
+div#i9 div#divMail font,
+div#i9 div#divCel font,
+div#i9 div#divMedioNot font{
+	position: relative !important;
+	left: 0px !important;
+}
+#enroll_STU *,fieldset.notas font,fieldset#Fnota font,fieldset #notas{
+    font-family: Arial,Helvetica,sans-serif !important;
+}
+
+/*Vector SAA 04/01/2016
+cambio en pantallade datos personales
+*/
+#c_i23BisA,#c_i23,div[id="c_admdat.selectCompania"],#c_i134{
+	left:215px !important;
+}
+
+
+/*Afiliación y Desbloqueo de SuperNet*/
+#Main *{
+	font-family: Arial,Helvetica,sans-serif !important;
+}
+/*#Main #i16{
+	top: 140px !important;
+}
+#Main #i0{
+	top: 120px !important;
+}
+#Main #i0 #divBot3{
+	top: 235px !important;
+}
+#Main div#divTerminos{
+	top: 440px !important;
+}
+#Main div#principal, #Main div#mensaje{
+	top: 120px !important;
+	background-color:transparent !important;
+}*/
+
+#Main #c_foliosuc input#foliosuc,
+#Main #c_nip2  input#nip2,
+#Main #c_nip1  input#nip1{
+	width: 210px !important;
+}
+
+/*Login Inicial*/
+/*
+#Main #i1{
+	left: 3px !important;
+}
+#Main #div{
+	top: 120px !important;
+}
+#Main #iB{
+	top: 82px !important;
+}
+#Main #iB #i1{
+	left: 15px !important;
+}
+*/
+/*Generado por Indra SAA modificacion de posiciones relativas para Tabs*/
+div#spnt{
+	float:left;
+	position: relative !important;
+}
+div#spnt>div[id="spnt.header"]{
+	position:relative !important;
+	top:0px;
+}
+div#spnt>.indraUnderMenu{
+	position: relative !important;
+	top: 0px !important;
+}
+div[id="spnt.tabdivs"],div[id="spnt.tabdivs.msdr"]{
+	height:auto !important;
+	top: 0px !important;
+	margin-top: 12px !important;
+	padding-bottom: 12px !important;
+	position: relative !important;
+}
+
+div[id="spnt.tabdivs"]{
+	background-color:#FFF !important;
+}
+div[id="spnt.tabdivs"]>div>.utilWnd>.title{
+	left: -1px !important;
+    top: -1px !important;
+    width: calc(100% + 2px) !important;
+}
+div[id="spnt.tabdivs.msdr"]{
+	margin-top:0px !important;
+	background-color: #d7d7d7 !important;
+	float:left;
+}
+div[id="spnt.tabdivs"]>div,div[id="spnt.tabdivs.msdr"]>div{
+	height: auto !important;
+	position: relative !important;
+}
+div[id="spnt.tabdivs.msdr"]>div{
+	float: left;
+}
+div[id="spnt.tabdivs.msdr"]>div.msdr{
+	left:22px !important;
+}
+div[id="spnt.tabdivs.msdr"]>div.msdr>div.utilWnd>.utilBody{
+	min-height:684px;
+}
+div[id="spnt.tabdivs"]>div>.utilWnd{
+	height:auto !important;
+	position: relative !important;
+	float:left;
+}
+div[id="spnt.tabdivs"]>div>.utilWnd>.utilBody{
+	height: auto !important;
+	position: relative !important;
+	float: left;
+	width: 100% !important;
+}
+/*Inicia Excepción para banca privada*/
+div[id="spnt.tabdivs"] > div[id="spnt.tabdivs.bpriv"] > .utilWnd > .utilBody > div{
+	min-height: 300px !important;
+}
+/*Finaliza Excepción para banca privada*/
+div[id="spnt.tabdivs"]>div>.utilWnd>.utilBody>div{
+	position: relative !important;
+	height:auto !important;
+	float:left;
+	min-height:600px !important;
+	left: initial !important;
+}
+div[id="spnt.tabdivs"]>div>.utilWnd>.utilBody>div>.mainOperations>div>.linksdiv{
+	height:auto !important;
+}
+/*Finaliza Acomodo de posiciones relativas*/
+
+/*Reacomodo de Footer*/
+.footer{
+	position: relative !important;
+	top: 0px !important;
+}
+/*Finaliza reacomodo de footer*/
+
+div[id="oprp.UtilBody"] div.mainOperation[id="msfquick.main"]{
+	top: 31px !important;
+}
+
+Table, Span, Div, Select, Input, Textarea, Font, Button,Legend{
+    font-family: Verdana ;
+    font-size:11px;
+
+}
+#UtilDialog.mainWin .dialogButton{
+	background-color: transparent !important;
+	box-shadow: none !important;
+	color:#000000 !important;
+}
+button,.dialogButton{
+	background:#FFF !important;
+	box-shadow:5px 5px 5px rgba(64,64,64,0.5) !important;
+
+	color:#FF0000;
+	border:none;
+}
+.mainLogin .title,.mainWin .title{
+	background-color:transparent !important;
+}
+.dialogLabelBold{
+	color: #FF0000 !important;
+}
+#UtilDialog.mainWin .dialogButton img{
+	display:block !important;
+}
+.dialogButton img{
+	display:none !important;
+}
+#UtilDialog.mainWin .dialogButton font{
+	text-align:left !important;
+}
+.dialogButton font{
+	position: relative !important;
+	width:100%;
+	left:0px !important;
+	top: 0px !important;
+	text-align:center;
+	float:left;
+}
+div[id="spnt.mnsg"],div[id="spnt.mnsg2"], div[id="spnt.tabdivs.msdr"] .msdr {
+	background:transparent !important;
+}
+Fieldset{
+    padding:0;
+    color:black;
+    font-family: Verdana ;
+    font-size:10px;
+
+}
+
+A{
+  font-family: Verdana;
+  color:#0000CC;
+  font-weight:bold;
+  font-size:11px;
+
+}
+
+Legend{
+    color:blue;
+}
+
+/*This classes are used by Jackbe's core to apply to PM message.*/
+.PM_disabledZone{
+    position:absolute;
+    z-index:1000;
+    left:0px;
+    top:0px;
+    width:100%;
+    height:100%;
+    visibility:hidden;
+}
+.PM_messageZone{
+    position:absolute;
+    top:0px;
+    right:0px;
+    background:#FF0000;
+    color:white;
+    font-family: Verdana;
+    padding:4px;
+}
+
+.error{
+   background:#ffa20c !important;
+}
+.stBoton{
+  font-family:Verdana;
+	font-size: 12px;
+	font-weight: normal;
+	color: #000000;
+	background-color: #FCFCB5;
+        border:0.1mm solid #DAA520;
+
+        }
+
+
+.botonR{
+ background:#FFFADA;
+ color:#4E0E26;
+ font-weight:bold;
+ font-size:10px;
+ border:solid 1px #4E0E26;
+
+}
+
+.divCustomize
+{
+	opacity: .5;
+	filter: alpha(opacity=50);
+}
+.divTitle{
+ background-color:  #3470b2;
+ color:white;
+ font-size:11px;
+
+}
+.divWellcome{
+  background-image:url("../img/pleca_top.gif");
+ }
+.lblTitle{
+ color:white;
+ font-family: Verdana ;
+ font-size:11px;
+ font-weight:bold;
+}
+.lblTitleHea{
+ color:#000000;
+ font-family: Verdana ;
+ font-size:11px;
+ font-weight:bold;
+}
+
+.tdCorner{
+ background-image:url("../img/menu_side.gif");
+}
+.tdCornerSide1{
+ background-image:url("../img/menu_shadow_side.gif");
+}
+
+
+.divTitleMenu{
+ background-image:url("../img/menu_title_top.gif");
+}
+.tdTitleBottom{
+ background-image:url("../img/menu_bottom.gif");
+
+}
+
+.tdContainerMenu{
+ background:#fff2da;
+ background:white;
+}
+.divTop{
+ background-image:url("../img/fondo_top.gif");
+
+ }
+
+.tdModuloTop1{
+ background-image:url("../img/modulo_top.gif");
+}
+
+.tdModuloSide1{
+ background-image:url("../img/modulo_side.gif");
+}
+.divGeneral{
+ border:solid 1px #676869;
+}
+
+.tdWindowInt{
+ background-image:url("../img/window-inside_title.gif");
+ color:#FFFFFF;
+ font-weight:bold;
+ font-size:11px;
+}
+.ren1{
+  background: pink;
+  border:solid 1px #676869; }
+.ren2{background:#fff2da}
+
+.renS1{background:#f1f1f2;
+       border:solid 1px #D3DCE8;
+       font-family: Verdana ;
+   }
+.renS2{background:#E9EDF4;
+       font-family: Verdana ;}
+
+.trHeader{
+    font-family: Verdana ;
+    font-size:11px;
+    color:#676869;
+    font-weight:bold;
+}
+
+.dinam{
+
+ width:100%
+}
+
+.monospace{
+	 font-family: Verdana;
+	 font-size: 12px;
+}
+
+.tabService{
+         text-align: center;
+	 font-weight: bold;
+	 border-right: 1px;
+	 border-top: #676869 2px solid;
+	 border-left: 1px;
+	 border-bottom: #676869 2px solid;
+	 cursor: pointer;
+         background:#FFFADA;
+
+}
+
+.i{filter:gray;color:gray}
+.ii{filter:alpha(Opacity=40);}
+.li{background-color:#CC0000}
+.alias{text-decoration:underline;
+       font-family: Verdana ;
+       font-size:12px;
+       cursor:hand;
+       }
+
+/*Creado por Indra SAA 15/07/2015 >> Modificadores directos para elementos */
+.ReceiptFooter>a{
+	text-decoration:none !important;
+}
+.ReceiptFooter input[type="button"]{
+	background-color: #fff;
+    border: 0 none;
+    box-shadow: 5px 5px 7px rgba(64, 64, 64, 0.5);
+    color: #f00 !important;
+    /*height: 25px;*/
+    text-decoration: none !important;
+    /*width: 100px;*/
+	cursor:pointer;
+}
+body #tabCont{
+	background-color:#FFF !important;
+	height: 100%;
+}
+input.size[type="text"]{
+	width: 135px !important;
+}
+img#i26{
+	left:170px !important;
+}
+div[id="admin.segu.divNIP"] > #i11,div[id="admin.segu.divNIP"] > div[id="c_Token.NIP"],div[id="admin.segu.divNIP"] > #i94{
+	position: relative !important;
+	top: initial !important;
+	left: initial !important;
+	float: left;
+}
+div[id="admin.segu.divNIP"] > div[id="c_Token.NIP"], div[id="admin.segu.divNIP"] > #i94{
+	margin-left: 10px;
+}
+div[id="c_Confirm.NipDinamicoInput"]{
+	left:90px !important;
+}
+/*Inicia reacomodo seguridad solicitud nip*/
+div#UtilDialogBody.win_bckg > #div1 > #divNIP{
+	position: relative !important;
+	width: 100% !important;
+}
+div#UtilDialogBody.win_bckg > #div1 > #divNIP > font, div#UtilDialogBody.win_bckg > #div1 > #divNIP > div[id="c_Token.NIP"]{
+	position: relative !important;
+	float: left;
+	margin-right: 10px;
+	left: initial !important;
+}
+/*Finaliza reacomodo seguridad solicitud nip*/
+#title{
+	font-weight:normal !important;
+	font-size:14px !important;
+}
+input[id="Token.NIP"]{
+	left: 48px !important;
+    position: relative;
+	width:70px !important;
+}
+#imgToken{
+	top: 4px !important;
+}
+font[id="spnt.info.tiene"]{
+	display:none !important;
+}
+select[id="spnt.tabdivs.mvts.selectCuenta"], select[id="mvtsfi.selectCuenta"],select[id="mvtstc.selectCuenta"]{
+	top: 3px !important;
+}
+select[id="mvtsfi.selectCuenta"]{
+	left:10px !important;
+}
+fieldset[id="c_mvtsfi.radioLast"]{
+	top: 16px !important;
+}
+fieldset[id="c_mvtsfi.radioRange"]{
+	top: 33px !important;
+}
+table[id="c_mvtsfi.calTo"] img,table[id="c_mvtsfi.calFrom"] img{
+	top: -2px !important;
+}
+font[id="spnt.tabdivs.mvts.lblTipoMov"], font[id="spnt.tabdivs.mvts.lblTypeAccount"],
+font[id="mvtsfi.lblTipoMov"], font[id="mvtsfi.lblTypeAccount"]{
+	left:initial !important;
+	right:312px !important;
+}
+font#lblYO.mvts{
+	display:none !important;
+}
+font[id="spnt.info.mensajes"]{
+	top: 10px !important;
+}
+img[id="spnt.info.mensaje"]{
+	top: 10px !important;
+}
+font[id="spnt.info.mensajes"]{
+	left: 463px !important;
+}
+img[id="spnt.info.mensaje"]{
+	left: 440px !important;
+}
+font[id="spnt.info.nuevos"]{
+	display:none !important;
+}
+table.eTable[id="mvtsfi.table"]{
+	width: 100% !important;
+}
+#divTableCompras.eTable{
+	height:200px !important;
+}
+div.pager[id="mvts.divPager"],div.pager[id="mvtsfi.divPager"]{
+	height: 28px !important;
+}
+font[id="mvts.lblAnterior"]{
+	font-size:10px !important;
+}
+font[id="mvts.lblSiguiente"]{
+	font-size:10px !important;
+}
+div.footer>font{
+	left: 17px !important;
+}
+/*font[id="mvts.lblPager"]{
+	left:initial !important;
+	right:200px !important;
+}*/
+
+input[id="trans.concepto"],div[id="c_trans.concepto"]{
+	width: 100% !important;
+}
+/*Finaliza*/
+
+
+/*Registro de pago automático de servicios*/
+
+div[id="c_pgaut.selec.Cuenta"],
+div[id="c_pgaut.selec.Tarjeta"]{
+	left: 292px !important;
+	top: 4px !important;
+}
+
+#i58,#txtDescServicio,#i41,#mtAut,#i59{
+	font-size: 11px !important;
+}
+input[id="pgaut.RFC"]{
+	width:237px !important;
+}
+
+#i2{
+	height:auto !important;
+}
+#i2>font, #i2 > div, #i2 > img{
+	position: relative !important;
+	top: initial !important;
+	left: initial !important;
+	float: left;
+	margin-right: 10px;
+}
+
+/*Finaliza*/
+/*Edición Pantalla Seguridad*/
+input[id="Token.NIP"]{
+	left:0px !important;
+}
+/*Finaliza*/
+
+/*#divTable{
+	top: 210px !important;
+}*/
+
+#divMail font{
+	position: relative !important;
+	left: initial !important;
+}
+
+div[id="admin.ctas.divMismoBanco"]>fieldset#labelSOFOM.notas{
+	position: relative !important;
+	width: 300px !important;
+}
+/*fieldset.notas{
+	height: auto !important;
+    padding: 2px 5px 5px;
+    position: relative !important;
+}
+fieldset.notas font{
+ 	float: left;
+    left: 0px !important;
+    position: static !important;
+    right: 0px !important;
+    top: 0px !important;
+	width: auto;
+}*/
+
+.cfSOFOM{
+	padding:13px 0px;
+	float:left;
+	top:377px;
+}
+
+.scrollOpRap{
+	overflow: scroll;
+	overflow-x: hidden;
+}
+
+.scrollOpRap::-webkit-scrollbar {
+   width: 5px; /*=> ancho del scroll*/
+   background-color: #ffffff; /*=> Color del fondo principal */
+}
+.scrollOpRap::-webkit-scrollbar-track {
+   background-color: rgba(38, 50, 56, 0.19); /*=> color de fondo del trayecto del scroll */
+}
+.scrollOpRap::-webkit-scrollbar-thumb {
+   background-color: #263238; /*=> color del indicador del scroll */
+   border-radius: 10px; /*=> bordes redondeados */
+}

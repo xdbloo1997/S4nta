@@ -1,0 +1,7 @@
+	try{
+		rCallback({"v4a":{"rapport_version":"NOT_AVAILABLE"},"v5":{"virtual_machine":null},"timestamp":"2020-07-25 15:36:11","ki":"","v4":{"download_link":null,"rapport_id":null,"rapport_running":0,"compatible":0}},
+				'',
+				'');
+		}
+	catch(e){}
+	

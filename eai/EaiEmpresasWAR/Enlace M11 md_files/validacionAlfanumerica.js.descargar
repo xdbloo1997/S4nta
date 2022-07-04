@@ -1,0 +1,252 @@
+//Valida que el campo contenga únicamente letras y números
+function esAlfanumericojSON(valorValidar){
+    var reg = /^([0-9 a-z]{1,})$/i;
+	try{
+		if("" !== valorValidar){
+			return (reg.test(valorValidar));
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que el campo contenga letras y números y símbolos como (& y @)
+function esAlfanumericojSONesp(valorValidar){
+    var reg = /^([0-9 a-z@&]{1,})$/i;
+	try{
+		if("" !== valorValidar){
+			return (reg.test(valorValidar));
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que el campo contra el patron especifico
+function cumplePatron(valorValidar,patron){
+	try{
+		if("" !== valorValidar){
+			return (patron.test(valorValidar));
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que el campo contenga únicamente letras (Tata TCS)
+function validaLetrasjSON(valorValidar){
+    var reg = /^([a-z \u00a0]{1,})$/i;
+	try{
+		if("" !== valorValidar){
+			return (reg.test(valorValidar));
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que el campo contenga únicamente letras, numeros y puntos (Tata TCS)
+function validaLetrasNumerosjSON(valorValidar){
+    var reg = /^([0-9 a-z .]{1,})$/i;
+	try{
+		if("" !== valorValidar){
+			return (reg.test(valorValidar));
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+
+//Valida que el campo contenga únicamente letras, numeros y puntos (Tata TCS)
+function validaNumerosPuntojSON(valorValidar){
+    var reg = /^([0-9 .]{1,})$/i;
+	try{
+		if("" !== valorValidar){
+			return (reg.test(valorValidar));
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+
+//Valida que el campo contenga únicamente letras, numeros y ampersand (Tata TCS)
+function validaLetrasNumerosAmpersand(valorValidar){
+    var reg = /^([0-9 a-z &]{1,})$/i;
+	try{
+		if("" !== valorValidar){
+			return (reg.test(valorValidar));
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que el campo no permita la palabra DOMICILIO CONOCIDO (Tata TCS)
+function validaCallejSON(valorValidar){
+    var reg = "DOMICILIO CONOCIDO";
+	try{
+		return !valorValidar.includes(reg);
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que el campo contenga únicamente letras y los caracteres á, é, í, ó, ú, ñ, &
+function validarAlfabetico(valorValidar){
+	var reg = /^([a-z ñáéíóú&]{1,})$/i;
+	try{
+		if("" !== valorValidar){
+			return (reg.test(valorValidar));
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que el campo contenga únicamente letras, números y los caracteres á, é, í, ó, ú, ñ, &
+function validarAlfanumericoAcentos(valorValidar){
+	var reg = /^([0-9 a-z A-Z]{1,})$/i;
+	try{
+		if("" !== valorValidar){
+			return (reg.test(valorValidar));
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que el campo contenga únicamente letras, números y los caracteres "ñ,&,' "
+function validarAlfanumericoEspeciales(valorValidar){
+	var reg = /^([0-9 a-z ñ&\']{1,})$/i;
+	try{
+		if("" !== valorValidar){
+			return (reg.test(valorValidar));
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que el campo contenga únicamente letras,numeros los caracteres "ñ "
+function validaLetrasEne(valorValidar){
+	var reg = /^([0-9 a-z ñ]{1,})$/i;
+	try{
+		if("" !== valorValidar){
+			return (reg.test(valorValidar));
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que el campo contenga únicamente letras, números y los caracteres "ñ& "
+function validaLetrasEneNumAmp(valorValidar){
+	var reg = /^([0-9 a-z ñ&]{1,})$/i;
+	try{
+		if("" !== valorValidar){
+			return (reg.test(valorValidar));
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que el campo contenga  alfanúmerico con "ñ", "´", "&", back space y suprimir
+function validarAlfanumericoTeclasEspeciales(valorValidar){
+	var reg = /^([0-9 a-z ñ&áéíóú]{1,})$/i;
+	try{
+		if("" !== valorValidar){
+			return (reg.test(valorValidar));
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que el campo contenga Alfanúmerico con "ñ", "´", back space y suprimir.
+function validarAlfanumericoSinAmperson(valorValidar){
+	var reg = /^([0-9 a-z ñáéíóú]{1,})$/i;
+	try{
+		if("" !== valorValidar){
+			return (reg.test(valorValidar));	
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que el campo contenga únicamente números, back space y suprimir
+function validarNumericoEspeciales(valorValidar){
+	var reg = /^([0-9]{1,})$/i;
+	try{
+		if("" !== valorValidar){
+			return (reg.test(valorValidar));	
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+//Valida que el campo contenga únicamente números, punto, coma, back space y suprimir
+function validarNumericoEspecialesExtra(valorValidar){
+	var reg = /^([0-9 ,.]{1,})$/i;
+	try{
+		if("" !== valorValidar){
+			return (reg.test(valorValidar));
+		}else{
+			return true;
+		}
+	}
+     catch(err){
+     	return false;
+     }
+}
+
+function validarVaciosValorMenorIgualQue(valorValidar, campoComparar){
+	try {
+		var campo1 = $("#" + campoComparar).val();
+		if (valorValidar === "" && campo1 === "") {
+			return true;
+		} else {
+			if (valorValidar === "") {
+				return false;
+			} else {
+				return valorValidar <= campo1;
+			}
+		}
+	} catch (err) {
+		return false;
+	}
+}

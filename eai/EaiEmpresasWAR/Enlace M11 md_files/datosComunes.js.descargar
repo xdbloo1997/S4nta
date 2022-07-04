@@ -1,0 +1,93 @@
+/**
+ * FUNCIONES GENERALES JAVASCRIPT
+ */
+$(document).ready(function(){
+	//obtenerUser();
+	//obtenerDatos();
+	//obtenerSesion();
+	
+});
+function obtenerUser(){
+	var result="";
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	$.ajax({
+		url : window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1]+"/datosComunes/obtenerUsuario.do",
+		type : 'POST',
+		// Elementos necesarios para evitar CSFR
+		beforeSend : function(request) {
+			if (token) {
+				request.setRequestHeader(header, token);
+			}
+		},
+		async: false,
+		dateType : 'json',
+		Accept: 'application/json',
+		success: function(data) {
+			if (data.keyUser !== '') {
+				console.log("KesUser:" + data.keyUser); 
+				result= data.keyUser;
+			}
+		},
+		error: function() {
+			console.log("Error al realizar la modificación");
+		}
+	});
+	return result;
+}
+function obtenerDatos(){
+	var result="";
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	$.ajax({
+		url : window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1]+"/datosComunes/obtenerDatos.do",
+		type : 'POST',
+		// Elementos necesarios para evitar CSFR
+		beforeSend : function(request) {
+			if (token) {
+				request.setRequestHeader(header, token);
+			}
+		},
+		async:false,
+		dateType : 'json',
+		Accept: 'application/json',
+		success: function(data) {
+			if (data.datos !== '') {
+				console.log("datos:" + data.datos);
+				result = data.datos;
+			}
+		},
+		error: function() {
+			console.log("Error al realizar la modificación");
+		}
+	});
+	return result;
+}
+function obtenerSesion(){
+	var result="";
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	$.ajax({
+		url : window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1]+"/datosComunes/obtenerSesion.do",
+		type : 'POST',
+		// Elementos necesarios para evitar CSFR
+		beforeSend : function(request) {
+			if (token) {
+				request.setRequestHeader(header, token);
+			}
+		},
+		async:false,
+		dateType : 'json',
+		Accept: 'application/json',
+		success: function(data) {
+			if (result.keySesion !== '') {
+				console.log("keySesion:" + data.keySesion);
+				result = data.keySesion;
+			}
+		},
+		error: function() {
+			console.log("Error al realizar la modificación");
+		}
+	});
+	return result;
+}

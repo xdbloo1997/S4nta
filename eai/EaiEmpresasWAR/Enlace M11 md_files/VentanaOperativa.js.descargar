@@ -1,0 +1,253 @@
+﻿$(document).ready(function() {
+var cfgLocale =$('#lang').val();
+var cfgExpira = parseInt($('#expira').val());
+var url ="../ventanaOperativa/configuraEntornoBET.do";
+var urlFxOnline="../flame/flameUK.do";
+$('#urlOriginal').val($(location).attr('href'));
+$('#iFramePrincipal').removeClass("divider-bottom");
+$(window).resize(function(){
+    heightWindow();
+    iconHeaderWidth();
+    contentFooterPhone();
+});
+heightWindow();
+iconHeaderWidth();
+contentFooterPhone();
+if ("es"===cfgLocale){
+  $('a#root-tplVentanaOperativa-aIconHeaderLanguageEng').removeClass();
+  $('a#root-tplVentanaOperativa-aIconHeaderLanguageEsp').addClass('language-selected');
+}else{
+  $('a#root-tplVentanaOperativa-aIconHeaderLanguageEsp').removeClass();
+  $('a#root-tplVentanaOperativa-aIconHeaderLanguageEng').addClass('language-selected');
+}
+if (cfgExpira<=5){
+  $("#modalExpiraPass").modal("show");
+}
+$('#btnCambiarExpiraPass').click( function(){
+  $('#expira').val("N");
+  $("#modalExpiraPass").modal("hide");
+  $("#iFramePrincipal").attr("src", '../datosPersonales/cambioDeContrasenia.do');
+});
+$('#btnAceptarExpiraPass').click( function(){
+    $('#expira').val("N");
+    $("#modalExpiraPass").modal("hide");  
+});
+
+/**
+ * Funcion para  el cambio  del idioma  a espaniol
+ */
+$('a#root-tplVentanaOperativa-aIconHeaderLanguageEsp').click( function(){
+     if ("es"===$('#lang').val()){
+        $('a#root-tplVentanaOperativa-aIconHeaderLanguageEsp').addClass('language-selected');
+        return false;
+        }else{
+            $('#lang').val("es");
+			      setCookie('lang', 'es','1');
+            setCookie('localDate', 'es_MX','1');
+            $("#modalCambioIdioma").modal("show");
+     }
+     var parametros = {
+             "pista" : "si"
+        };
+        $.ajax({
+            url :'cambioIdioma.do',
+            data : parametros,
+            dataType : 'json'
+        });
+});
+/**
+ * Funcion para  el cambio  del idioma  a Ingless
+ */
+$('a#root-tplVentanaOperativa-aIconHeaderLanguageEng').click( function(){
+  if ("en"===$('#lang').val()){
+        $('a#root-tplVentanaOperativa-aIconHeaderLanguageEng').addClass('language-selected');
+        return false;
+  }else{
+            $('#lang').val("en");
+			      setCookie('lang', 'en','1');
+            setCookie('localDate', 'en_US','1');
+            $("#modalCambioIdioma").modal("show");
+  }
+    var parametros = {
+         "pista" : "si"
+    };
+    $.ajax({
+        url :'cambioIdioma.do',
+        data : parametros,
+        dataType : 'json'
+    });
+});
+$('.ico_tradre').click( function(e){
+    e.preventDefault();
+    $("#modalAccesoTrade").modal("show");
+});
+$('.icono_demo').click( function(e){
+    e.preventDefault();
+    $("#modalAccesoDemo").modal("show");
+});
+$('.ico_FxOnline').click( function(e){
+    e.preventDefault();
+    $("#modalAccesoFxOnline").modal("show");
+});
+/** Accion al dar clic en el icono de Enlace **/
+$('.ico_version').click( function(e){
+    e.preventDefault();
+    $("#modalVersionAnterior").modal("show");
+});
+$('#btnAceptarAccesoTrade').click( function(){
+    $("#modalAccesoTrade").modal("hide");
+    var varUrlTrade = $('#urlTrade').val();
+    var tokenB64 = $('#token_b64').val();
+    var parametros = {
+        "pista" : "si"
+    };
+    $.ajax({
+        url :'santandeTrade.do',
+        data : parametros,
+        dataType : 'json'
+    });
+    window.open(varUrlTrade + "?token_b64=" + tokenB64, "_blank");
+    cierreSesion('../ventanaOperativa/cerrarSesion.go');
+});
+$('#root-tplVentanaOperativa-linkCabecera').click( function(){
+    var url='../inicio.do';
+    validNavigation = true;
+    $(location).attr("href", url);
+});
+$('#btnCancelarAccesoTrade').click( function(){
+    $("#modalAccesoTrade").modal("hide");
+});
+$('#btnAceptarAccesoDemo').click( function(){
+    $("#modalAccesoDemo").modal("hide");
+    var parametros = {
+         "pista" : "si"
+     };
+     $.ajax({
+            url :'cargaDemo.do',
+            data : parametros,
+            dataType : 'json'
+         });
+     window.open(urlDemo, '_blank', 'width=800,height=640,left="0,top=0');
+});
+$('#btnCancelarAccesoDemo').click( function(){
+    $("#modalAccesoDemo").modal("hide");
+});
+$('#btnAceptarCambioIdioma').click( function(){
+    $( "#frmOperativa").attr('action',url);
+    $( "#frmOperativa").submit();
+});
+$('#btnCancelarCambioIdioma').click( function(){
+   $("#modalCambioIdioma").modal("hide");
+});
+$("#menuDesp").click(function(){
+    $("#divContacto").css("display", "none");
+});
+$("#iconHeaderContact").click(function(){
+    $("#divContacto").css("display", "block");
+});
+$("#menuDesp").click(function(){
+     $("#menuDesplegableMostrar").css("display", "block");
+});
+$("#iconHeaderContact").click(function(){
+    $("#menuDesplegableMostrar").css("display", "none");
+});
+
+/*Acciones Modal FxOnline*/
+$('#btnAceptarAccesoFxOnline').click( function(){
+	$("#iFramePrincipal").attr("src", urlFxOnline);
+	$("#modalAccesoFxOnline").modal("hide");
+});
+$('#btnCancelarAccesoFxOnline').click( function(){
+	 $("#modalAccesoFxOnline").modal("hide");
+});
+/*Acciones de Modal Version Anterior */
+$('#btnAceptarVersionAnterior').click( function(){
+	$("#modalVersionAnterior").modal("hide");
+	cierreSesion('../versionAnteriorEnlace/cerrarSesionAEnlace.go');
+});
+$('#btnCancelarVersionAnterior').click( function(){
+	 $("#modalVersionAnterior").modal("hide");
+});
+/**/
+//si mueven la ventana, reacomodar lo gris
+$(window).resize(function(){
+   acomodar();
+});
+//pintar los divs que vamos a usar
+var image = "/img/ajax-loader.gif";
+var divfondo = "<div id='ninja' style='display:none;'><img src='" + image +"' id='ninjaImg' name='ninjaImg'/></div>";
+$("#ninja").hide();
+$("body").prepend(divfondo);
+});
+function verNinja() {
+    $("#ninja").show();
+    $("#ninja").bgiframe();
+    acomodar();
+    setTimeout("document.images['ninjaImg'].src=document.images['ninjaImg'].src", 10);
+}
+function ocultarNinja() {
+     document.getElementById("ninja").style.display='none';
+     $("#ninja").hide();
+}
+function acomodar(){
+    $("#ninja").css("height", $(document).height()+"px");
+    $("#ninja").css("width", $(document).width()+"px");
+}
+function iconHeaderWidth(){
+    var tamano = $(window).width();
+    var anchoic = $(".slide-box").width();
+    var ancho = $(".icon-admin-menu-salir").width();
+    var Tm=tamano-ancho-anchoic;
+    $(".menuDesplegableContacto").css("margin-left",(Tm-119));
+    $(".menuDesplegable").css("margin-left",(Tm-6));
+    if(tamano<= 1200){
+        $(".menuDesplegable").css("margin-left",(Tm-50));
+        $(".menuDesplegableContacto").css("margin-left",(Tm-153));
+    }
+    if(tamano<= 400){
+        $(".menuDesplegable").css("margin-left",(Tm-38));
+        $(".menuDesplegable").css("margin-top","47px");
+        $(".menuDesplegableContacto").css("margin-left",(Tm-153));
+        $(".menuDesplegableContacto").css("margin-top","47px");
+     }
+}
+function  heightWindow(){
+    var alto = $( window ).height();
+    var alto_menu=144, margin_top=6, alto_footer=140;
+    var Talto= alto-alto_menu;
+    $("#iFramePrincipal").css("min-height",Talto);
+    $("#root-tplVentanaOperativa-genericaBody").css("min-height",(Talto+alto_footer));
+    $(".divBuscadores").css("min-height",(Talto));
+    $(".viewport").css("height",Talto+alto_footer);
+    $('#scrollbar1').tinyscrollbar();
+    $("#scrollbar2").tinyscrollbar2();
+    $(".viewport4").css("height",alto);
+    $('#scrollbar3').tinyscrollbar3();
+    $('#scrollbar4').tinyscrollbar4();
+    condicionDresolucion();
+    $(".viewport4").css("height",Talto);
+    if (!$("#divBuscadorContrato").hasClass('oculto')){
+        $(".panel").css("margin-bottom","6px");
+    }
+}
+// ESTO ES PARA EL TEMA  DE LOS CATALOGOS.
+/*
+$('td.collapsible').click(function() {
+     var id = $(this).parent().attr('id');
+     var num = id.substring(id.length - 1, id.length);
+     $("#"+id+" td").toggleClass("darkerback");
+     $(".border"+num).toggleClass("detalle-td-bordered");
+     $("#"+id+" td.collapsible").toggleClass("icon-cerrar-detalle-bit");
+     
+});*/
+///////////////////////////////////
+function contentFooterPhone(){     
+    var margin = 20;
+    var heightFrame = $("#root-tplVentanaOperativa-genericaBody").height();
+    var heightHeader = $("#root-tplVentanaOperativa-ICabeceraPrincipal-cabSuperiorTitulo").height();
+    var heightHelper = $(".auxiliar-header").height();
+    var heightContent = $(".content-body").height();
+    var heightFotter = $(".page-footerPhone").height();
+    var TotalFrameHeader = heightFrame-(heightHeader+heightHelper+heightContent+heightFotter+ margin);
+    $("#ContentPhoneBlock").css("height",TotalFrameHeader);
+}

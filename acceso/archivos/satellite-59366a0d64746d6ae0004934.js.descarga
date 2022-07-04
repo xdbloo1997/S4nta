@@ -1,0 +1,29 @@
+try {
+  // 1.- FIND THE IFRAMES IN THE PAGE
+var iframes = window.document.getElementsByTagName("iframe");
+// 2.- BUILD THE URL PARAMETER WITH THE AOCS COOKIE
+if (window.unescape(_satellite.readCookie('aocs')) != undefined && window.unescape(_satellite.readCookie('aocs')).length > 0) {
+  var cookieAocs = "aocs=" + window.unescape(_satellite.readCookie('aocs'));
+  // 3.- CHANGE THE SRC ATTRIBUTE ADDIND THE URL PARAMETER
+  for (var i = 0; i < iframes.length; i++){
+    var src = iframes[i].getAttribute("src");
+    if(src.indexOf("?") > -1){
+      src += "&" + cookieAocs;
+    }else{
+      src += "?" + cookieAocs;
+    }
+    iframes[i].setAttribute("src", src);
+    window.console.log("AOCS: CHANGED TO - " + src);
+  }
+}
+  
+}
+catch(error) {
+  console.error(error);
+}
+
+
+/*    
+if (window.s != undefined && window.s.c_r('aocs') != undefined && window.s.c_r('aocs').length > 0) {
+  var cookieAocs = "aocs=" + window.s.c_r('aocs');
+*/

@@ -1,0 +1,2245 @@
+var URL_BUSCADOR_BENEF="buscadorBeneficiario.do";
+var URL_BUSCADOR_SUC="buscadorSucursal.do";
+var URL_ALTA_PAGO="../PagoDirecto/altaPagoDirecto.do";
+var URL_BUSCAR_CTA="buscarCuentasPD.do";
+var URL_BUSCAR_CONT="buscadorContrato.do";
+var STR_SEPARADOR="@";
+var REGISTRO_POR_COMBO = 0;
+var PAGINA = 1;
+var PAGINA_SUC = 1;
+var numCount=1;
+$(window).resize(function(){
+
+	contentFooter();
+});
+
+//$(window).load(function() {
+////	var valorBuscador = $('#idBuscadorCuentas').val();
+//	
+//});
+
+$(document).ready(function() {
+	var parametroBuscadorCtas = $("#idBuscadorCuentas").val();
+	$("#nombre").click(function(){
+		$("#claveSucursal").attr("disabled", true);
+		$("#cp").attr("disabled", true);
+	});
+	
+	
+	
+	$("#nombre").mouseover(function(){
+		if($("#nombre").val()===""){
+			$("#claveSucursal").attr("disabled", false);
+			$("#cp").attr("disabled", false);
+		}
+	});
+	
+	$("#cp").click(function(){
+		$("#claveSucursal").attr("disabled", true);
+		$("#nombre").attr("disabled", true);
+	});
+	
+	$("#cp").mouseover(function(){
+		if($("#cp").val()===""){
+			$("#claveSucursal").attr("disabled", false);
+			$("#nombre").attr("disabled", false);
+		}
+	});
+	
+	$("#claveSucursal").click(function(){
+		$("#nombre").attr("disabled", true);
+		$("#cp").attr("disabled", true);
+
+	});
+	
+	
+	$("#claveSucursal").mouseover(function(){
+		if($("#claveSucursal").val()===""){
+			$("#nombre").attr("disabled", false);
+			$("#cp").attr("disabled", false);
+		}
+	});
+	
+	
+	$("#codigoCliente").focus(function(){
+		$('#nombreCliente').attr("readOnly", "readOnly");
+		$('#codigoCliente').removeAttr("readOnly");
+		$('#nombreCliente').val("");
+	});
+	$("#nombreCliente").focus(function(){
+		$('#codigoCliente').attr("readOnly", "readOnly");
+		$('#codigoCliente').val("");
+		$('#nombreCliente').removeAttr("readOnly");
+	});
+	
+	contentFooter();
+	validaKeyBlurUsuarios();
+	
+	validaKeyBlurSucursales();
+	validaKeyBlurBeneficiarios();
+	validaKeyBlurContratos();
+	
+	REGISTRO_POR_COMBO=0;
+	
+	$('#btnBuscadorBenef').click(function() {
+		REGISTRO_POR_COMBO = $("#registrosPorComboBenef").val();
+		if(validacionesBuscadorBenef() === true){
+			addAjaxLoader();
+			limpiaDivAlertas();
+			buscarBeneficiarios();
+			 $(".alertMsjsBuscadorUsu").addClass("oculto");
+		}else{
+			$(".alertMsjsBuscadorUsu").removeClass("oculto");
+			$(window).resize();
+		}
+		
+	});
+	$('#btnBuscadorUsuarios').click(function() {
+		REGISTRO_POR_COMBO = $("#registrosPorComboUsu").val();
+		
+		if(validacionesBuscadorUsuarios() === true){
+			addAjaxLoader();
+			limpiaDivAlertas();
+			buscarUsuarios();
+			 $(".alertMsjsBuscadorUsu").addClass("oculto");
+		}else{
+			$(".alertMsjsBuscadorUsu").removeClass("oculto");
+			$(window).resize();
+		}
+	});
+	
+	$("#btnSiguienteBenef").on('click', function() {
+		addAjaxLoader();
+		PAGINA++;
+		buscarBeneficiarios();
+	});
+
+	$("#btnAnteriorBenef").on('click', function() {
+		addAjaxLoader();
+		PAGINA--;
+		buscarBeneficiarios();
+	});
+	
+	 	$("#btnSiguienteUsu").on('click',function(){
+		  PAGINA++;
+		  buscarUsuarios();	
+		 });
+		 
+		 $("#btnAnteriorUsu").on('click',function(){
+		  PAGINA--;
+		  buscarUsuarios();
+		 });
+		 
+		 
+			$("#btnSiguienteSuc").on('click',function(){
+				  PAGINA_SUC++;
+				  buscarSucursales();
+				 });
+				 
+				 $("#btnAnteriorSuc").on('click',function(){
+				  PAGINA_SUC--;
+				  buscarSucursales();
+				 });
+		 
+	$('#btnRegreBuscadorBenef').click(function() {
+		$("#divBuscadorBeneficiario").addClass('oculto');
+		$("#idDivPaginaPrincipal").removeClass('oculto');
+		$(".ocultaEspacio").removeClass('oculto');
+		limpiaDivAlertas();
+		limpiaContenido();
+		$(window).resize();
+		 setTimeout(function() {
+			 $(window).resize();
+			}, 300);
+	   
+	});
+	$('#btnRegreBuscadorUsu').click(function() {
+		$("#divBuscadorUsuario").addClass('oculto');
+		$("#idDivPaginaPrincipal").removeClass('oculto');
+		limpiaDivAlertas();
+		limpiaContenido();
+		$(window).resize();
+		 setTimeout(function() {
+			 $(window).resize();
+			}, 300);
+	   
+	});
+	$('#btnBuscadorSuc').click(function() {
+		PAGINA_SUC = 1;
+		var claveSuc= $("#claveSucursal").val();
+		var nomSuc= $("#nombre").val();
+		var cpSuc= $("#cp").val();
+		
+		if(validacionesBuscadorSucursales() === true){
+			
+			addAjaxLoader();
+			limpiaDivAlertas();
+			
+			buscarSucursales();
+			 $(".alertMsjsBuscadorUsu").addClass("oculto");
+		}else{
+			$(".alertMsjsBuscadorUsu").removeClass("oculto");
+			$(window).resize();
+		}
+
+	});
+	$('#btnRegreBuscadorSuc').click(function() {
+		$("#divBuscadorSuc").addClass('oculto');
+		$("#idDivPaginaPrincipal").removeClass('oculto');
+		$("#nombre").attr("disabled", false);
+		$("#cp").attr("disabled", false);
+		$("#claveSucursal").attr("disabled", false);
+		limpiaDivAlertas();
+		limpiaContenido();
+		$(window).resize();
+		 setTimeout(function() {
+			 $(window).resize();
+			}, 300);
+		
+	});
+	
+	
+	
+	$(".botonBuscadorCuentas").each(function() {
+		var idBuscadorCtas= $(this).attr("valor");
+		validaKeyBlurCuentas(idBuscadorCtas);
+		$(this).click(function(){
+			REGISTRO_POR_COMBO = $("#registrosPorComboCuenta"+idBuscadorCtas).val();
+			if(validaCuentasBuscador(idBuscadorCtas)){
+				addAjaxLoader();
+				limpiaDivAlertas();
+				$('#memento'+idBuscadorCtas).val("");
+				if(idBuscadorCtas === "100"){
+					buscarCuentasBTBN(1,idBuscadorCtas);
+				}else{
+				buscarCuentas(1,idBuscadorCtas);
+				}
+				 $(".alertMsjsBuscadorUsu").addClass("oculto");
+			}else{
+				$(".alertMsjsBuscadorUsu").removeClass("oculto");
+				$(window).resize();
+			}
+		});
+			
+	});
+	
+	$('.botonRegresrBuscadorCuentas').click(function() {
+		
+		$(".divBuscadores").each(function(){
+			$(this).addClass('oculto');
+		});
+		$("#idDivPaginaPrincipal").removeClass('oculto');
+		limpiaDivAlertas();
+		limpiaContenido();
+		$("#mensajesAlertas").addClass('oculto');
+		$(window).resize();
+		 setTimeout(function() {
+			 $(window).resize();
+			}, 300);
+	});
+	
+	$('.btnBuscadorContratos').click(function(e) {
+		REGISTRO_POR_COMBO = $("#registrosPorComboCont").val();
+
+		if(validacionesBuscadorContratos()){
+			addAjaxLoader();
+			limpiaDivAlertas();
+			
+				buscarContratos();	
+				
+			 $(".alertMsjsBuscadorCont").addClass("oculto");
+		}else{
+			$(".alertMsjsBuscadorCont").removeClass("oculto");
+			$(window).resize();
+		}
+	
+
+	});
+	
+	$('#btnRegreBuscContrato').click(function() {
+		$("#divBuscadorContrato").addClass('oculto');
+		$("#idDivPaginaPrincipal").removeClass('oculto');
+		$(".divBuscadores").addClass('oculto');
+		limpiaDivAlertas();
+		limpiaContenido();
+		$('#seleccionContratoVentana').val("");
+		$(window).resize();
+		
+	});
+
+	  $('#idBtnIrCuentas').click(function() {
+			$("#idDivPaginaPrincipal").addClass('oculto');
+			$("#divBuscadorBeneficiario").addClass('oculto');
+			$("#divBuscadorSuc").addClass('oculto');
+			$("#divBuscadorCuentas").removeClass('oculto');
+			$(window).resize();
+		});
+	  
+	  var idBuscador= $("#idBuscadorCuentas").val();
+	  var idServicio1 =  $("#noServicio"+idBuscador).val();
+	  //paginacion de buscador de cuentas
+	   	$('#paginarBackCtas'+idBuscador).click(function() {
+					$("#paginarNextCtas"+idBuscador).removeClass('oculto');
+				if(idBuscador === "100"){
+					buscarCuentasBTBN(2,idBuscador);
+				}else{
+				    buscarCuentas(2,idBuscador);
+				}
+		
+		if("10000240" === idServicio1 || "10000245" === idServicio1){
+			$('.registroBuscador').removeClass('oculto');
+			$('.gosth').addClass('oculto');
+			$(window).resize();	
+			$('#paginarBackCtas'+idBuscador).addClass('oculto');
+			$('#paginarNextCtas'+idBuscador).removeClass('oculto');
+			$('#labelPaginador').text('1/100');
+		}
+					
+		});
+	   	
+		$("#paginarNextCtas"+idBuscador).click(function() {
+			if(idBuscador === "100"){
+					buscarCuentasBTBN(3,idBuscador);
+				}else{
+				    buscarCuentas(3,idBuscador);
+				    }
+					$("#paginarBackCtas"+idBuscador).removeClass('oculto');
+					if("10000240" === idServicio1 || "10000245" === idServicio1){
+						$('.registroBuscador').addClass('oculto');
+						$('.gosth').removeClass('oculto');
+						$(window).resize();
+						$('#paginarBackCtas'+idBuscador).removeClass('oculto');
+						$('#paginarNextCtas'+idBuscador).addClass('oculto');
+						var num=0;
+						$('.gosth').each(function(){
+							num++;
+						});
+						
+						$('#labelPaginador').text('1/'+(num+100));
+					}
+		});
+		
+		$('#backBuscador').click(function(){
+			$('.registroBuscador').removeClass('oculto');
+			$('.gosth').addClass('oculto');
+			$(window).resize();	
+			$('#backBuscador').addClass('oculto');
+			$('#nextBuscador').removeClass('oculto');
+			$('#labelPaginador').text('1/100');
+		});
+		
+		$('#nextBuscador').click(function(){
+			$('.registroBuscador').addClass('oculto');
+			$('.gosth').removeClass('oculto');
+			$(window).resize();
+			$('#backBuscador').removeClass('oculto');
+			$('#nextBuscador').addClass('oculto');
+			var num=0;
+			$('.gosth').each(function(){
+				num++;
+			});
+			
+			$('#labelPaginador').text('101/'+(num+100));
+		});
+	  
+});
+
+function cerrarBuscador(){
+	
+	$(".divBuscadores").each(function(){
+		$(this).addClass('oculto');
+	});
+	$("#idDivPaginaPrincipal").removeClass('oculto');
+	$(".divBuscadores").addClass('oculto');
+	$(".alert-danger").addClass('oculto');
+	limpiaDivAlertas();
+	$('#seleccionContratoVentana').val("");
+	limpiaContenido();
+	 setTimeout(function() {
+		 $(window).resize();
+		}, 300);
+}
+function limpiaContenido(){
+	$(".itemBuscador").each(function(){
+		$(this).val("");
+		
+	});
+	
+	$(".alertMsjsBuscadorUsu").addClass('oculto');
+	$(".alertMsjsBuscadorCont").addClass("oculto");
+	$(".itemBuscador").removeClass("ls-focus-error-input");
+	
+}
+/*
+ * Limpia div de alertas	
+ */
+function limpiaDivAlertas() {
+	var elementsDiv = document.getElementsByClassName("idMensajesBuscadores");
+	for (var i = 0; i < elementsDiv.length; i++) {
+		  elementsDiv[i].innerHTML = "";
+		}
+}
+
+/*
+ * Configura  el registro Seleccionado, permite  armar el registro
+ * la manera  de armarlo es <<llave>>@<<valor>>
+ * donde el campo <<llave>> es  el valor seleccionado
+ * donde el campo <<valor>> es  el valor que se mostrara en el select
+ */
+function ctaSeleccionada(clave,descripcion)
+{
+	var registroArmado = clave + STR_SEPARADOR +" "+descripcion;
+	// Se le asigna  el valor al elemento segun el registro seleccionado
+	$("#cuentaBuscador").val(registroArmado);
+	urlOrigen=$("#urlOrigen").val();
+	// Se lee el valor  de la url de origen
+	
+	//Se redirecciona a la url de origen la cual deberá  de leer  la propiedad registroBuscador
+	irPantalla(ID_FORMA_CTA,urlOrigen);
+	}
+
+
+// FUNCIONES PARA BUSCADOR DE SUCURSALES
+function buscarSucursales(){
+	
+	
+	 var rowCount = $("#idTablaBuscadorSuc tbody tr").length;
+	 var aux = $("#valorPag" + PAGINA_SUC).val();
+	 var last = $("#cod" + (rowCount - 1)).val();
+	 if(aux === undefined){
+	  var input = "<input type='hidden' id='valorPag" + PAGINA_SUC + "' value='" + last + "'/>";
+	  $(input).appendTo("#itemsCombos");
+	 }
+	 var valorReposicion = $("#valorPag" + PAGINA_SUC).val();
+	
+	var pagAct = PAGINA_SUC;
+	var cont = 0;
+	var mapaSuc={
+			cveSuc:$("#claveSucursal").val(),
+			nomSuc:$("#nombre").val(),
+			cpSuc:$("#cp").val(),
+			valor : valorReposicion,
+			pag : pagAct,
+			indicadorM:$("#indMasDatosR").val()
+	};
+	addAjaxLoader();
+	$.ajax({
+	    url : '../Buscadores/buscadorSucursal.do',
+	    data : mapaSuc,
+	    type : 'GET',
+	    dataType : 'json',
+	    // código a ejecutar si la petición es satisfactoria;
+	    // la respuesta es pasada como argumento a la función
+	    success : function(response) {   
+	    	limpiaRows('idTablaBuscadorSuc');
+	      $.each(response, function(idx, lstSuc){
+	    	  $("#div-tabla-buscador-suc").removeClass('oculto');
+	    	var tragrega="<tr class='registroBuscador'><td class='resultadoUsuariosTB text-left padding-left-0 claseLink underlined' onclick=sucursalSeleccionada('"+lstSuc.ltcofic+"');>"+lstSuc.ltcofic+"</td>" +
+	    	"<td class='resultadoUsuariosTB text-center'>"+lstSuc.ltmofic+"</td>" +
+	    	"<td class='resultadoUsuariosTB text-center'>"+lstSuc.ltdofic+"</td>" +
+	    	"<td class='resultadoUsuariosTB text-center'>"+lstSuc.ltdeleg+"</td>" +
+	    	"<td class='resultadoUsuariosTB text-center'>"+lstSuc.ltciuda+"</td>" +
+	    	"<td class='resultadoUsuariosTB text-center'>"+lstSuc.ltprovi+"</td>" +
+	    	"<td class='resultadoUsuariosTB text-center'>"+lstSuc.ltcpoof+"</td>" +
+	    	"<td class='resultadoUsuariosTB text-right'>"+lstSuc.lttelsu+"</td>" +
+	    	"<input type='hidden' id='cod"+idx+"' value='"+lstSuc.ltcofic+"-"+lstSuc.ltcenti+"'>" +
+	    	
+	    	"</tr>"; 
+	    	$(tragrega).appendTo("#idTablaBuscadorSuc");
+	    	$(window).resize();
+	    	cont++;
+	    	if(lstSuc.ltindmd === "N" && PAGINA_SUC > 1){
+		         $("#btnSiguienteSuc").addClass("oculto");
+		         $("#btnAnteriorSuc").removeClass("oculto");
+		        } else if(lstSuc.ltindmd === "S" && PAGINA_SUC > 1){
+		         $("#btnSiguienteSuc").removeClass("oculto");
+		         $("#btnAnteriorSuc").removeClass("oculto");
+		        } else{
+		         $("#btnAnteriorSuc").addClass("oculto");
+		         if(PAGINA===1 && cont<100){
+		          $("#btnSiguienteSuc").addClass("oculto");	        	 
+		         }else{
+	         	  $("#btnSiguienteSuc").removeClass("oculto");
+		         }
+		        }
+		        
+	      });
+	      
+	      
+	      var ant = 100 * (PAGINA_SUC -1) + 1;
+	      var sig = 100 * (PAGINA_SUC -1) + cont;
+	      var sig1 = cont * PAGINA_SUC;
+	      if(PAGINA_SUC === 1){
+	       $("#paginaTotaltes").text("1 / " + cont);
+	      } else{
+	       if(cont < 100){
+	        $("#paginaTotaltes").text(ant + " / " + sig);
+	       } else{
+	        $("#paginaTotaltes").text(ant + " / " + sig1);
+	       }
+	      }
+	   
+	      
+	    },
+	    error : function() {
+	    	removeAjaxLoader();
+	    	vsf_modal("icon-modal-vsf",avisoM,mensajeModalAmbos,btnModalAceptar,"javascript:return 0;");
+  		  $('#div-tabla-buscador-usu').addClass('oculto');
+	    },
+	    complete : function() {
+	    	removeAjaxLoader();
+	    }
+	});
+	$(window).resize();
+}
+function sucursalSeleccionada(clave){	
+	$("#divBuscadorSuc").addClass('oculto');
+	$("#idDivPaginaPrincipal").removeClass('oculto');
+	$("#idTxtSucursal").val(clave);
+	$('#inputValorSucursal').val(clave);
+	$(window).resize();
+	 setTimeout(function() {
+		 $(window).resize();
+		}, 300);
+}
+//FUNCIONES PARA BUSCADOR DE BENEFICIARIOS
+function buscarBeneficiarios(){
+	limpiaRows('idTablaBuscadorBenef');
+	var cantRegistros=0;
+	var mapaBenef={
+			cveBenef:$("#claveBenef").val(),
+			nomBenef:$("#nombreBenef").val(),
+			apBenef:$("#apPaterno").val(),
+			amBenef:$("#apMaterno").val(),
+			paginar : "false"
+	};
+	
+	$.ajax({
+	    url : '../Buscadores/buscadorBeneficiario.do',
+	    data : mapaBenef,
+	    type : 'GET',
+	    dataType : 'json',
+	    // código a ejecutar si la petición es satisfactoria;
+	    // la respuesta es pasada como argumento a la función
+	    success : function(response) {    
+	      $.each(response.lista, function(idx, lstBenef){
+	    	  $("#div-tabla-buscador-benef").removeClass('oculto');
+	    	var tragrega="<tr class='registroBuscador'><td id='beneficiario"+idx+"' class='resultadoUsuariosTB text-left padding-left-0 claseLink underlined' onclick=beneficiarioSeleccionada('"+idx+"','datosBenef"+idx+"');>"+lstBenef.aliasBenef+"</td>" +
+	    	"<td class='resultadoUsuariosTB text-center'>"+lstBenef.tipoPersonaTraduccion+"</td>" +
+	    	"<td class='resultadoUsuariosTB text-center' id='descBeneficiario"+idx+"'>"+lstBenef.nombre+"</td>" +
+			"<td class='resultadoUsuariosTB text-center'>"+lstBenef.apellido1+"</td>" +
+			"<td class='resultadoUsuariosTB text-right'>"+lstBenef.apellido2+"</td>" +
+			"<input type='hidden' id='datosBenef"+idx+"' value='" +lstBenef.idBenef+ '/'+lstBenef.nombre+ '/'+lstBenef.apellido1+ '/'+lstBenef.apellido2+'/'+lstBenef.aliasBenef+'/'+lstBenef.nombreCompleto+'/'+lstBenef.tipoPersona+'/'+lstBenef.helper.email+'/'+lstBenef.helper.curp+'/'+lstBenef.helper.telefono+"'>" +
+			"</tr>"; 
+	    	$(tragrega).appendTo("#idTablaBuscadorBenef");
+	    	$(window).resize();
+	    	 cantRegistros++;
+	      });
+	      
+
+	      
+	      var input = "<input type='hidden' id='valorPag2' value='"+response.memento+ "' />";
+	       $(input).appendTo("#itemsCombos");
+	       
+	       if(response.masDatos === "N" && PAGINA > 1){
+              $("#btnSiguienteBenef").addClass("oculto");
+              $("#btnAnteriorBenef").removeClass("oculto");
+             } else if(response.masDatos === "N" && PAGINA === 1){
+                  $("#btnSiguienteBenef").addClass("oculto");
+                  $("#btnAnteriorBenef").addClass("oculto");
+             }else if(response.masDatos === "S" && PAGINA > 1){
+              $("#btnSiguienteBenef").removeClass("oculto");
+              $("#btnAnteriorBenef").removeClass("oculto");
+             } else{
+              $("#btnAnteriorBenef").addClass("oculto");
+              $("#btnSiguienteBenef").removeClass("oculto");
+             }
+     var ant = 100 * (PAGINA -1) + 1;
+     var sig = 100 * (PAGINA -1) + cantRegistros;
+     var sig1 = cantRegistros * PAGINA;
+     if(PAGINA === 1){
+      $("#paginaTotales").text("1 / " + cantRegistros);
+     } else{
+      if(cantRegistros < 100){
+       $("#paginaTotales").text(ant + " / " + sig);
+      } else{
+       $("#paginaTotales").text(ant + " / " + sig1);
+      }
+     }
+	      
+	      
+	      
+	    },
+	    error : function() {
+	    	removeAjaxLoader();
+	    },
+	    complete : function() {
+	    	removeAjaxLoader();
+	    }
+	});
+	$(window).resize();
+}
+
+function ejecutaDivisas(){
+	
+	irPantalla("", "consultaDivisas.do");
+}
+function benefSeleccionado(){
+$("#registroBuscador").val("003@Beneficiario1");
+agregarAlCombo();
+}
+/**
+ * Funcion  que elimina  los registros  de la tabla indicada
+ * @param idTabla
+ */
+function limpiaRows(idTabla)
+{
+	$('#'+idTabla +' tr.registroBuscador').remove();
+}
+
+//FUNCIONES PARA BUSCADOR DE CUENTAS
+
+function buscarCuentasBTBN(paginado, idBuscador) {
+	limpiaRows('idTablaBuscadorCuenta'+idBuscador);
+	
+	var noCuenta1 = $("#noCuenta"+idBuscador).val();
+	var idServicio1 =  $("#noServicio"+idBuscador).val();
+	var contexto1 = $("#contexto"+idBuscador).val();
+	var divisa1 = $("#selectDivisa"+idBuscador).val();
+	var tipoCuenta1 = $("#cmbTipo"+idBuscador).val();
+	var cuentaDesc1 = $("#cuentaDesc"+idBuscador).val();
+	var agrupacion1 = $("#agrupacionBenef"+idBuscador).val();
+	var tipoCuentas1 = $("#tipoCtas"+idBuscador).val();
+	
+	var pagActual = $("#pagActual"+idBuscador).val();
+	var memento = $("#memento"+idBuscador).val();
+	
+   var token = $("meta[name='_csrf']").attr("content");
+   var header = $("meta[name='_csrf_header']").attr("content");
+   
+   if(tipoCuenta1 != ""){
+	   tipoCuentas1 = tipoCuenta1;
+   }
+   
+   var request = {
+      dscCuenta : cuentaDesc1,
+      tipoCuenta : tipoCuentas1,
+      numCtaMobil : noCuenta1,
+      divisa : divisa1,
+      claveAbaSwiftt : "",
+      banco : "",
+      pais : "",
+      ciudad : "",
+      fechaInicio : "",
+      fechaFin : "",
+      memento : memento,
+      pagActual : pagActual,
+      modoPaginar : paginado,
+      banderaAlta: "OK"
+   };
+   addAjaxLoader();
+   $.ajax({
+      type : "GET",
+      dataType : "json",
+      beforeSend : function(request) {
+         if (token) {
+            request.setRequestHeader(header, token);
+         }
+      },
+      cache : false,
+      url : "../Buscadores/buscarCuentasBTBN.do",
+      data : request,
+      success : function(response){
+    	  $("#pagActual"+idBuscador).val(response.paginaActual);
+					if("S" ===response.indicadorPaginado && false===response.valorFinal){
+						if(1===paginado){			
+							$("#memento"+idBuscador).val($("#memento"+idBuscador).val()+response.memento+"B@T@B@N");
+							$("#paginarNextCtas"+idBuscador).removeClass('oculto');
+							$("#paginarBackCtas"+idBuscador).addClass('oculto');
+						}
+						
+						if(3===paginado){			
+							$("#memento"+idBuscador).val($("#memento"+idBuscador).val()+response.memento+"B@T@B@N");
+							$("#paginarNextCtas"+idBuscador).removeClass('oculto');
+							$("#paginarBackCtas"+idBuscador).removeClass('oculto');
+						}
+					}
+					if("N" ===response.indicadorPaginado && paginado===3){
+						$("#paginarNextCtas"+idBuscador).addClass('oculto');
+					}
+					if("N" ===response.indicadorPaginado && paginado===1){
+						$("#paginarNextCtas"+idBuscador).addClass('oculto');
+					}
+					if(paginado===2 && (pagActual-1)<=0){		
+						$("#paginarNextCtas"+idBuscador).removeClass('oculto');
+						$("#paginarBackCtas"+idBuscador).addClass('oculto');
+					}
+					$("#idLblNumeros"+idBuscador).text(response.totalRegitros);
+						
+					$.each(response.lstCuentas, function(idx, lstCuentas){
+				    	$("#div-tabla-buscador-cuenta"+idBuscador).removeClass('oculto');
+				    	
+				    	var tragrega="<tr class='registroBuscador'><td id='cuenta"+idx+""+idBuscador+"' class='resultadoUsuariosTB text-left padding-left-0 claseLink underlined' onclick=cuentaSeleccionada('"+idx+"','datosCuentas"+idx+"',"+idBuscador+");>"+lstCuentas.accerr+"</td>" +
+				    	"<td id='cuentaDescripcion"+idx+""+idBuscador+"' class='resultadoUsuariosTB text-right'>"+lstCuentas.helper.descracc+"</td>" +
+//				    	ACCERR - CUENTA LOCAL / CENTRO_Z - CENTRO-PRT / CONTRA - CONTRATO-PRT / PRODCOR - PRODUCTO / ALITE301 - ENTIDAD CUENTA LOCAL O ABA_SWIFT / CESTAZ - CESTA / TIPO_BZT - TIPO DE CUENTA / SUBTIPPE - SUBTIPO / DESCRACC - DESCRIPCION / EMPRESAK - EMPRESA-PRT / CENTRO_Z - centro / PRODACCI - PRODUCTO-PRT / DIVISADB - DIVISA / PAISLI - PAIS / ACC_ADR - ID BENEFICIARIO / BDESC1 - CIUDAD
+				    	"<input type='hidden' id='datosCuentas"+idx+""+idBuscador+"' value='"+lstCuentas.accerr+'/'+lstCuentas.centroZ+ '/'+lstCuentas.contra+ '/'+lstCuentas.prodcor+ '/'+lstCuentas.alite301+ '/'+lstCuentas.cestaz+ '/'+lstCuentas.tipoBzt+ '/'+lstCuentas.helper.subtippe+'/'+lstCuentas.helper.descracc+'/'+lstCuentas.empresak+'/'+lstCuentas.centroZ+'/'+lstCuentas.prodacci+'/'+lstCuentas.divisadb+'/'+lstCuentas.helper.paisli+'/'+lstCuentas.helper.accAdr+ '/'+lstCuentas.helper.bdesc1+"'> " +
+						"</tr>"; 
+				    	$(tragrega).appendTo("#idTablaBuscadorCuenta"+idBuscador);
+				    	$(window).resize();
+				    });
+					
+					 if(response.lstCuentas.length === 0){
+						 vsf_modal("icon-modal-vsf",avisoM,mensajeModal,btnModalAceptar,"javascript:return 0;");
+			    		  $("#div-tabla-buscador-cuenta"+idBuscador).addClass("oculto");
+			    		  removeAjaxLoader();
+			    	  }
+      },
+    error : function(error) {
+	    	 removeAjaxLoader();
+	    	 $("#div-tabla-buscador-cuenta"+idBuscador).addClass("oculto");
+	    	 $(".alertMsjsBuscadorUsu").addClass("oculto");
+	    	 vsf_modal("icon-modal-vsf",avisoM,mensajeModal,btnModalAceptar,"javascript:return 0;");
+		     setTimeout(function() {
+				 $(window).resize();
+			}, 300);
+	    },
+	    complete : function() {
+	    	removeAjaxLoader();
+	    }
+   });
+   
+   $('#backBuscador').addClass('oculto');
+	
+	$(window).resize();
+}
+
+function buscarCuentas(paginado, idBuscador){
+	limpiaRows('idTablaBuscadorCuenta'+idBuscador);
+	
+	var noCuenta1 = $("#noCuenta"+idBuscador).val();
+	var idServicio1 =  $("#noServicio"+idBuscador).val();
+	var contexto1 = $("#contexto"+idBuscador).val();
+	var divisa1 = $("#selectDivisa"+idBuscador).val();
+	var tipoCuenta1 = $("#cmbTipo"+idBuscador).val();
+	var cuentaDesc1 = $("#cuentaDesc"+idBuscador).val();
+	var agrupacion1 = $("#agrupacionBenef"+idBuscador).val();
+	var tipoCuentas1 = $("#tipoCtas"+idBuscador).val();
+	
+	var pagActual = $("#pagActual"+idBuscador).val();
+	var memento = $("#memento"+idBuscador).val();
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	 addAjaxLoader();
+	$.ajax({
+	    url : '../Buscadores/buscarCuentas.do',
+	    data : { idServicio :idServicio1 ,noCuenta :noCuenta1,contexto :contexto1,cmbdivisa :divisa1, tipoCuentaF :tipoCuenta1,cuentaDesc :cuentaDesc1, 
+	    	pagActual: pagActual, memento: memento, modPaginar:paginado,agrupacion:agrupacion1,tiposCuentas:tipoCuentas1},
+	    type : 'GET',
+	    dataType : 'json',
+	    beforeSend : function(request) {
+			if (token) {
+				request.setRequestHeader(header, token);
+			}
+		},
+		cache : false,
+	   
+	    success : function(response) {    
+				//Validaciones para el buscador de creditos
+			if(idServicio1 === "10000240" || idServicio1 === "10000245"){	
+				if("DAE000" === response.codError || "ER00000" === response.codError){
+			    	removeAjaxLoader();
+			    	$("#div-tabla-buscador-cuenta"+idBuscador).addClass("oculto");
+				}
+				  $.each(response.lstCuentasCreditos, function(idx, lstCuentasCred){
+					  var cantidad=response.lstCuentasCreditos.length;
+					  	var posision=idx+1;
+					  	if(idx <= 100){
+				    	$("#div-tabla-buscador-cuenta"+idBuscador).removeClass('oculto');
+				    	
+				    	var tragrega="<tr class='registroBuscador'><td id='cuenta"+idx+""+idBuscador+"' class='resultadoUsuariosTB text-left padding-left-0 claseLink underlined' onclick=cuentaSeleccionadaCredito('"+idx+"','datosCuentas"+idx+"',"+idBuscador+");>"+lstCuentasCred.helper2.ctaloc+"</td>" +
+				    	"<td id='cuentaDescripcion"+idx+""+idBuscador+"' class='resultadoUsuariosTB text-right'>"+lstCuentasCred.helper2.descra60+"</td>" +
+				    	"<input type='hidden' id='datosCuentas"+idx+""+idBuscador+"' value='"+lstCuentasCred.helper2.ctaloc+"'> " +
+						"</tr>"; 
+				    	$(tragrega).appendTo("#idTablaBuscadorCuenta"+idBuscador);
+				    	$(window).resize();
+				    	$('#paginarNextCtas'+idBuscador).addClass('oculto');
+					  	}else{
+					  		
+					  		var tragrega="<tr class='registroBuscador oculto gosth'><td id='cuenta"+idx+""+idBuscador+"' class='resultadoUsuariosTB text-left padding-left-0 claseLink underlined' onclick=cuentaSeleccionadaCredito('"+idx+"','',"+idBuscador+");>"+lstCuentasCred.helper2.ctaloc+"</td>" +
+					    	"<td id='cuentaDescripcion"+idx+""+idBuscador+"' class='resultadoUsuariosTB text-right'>"+lstCuentasCred.helper2.ctaloc+"</td>" +
+					    	"<input type='hidden'  id='datosCuentas"+idx+""+idBuscador+"' value='"+lstCuentasCred.helper2.ctaloc+"'> " +
+							"</tr>"; 
+					    	$(tragrega).appendTo("#idTablaBuscadorCuenta"+idBuscador);
+					    	$('#paginarNextCtas'+idBuscador).removeClass('oculto');
+					  	}
+					  	if(posision === cantidad){
+				    		numCount=numCount+1;
+				    		if(numCount===2){
+				    			limpiaRows('idTablaBuscadorCuenta');   
+				    		}	    			    		
+				    	}
+			});
+				if(response.totalRegitrosCreditos>0){
+					$("#idLblNumeros"+idBuscador).text("1/"+response.totalRegitrosCreditos);
+				}else{
+					$("#div-tabla-buscador-cuenta"+idBuscador).addClass("oculto");
+					$(".alertMsjsBuscadorUsu").addClass("oculto");
+					vsf_modal("icon-modal-vsf",avisoM,mensajeModal,btnModalAceptar,"javascript:return 0;");
+					setTimeout(function() {
+						$(window).resize();
+					}, 300);
+				}
+			}else{
+				
+				//buscador de cuentas BTBT
+					$("#pagActual"+idBuscador).val(response.paginaActual);
+					if("S" ===response.indicadorPaginado && false===response.valorFinal){
+						if(1===paginado){			
+							$("#memento"+idBuscador).val($("#memento"+idBuscador).val()+response.memento+"B@T@B@T");
+							$("#paginarNextCtas"+idBuscador).removeClass('oculto');
+							$("#paginarBackCtas"+idBuscador).addClass('oculto');
+						}
+						
+						if(3===paginado){			
+							$("#memento"+idBuscador).val($("#memento"+idBuscador).val()+response.memento+"B@T@B@T");
+							$("#paginarNextCtas"+idBuscador).removeClass('oculto');
+							$("#paginarBackCtas"+idBuscador).removeClass('oculto');
+						}
+					}
+					if("N" ===response.indicadorPaginado && paginado===3){
+						$("#paginarNextCtas"+idBuscador).addClass('oculto');
+					}
+					if("N" ===response.indicadorPaginado && paginado===1){
+						$("#paginarNextCtas"+idBuscador).addClass('oculto');
+					}
+					if(paginado===2 && (pagActual-1)<=0){		
+						$("#paginarNextCtas"+idBuscador).removeClass('oculto');
+						$("#paginarBackCtas"+idBuscador).addClass('oculto');
+					}
+					$("#idLblNumeros"+idBuscador).text(response.totalRegitros);
+						
+					$.each(response.lstCuentas, function(idx, lstCuentas){
+				    	$("#div-tabla-buscador-cuenta"+idBuscador).removeClass('oculto');
+				    	
+				    	var tragrega="<tr class='registroBuscador'><td id='cuenta"+idx+""+idBuscador+"' class='resultadoUsuariosTB text-left padding-left-0 claseLink underlined' onclick=cuentaSeleccionada('"+idx+"','datosCuentas"+idx+"',"+idBuscador+");>"+lstCuentas.helper1.accerr+"</td>" +
+				    	"<td id='cuentaDescripcion"+idx+""+idBuscador+"' class='resultadoUsuariosTB text-right'>"+lstCuentas.helper1.descracc+"</td>" +
+//				    	ACCERR - CUENTA LOCAL / CENTRO_Z - CENTRO-PRT / CONTRA - CONTRATO-PRT / PRODCOR - PRODUCTO / ALITE301 - ENTIDAD CUENTA LOCAL O ABA_SWIFT / CESTAZ - CESTA / TIPO_BZT - TIPO DE CUENTA / SUBTIPPE - SUBTIPO / DESCRACC - DESCRIPCION / EMPRESAK - EMPRESA-PRT / CENTRO_Z - centro / PRODACCI - PRODUCTO-PRT / DIVISADB - DIVISA / PAISLI - PAIS / ACC_ADR - ID BENEFICIARIO / BDESC1 - CIUDAD
+				    	"<input type='hidden' id='datosCuentas"+idx+""+idBuscador+"' value='"+lstCuentas.helper1.accerr+'/'+lstCuentas.helper1.centroZ+ '/'+lstCuentas.helper1.contra+ '/'+lstCuentas.helper2.prodcor+ '/'+lstCuentas.helper1.alite301+ '/'+lstCuentas.helper1.cestaz+ '/'+lstCuentas.helper2.tipobzt+ '/'+lstCuentas.helper2.subtippe+'/'+lstCuentas.helper1.descracc+'/'+lstCuentas.helper2.empresak+'/'+lstCuentas.helper1.centroZ+'/'+lstCuentas.helper1.prodacci+'/'+lstCuentas.helper1.divisadb+'/'+lstCuentas.helper2.paisli+'/'+lstCuentas.helper1.accadr+ '/'+lstCuentas.helper1.bdesc1+"'> " +
+						"</tr>"; 
+				    	$(tragrega).appendTo("#idTablaBuscadorCuenta"+idBuscador);
+				    	$(window).resize();
+				    });
+					
+					 if(response.lstCuentas.length === 0){
+						 vsf_modal("icon-modal-vsf",avisoM,mensajeModal,btnModalAceptar,"javascript:return 0;");
+			    		  $("#div-tabla-buscador-cuenta"+idBuscador).addClass("oculto");
+			    		  removeAjaxLoader();
+			    	  }
+			}
+	    	 
+	 
+	      
+	    },
+	    error : function(error) {
+	    	 removeAjaxLoader();
+	    	 $("#div-tabla-buscador-cuenta"+idBuscador).addClass("oculto");
+	    	 $(".alertMsjsBuscadorUsu").addClass("oculto");
+	    	 vsf_modal("icon-modal-vsf",avisoM,mensajeModal,btnModalAceptar,"javascript:return 0;");
+		     setTimeout(function() {
+				 $(window).resize();
+			}, 300);
+	    },
+	    complete : function() {
+	    	removeAjaxLoader();
+	    }
+	});
+	//Buscador de crditos y en linea
+	$('#backBuscador').addClass('oculto');
+	
+	$(window).resize();
+}
+
+
+//FUNCIONES PARA BUSCADOR DE USUARIOS
+function buscarUsuarios(){
+	
+	 var rowCount = $("#idTablaBuscadorUsu tbody tr").length;
+	 var aux = $("#valorPag" + PAGINA).val();
+	 var last = $("#cod" + (rowCount - 1)).val();
+	 if(aux === undefined){
+	  var input = "<input type='hidden' id='valorPag" + PAGINA + "' value='" + last + "'/>";
+	  $(input).appendTo("#itemsCombos");
+	 }
+	 var valorReposicion = $("#valorPag" + PAGINA).val();
+	 var pagAct = PAGINA;
+	var cont = 0;
+	var mapaUsu={
+			codUsu:$("#codigoCliente").val(),
+			nomUsu:$("#nombreCliente").val(),
+			valor : valorReposicion,
+			pag : pagAct,
+			indicadorM:$("#indMasDatosR").val()
+			
+	};
+	limpiaRows('idTablaBuscadorUsu');
+	$.ajax({
+	    url : '../Buscadores/buscadorUsuarios.do',
+	    data : mapaUsu,
+	    type : 'GET',
+	    dataType : 'json',
+	    // código a ejecutar si la petición es satisfactoria;
+	    // la respuesta es pasada como argumento a la función
+	    success : function(response) {    
+	      $.each(response.lstUsuario, function(idx, lstUsu){
+	    	 
+	    	  $("#div-tabla-buscador-usu").removeClass('oculto');
+	    	  
+	    	var tragrega="<tr class='registroBuscador'><td id='usuario"+idx+"'  class='resultadoUsuariosTB text-left padding-left-10 claseLink underlined' onclick=usuarioSeleccionado('"+idx+"','"+lstUsu.codigoCliente+"');>"+"****"+lstUsu.codigoCliente.substring(4,8)+"</td>" +
+	    	"<td id='usuarioDesc"+idx+"' class='resultadoUsuariosTB text-right'>"+lstUsu.nombre+"" +
+	    	"<input type='hidden' id='cod"+idx+"' value='"+lstUsu.codigoCliente+'/'+lstUsu.indMasDatos+"'>" +
+	    	"</td>" +
+	    	
+			"</tr>"; 
+	    	
+	    	 
+	        if(lstUsu.indMasDatos === "N" && PAGINA > 1){
+	         $("#btnSiguienteUsu").addClass("oculto");
+	         $("#btnAnteriorUsu").removeClass("oculto");
+	        } else if(lstUsu.indMasDatos === "S" && PAGINA > 1){
+	         $("#btnSiguienteUsu").removeClass("oculto");
+	         $("#btnAnteriorUsu").removeClass("oculto");
+	        } else{
+	         $("#btnAnteriorUsu").addClass("oculto");
+	         if(PAGINA===1 && cont<100){
+	          $("#btnSiguienteUsu").addClass("oculto");	        	 
+	         }else{
+         	  $("#btnSiguienteUsu").removeClass("oculto");
+	         }
+	        }
+	        cont++;
+	       
+	    	$(tragrega).appendTo("#idTablaBuscadorUsu");
+	    	$(window).resize();
+	      });
+	      if(response.lstUsuario.length === 0){
+    		  vsf_modal("icon-modal-vsf",avisoM,mensajeModalAmbos,btnModalAceptar,"javascript:return 0;");
+    		  $('#div-tabla-buscador-usu').addClass('oculto');
+    	  }
+	      var ant = 100 * (PAGINA -1) + 1;
+	      var sig = 100 * (PAGINA -1) + cont;
+	      var sig1 = cont * PAGINA;
+	      if(PAGINA === 1){
+	       $("#paginaTotaltes").text("1 / " + cont);
+	      } else{
+	       if(cont < 100){
+	        $("#paginaTotaltes").text(ant + " / " + sig);
+	       } else{
+	        $("#paginaTotaltes").text(ant + " / " + sig1);
+	       }
+	      }
+	    },
+	    error : function() {
+	    	removeAjaxLoader();
+	  	  vsf_modal("icon-modal-vsf",avisoM,mensajeModalAmbos,btnModalAceptar,"javascript:return 0;");
+	    },
+	    complete : function() {
+	    	removeAjaxLoader();
+	    }
+	});
+	
+	$(window).resize();
+}
+
+//FUNCIONES PARA BUSCADOR DE CUENTAS
+function buscarContratos(){
+	limpiaRows('idTablaBuscadorContrato');
+	var numContrato= $("#numContrato").val();
+	var descContrato= $("#nombContrato").val();
+	var cont = 0;
+	$.ajax({
+	    url : '../Buscadores/buscadorContrato.do',
+	    data : { contrato :numContrato, descripcion: descContrato },
+	    type : 'GET',
+	    dataType : 'json',
+	    // código a ejecutar si la petición es satisfactoria;
+	    // la respuesta es pasada como argumento a la función
+	    success : function(response) {
+	    	 var cantidad=response.length;
+	    	 
+		    	if(cantidad===0 && descContrato.length>0 && numContrato.length>0){
+		    		removeAjaxLoader();
+		    		 vsf_modal("icono-notificacion",avisoM,mensajeModalAmbos,"Aceptar","javascript:return 0;");
+		    		 $('#div-tabla-buscador-contratos').addClass('oculto');
+		    	}
+		    	
+		    	if(cantidad===0 && descContrato.length>0 && ""===numContrato){
+		    		removeAjaxLoader();
+		    		 vsf_modal("icono-notificacion",avisoM,mensajeModalContrato,"Aceptar","javascript:return 0;");
+		    		 $('#div-tabla-buscador-contratos').addClass('oculto');
+		    	}
+		    	if(cantidad===0 && numContrato.length>0 && ""=== descContrato){
+		    		removeAjaxLoader();
+		    		 vsf_modal("icono-notificacion",avisoM,mensajeModalDes,"Aceptar","javascript:return 0;");
+		    		 $('#div-tabla-buscador-contratos').addClass('oculto');
+		    	}
+	      $.each(response, function(idx, lista){
+	    	  var posision=idx+1;
+	    	if(idx <= 99){
+	    		$("#div-tabla-buscador-contratos").removeClass('oculto');
+		    	  var tragrega="<tr class='registroBuscador'><td id='contrato"+idx+"' class='resultadoUsuariosTB text-left padding-left-0 claseLink underlined' onclick=contratoSeleccionado('"+idx+"','datosContratos"+idx+"');>"+lista.numContrato+"</td>" +
+		    	"<td id='contratoDesc"+idx+"' class='resultadoUsuariosTB text-right'>"+lista.nombContrato+"</td>" +
+		    	"<input type='hidden' id='datosContratos"+idx+"' value='"+lista.numContrato+'.' +lista.empresaPartenon+ '.'+lista.centroPartenon+ '.'+lista.productoPartenon+ '.'+lista.cuentaPartenon+'.'+lista.empresaLocal+ '.'+lista.centroLocal+'.'+lista.cuentaLocal+'.'+lista.productoLocal+'.'+lista.subProducto+'.'+lista.numeroPersona+'.'+lista.titularContrato+"'>" +
+				"</tr>"; 
+		    	$(tragrega).appendTo("#idTablaBuscadorContrato");
+		    	$('#nextBuscador').addClass('oculto');
+		    	cont++;
+	    	}else{
+		    	  var tragrega="<tr class='registroBuscador oculto gosth'><td id='contrato"+idx+"' class='resultadoUsuariosTB text-left padding-left-0 claseLink underlined' onclick=contratoSeleccionado('"+idx+"','datosContratos"+idx+"');>"+lista.numContrato+"</td>" +
+		    	"<td id='contratoDesc"+idx+"' class='resultadoUsuariosTB text-right'>"+lista.nombContrato+"</td>" +
+		    	"<input type='hidden' id='datosContratos"+idx+"' value='"+lista.numContrato+'.' +lista.empresaPartenon+ '.'+lista.centroPartenon+ '.'+lista.productoPartenon+ '.'+lista.cuentaPartenon+'.'+lista.empresaLocal+ '.'+lista.centroLocal+'.'+lista.cuentaLocal+'.'+lista.productoLocal+'.'+lista.subProducto+'.'+lista.numeroPersona+'.'+lista.titularContrato+"'>" +
+				"</tr>"; 
+		    	$(tragrega).appendTo("#idTablaBuscadorContrato");
+		    	
+		    	$('#nextBuscador').removeClass('oculto');
+		    	cont++;
+	    	}
+	    	$(window).resize();
+	    	
+//	    	if(posision === cantidad){
+//	    		numCount=numCount+1;
+//	    		if(numCount===2){
+//	    			limpiaRows('idTablaBuscadorContrato');
+//	    		}	    			    		
+//	    	}
+	    	
+	      });
+	      
+	      $("#labelPaginador").text("1 / " + cont);
+	      if(cont<=99){
+	    	  $('#nextBuscador').addClass('oculto');
+	      }
+	    },
+	    error : function() {
+	    	removeAjaxLoader();
+	    	 vsf_modal("icono-notificacion",avisoM,mensajeModal,"Aceptar","javascript:return 0;");
+	    },
+	    complete : function() {
+	    	removeAjaxLoader();
+	    }
+	});
+	$(window).resize();
+}
+function cuentaSeleccionada(id,datosCuentas,idBuscador){
+	var cuenta=$("#cuenta"+id+idBuscador).text();
+	var desc=$("#cuentaDescripcion"+id+idBuscador).text();
+	var datosC = $("#"+datosCuentas+idBuscador).val();
+	var registro=cuenta+"@"+desc;
+	limpiaDivAlertas();
+	
+	agregarAlComboCta(registro,$("#itemComboCuenta"+idBuscador).val(),datosC, idBuscador);
+	$("#datosCuentas").val(datosC);
+	
+	
+}
+function cuentaSeleccionadaCredito(id,datosCuentas,idBuscador){
+	var cuenta=$("#cuenta"+id+idBuscador).text();
+	var desc=$("#cuentaDescripcion"+id+idBuscador).text();
+	var datosC = $("#"+datosCuentas+idBuscador).val();
+	var registro=cuenta+"@"+desc;
+	limpiaDivAlertas();
+	
+	agregarAlComboCtaCredito(registro,$("#itemComboCuenta"+idBuscador).val(),datosC, idBuscador);
+	$("#datosCuentas").val(datosC);
+	
+	
+}
+
+/**
+ * Para   seleccionar  el elemento  de la lista.
+ * @param id
+ */
+function contratoSeleccionado(id,datosContrato){
+	var contrato=$("#contrato"+id).text();
+	var desc=$("#contratoDesc"+id).text();
+	var registro=contrato+"@"+desc;
+	
+	var datosCompletos = $("#"+datosContrato).val();
+	
+	agregarAlComboContrato(registro,$("#itemComboContrato").val(),datosCompletos);
+	limpiaContenido();
+}
+
+/**
+ * Agregar  al combo el contrato seleccionado
+ * @param registro
+ * @param id
+ */
+function agregarAlComboContrato(registro,id,datosContrato)
+{
+	
+	//Variable  que controla las iteraciones
+	var x=1;
+	var arregloOriginal = $("#combosOriginalesContrato").val().split("@");
+	//Variable  que lee el valor del registro Seleccionado y la hace un split , para diferenciar  la llave  del contenido
+	var  registrosSeleccionado =registro.split("@");
+	var datosCompletos=datosContrato.split(".");
+
+	$("#"+id + " option").each(function()
+			{	
+		if ($(this).val()===registrosSeleccionado[0]) 
+		{
+			seleccionaSelectOption(id,registrosSeleccionado[0]);
+			 
+			$("#divBuscadorContrato").addClass('oculto');		    
+		    return false;
+		}	
+		if (x >= REGISTRO_POR_COMBO)
+		{			
+			$("#"+id+" option[value='*']").remove();
+			$("#"+id+" option[value='"+arregloOriginal[x-1]+"']").remove();
+			var verMas=$("#idOptionVerMas").val();
+			    $("#"+id).append('<option value="'+datosCompletos[0]+'.'+datosCompletos[1]+'.'+datosCompletos[2]+'.'+datosCompletos[3]+'.'+datosCompletos[4]+'.'+datosCompletos[5]+'.'+datosCompletos[6]+'.'+datosCompletos[7]+'.'+datosCompletos[8]+'.'+datosCompletos[9]+'.'+datosCompletos[10]+'.'+datosCompletos[11]+'" selected="selected">'+registrosSeleccionado[1]+' '+registrosSeleccionado[0]+'</option>');
+			    $("#"+id).append('<option value="*">'+verMas+'</option>');
+			   seleccionaSelectOption(id,registrosSeleccionado[0]);
+			   $("#divBuscadorContrato").addClass('oculto');
+			    return false;
+		}
+		x++;
+			});
+	
+	calculaElementosCombos(id,'combosOriginalesContrato');
+	
+	var solicitud=$("#txtSolicitudH").val();
+	
+	if(solicitud){
+		
+		$("#divBuscadorContrato").addClass('oculto');
+		$("#idDivPaginaPrincipal").removeClass('oculto');
+		$(window).resize();
+		
+	}else{
+		
+		$("#divBuscadorContrato").removeClass('oculto');
+		$("#idDivPaginaPrincipal").addClass('oculto');
+	}
+	
+}
+
+
+function agregarAlComboCta(registro,id,datosCuentas,idBuscador)
+{
+//	value='"+lstCuentas.helper1.accerr+'/'+lstCuentas.helper1.centroZ+ '/'+lstCuentas.helper1.contra+ '/'+lstCuentas.helper2.prodcor+ '/'+lstCuentas.helper1.alite301+ '/'+lstCuentas.helper1.cestaz+ '/'+lstCuentas.helper2.tipobzt+ '/'+lstCuentas.helper2.subtippe+"'> " +
+	//Variable  que controla las iteraciones
+	var x=1;
+	
+	//Variable  que lee el valor del registro Seleccionado y la hace un split , para diferenciar  la llave  del contenido
+	var  registrosSeleccionado =registro.split("@");
+	var arregloOriginal = $("#combosOriginalesCuenta").val().split("@");
+	var datosCompletosCtas = null;
+	if(datosCuentas != null || datosCuentas != ''){
+		datosCompletosCtas=datosCuentas.split("/");
+	}
+	var finResulta = true;
+	
+	$("#"+id + " option").each(function()
+			{
+		valorOption = $(this).val();
+		booleanComparaCuenta=false;
+		valorCuenta = "";
+		if(valorOption.indexOf("/")>=0){
+			valorCuenta = valorOption.split("/")[0];
+			booleanComparaCuenta=true;
+		}
+		if ($(this).val()===registrosSeleccionado[0]
+				||(booleanComparaCuenta&&valorCuenta===registrosSeleccionado[0])) 
+		{
+			$("#"+id).val($(this).val());
+			seleccionaSelectOption(id,$(this).val());
+			
+			
+			$(".divBuscadores").each(function(){
+				
+				$(this).addClass('oculto');
+			});
+			limpiaDivAlertas();
+//			$("#divBuscadorCuentas2").addClass('oculto');
+			finResulta = false;
+		}
+			});
+	if (finResulta)
+		{			
+			$("#"+id+" option[value='*']").remove();
+			$("#"+id+" option[value='"+arregloOriginal[x-1]+"']").remove();
+			var verMas=$("#idOptionVerMas").val();
+			if(datosCompletosCtas!=null){
+				$("#"+id).append('<option value="'+datosCompletosCtas[0]+'/'+datosCompletosCtas[1]+'/'+datosCompletosCtas[2]+'/'+datosCompletosCtas[3]+'/'+datosCompletosCtas[4]+'/'+datosCompletosCtas[5]+'/'+datosCompletosCtas[6]+'/'+datosCompletosCtas[7]+'/'+datosCompletosCtas[8]+'/'+datosCompletosCtas[9]+'/'+datosCompletosCtas[10]+'/'+datosCompletosCtas[11]+'/'+datosCompletosCtas[12]+'/'+datosCompletosCtas[13]+'/'+datosCompletosCtas[14]+'/'+datosCompletosCtas[15]+'" selected="selected">'+registrosSeleccionado[0]+' '+registrosSeleccionado[1]+'</option>');
+			}else{
+				$("#"+id).append('<option value="'+registrosSeleccionado[0]+'" selected="selected">'+registrosSeleccionado[0]+' - '+registrosSeleccionado[1]+'</option>');
+			}
+			    
+			$("#"+id).append('<option value="*">'+verMas+'</option>');
+			   seleccionaSelectOption(id,registrosSeleccionado[0]);
+			   
+				$(".divBuscadores").each(function(){
+					
+					$(this).addClass('oculto');
+				});
+				limpiaDivAlertas();
+//			   $("#divBuscadorCuentas"+idBuscador).addClass('oculto');
+//			   $("#divBuscadorCuentas2").addClass('oculto');
+		}
+	calculaElementosCombos(id,'combosOriginalesCuenta');
+	
+	$(".divBuscadores").each(function(){
+	
+		$(this).addClass('oculto');
+	});
+	
+	limpiaDivAlertas();
+	
+//	$("#divBuscadorCuentas"+idBuscador).addClass('oculto');
+//	$("#divBuscadorCuentas2").addClass('oculto');
+	$("#idDivPaginaPrincipal").removeClass('oculto');
+	$(window).resize();
+	 setTimeout(function() {
+		 $(window).resize();
+		}, 300);
+	
+}
+
+function agregarAlComboCtaCredito(registro,id,datosCuentas,idBuscador){
+//	value='"+lstCuentas.helper1.accerr+'/'+lstCuentas.helper1.centroZ+ '/'+lstCuentas.helper1.contra+ '/'+lstCuentas.helper2.prodcor+ '/'+lstCuentas.helper1.alite301+ '/'+lstCuentas.helper1.cestaz+ '/'+lstCuentas.helper2.tipobzt+ '/'+lstCuentas.helper2.subtippe+"'> " +
+	//Variable  que controla las iteraciones
+	var x=1;
+	
+	//Variable  que lee el valor del registro Seleccionado y la hace un split , para diferenciar  la llave  del contenido
+	var  registrosSeleccionado =registro.split("@");
+	var arregloOriginal = $("#combosOriginalesCuenta").val().split("@");
+	var datosCompletosCtas = null;
+	if(datosCuentas != null || datosCuentas != ''){
+		datosCompletosCtas=datosCuentas.split("/");
+	}
+	
+	
+	$("#"+id + " option").each(function()
+			{	
+		if ($(this).val()===registrosSeleccionado[0]) 
+		{
+			seleccionaSelectOption(id,registrosSeleccionado[0]);
+			
+			
+			$(".divBuscadores").each(function(){
+				
+				$(this).addClass('oculto');
+			});
+			limpiaDivAlertas();
+//			$("#divBuscadorCuentas2").addClass('oculto');
+		    return false;
+		}	
+		if (x >= REGISTRO_POR_COMBO)
+		{			
+			$("#"+id+" option[value='*']").remove();
+			$("#"+id+" option[value='"+arregloOriginal[x-1]+"']").remove();
+			var verMas=$("#idOptionVerMas").val();
+			if(datosCompletosCtas!=null){
+				$("#"+id).append('<option value="'+registrosSeleccionado[0]+'/'+registrosSeleccionado[1]+'" selected="selected">'+registrosSeleccionado[0]+' '+registrosSeleccionado[1]+'</option>');
+			}else{
+				$("#"+id).append('<option value="'+registrosSeleccionado[0]+'" selected="selected">'+registrosSeleccionado[0]+' - '+registrosSeleccionado[1]+'</option>');
+			}
+			    
+			$("#"+id).append('<option value="*">'+verMas+'</option>');
+			   seleccionaSelectOption(id,registrosSeleccionado[0]);
+			   
+				$(".divBuscadores").each(function(){
+					
+					$(this).addClass('oculto');
+				});
+				limpiaDivAlertas();
+//			   $("#divBuscadorCuentas"+idBuscador).addClass('oculto');
+//			   $("#divBuscadorCuentas2").addClass('oculto');
+			    return false;
+		}
+		x++;
+			});
+	
+	calculaElementosCombos(id,'combosOriginalesCuenta');
+	
+	$(".divBuscadores").each(function(){
+	
+		$(this).addClass('oculto');
+	});
+	
+	limpiaDivAlertas();
+	
+//	$("#divBuscadorCuentas"+idBuscador).addClass('oculto');
+//	$("#divBuscadorCuentas2").addClass('oculto');
+	$("#idDivPaginaPrincipal").removeClass('oculto');
+	$(window).resize();
+	 setTimeout(function() {
+		 $(window).resize();
+		}, 300);
+	
+}
+
+/**
+ * 
+ * @param registro
+ * @param id
+ */
+function agregarAlComboBeneficiario(registro,id, datosBenef)
+{
+	//Variable  que controla las iteraciones
+	var x=1;
+	
+	//Variable  que lee el valor del registro Seleccionado y la hace un split , para diferenciar  la llave  del contenido
+	var  registrosSeleccionado =registro.split("@");
+	var arregloOriginal = $("#combosOriginalesBeneficiario").val().split("@");
+	var datosBene= datosBenef.split("/");
+	var noEstaEnListado = true;
+	var posicionListado = -1;
+	for (var i = 0; i < arregloOriginal.length; i++) {
+		var datosBenefCombo = arregloOriginal[i].split("/");
+		if (datosBenefCombo.length <= 1) {
+			datosBenefCombo = arregloOriginal[i].split("|");
+		}
+		if(datosBene[4] === datosBenefCombo[4] ){
+			noEstaEnListado = false ;
+			var accionOrigen = $("#accionOrigen").val();
+			var ajuste = 0;
+			if (accionOrigen === "M" || accionOrigen === "C") {
+				ajuste = 1;
+			}
+			if (accionOrigen === "A") {
+				ajuste = -1;
+			}
+			posicionListado = i + ajuste;
+			break;
+		}
+	}
+	$("#"+id + " option").each(function()
+			{	
+		if ($(this).val()===registrosSeleccionado[0]) 
+		{
+			seleccionaSelectOption(id,registrosSeleccionado[0]);
+			$("#divBuscadorBeneficiario").addClass('oculto');
+		    return false;
+		}	
+		if (x >= REGISTRO_POR_COMBO) {			
+			if (noEstaEnListado) {
+				$("#"+id+" option[value='*']").remove();
+				$("#"+id+" option[value='"+arregloOriginal[x-1]+"']").remove();
+				var verMas=$("#idOptionVerMas").val();
+				if(datosBene[6] ==="J"){
+					$("#"+id).append('<option value="'+armaValueBusqBenef(datosBene)+'" selected="selected">'+datosBene[4]+' - '+datosBene[1]+'</option>');
+				}else{
+					$("#"+id).append('<option value="'+armaValueBusqBenef(datosBene)+'" selected="selected">'+datosBene[4]+' - '+datosBene[1]+' '+datosBene[2]+' '+datosBene[3]+'</option>');
+				}
+				    $("#"+id).append('<option value="*">'+verMas+'</option>');
+				posicionListado = -1; 
+			}
+			seleccionaSelectOptionIndex(id,posicionListado);
+		   $("#divBuscadorBeneficiario").addClass('oculto');
+		    return false;  
+		}
+		x++;
+		});
+	
+	calculaElementosCombos(id,'combosOriginalesBeneficiario');
+	
+	$("#divBuscadorBeneficiario").addClass('oculto');
+	$("#idDivPaginaPrincipal").removeClass('oculto');
+	$(window).resize();
+	 setTimeout(function() {
+		 $(window).resize();
+		}, 300);
+	
+}
+
+/**
+ * Arma en valor del value del select en base al origen del buscador.
+ * @param datosBene
+ * @returns {String}
+ */
+function armaValueBusqBenef(datosBene) {
+	var valorResp = "/////";
+	var accionOrigen = $("#accionOrigen").val();
+	if (accionOrigen === "M") {
+		valorResp = datosBene[0]+'/'+datosBene[1]+'/'+datosBene[2]+'/'+datosBene[3]+'/'+datosBene[4]+'/'+datosBene[6];
+	}
+	if (accionOrigen === "A") {
+		valorResp = datosBene[0]+'|'+datosBene[1]+'@'+datosBene[2]+'@'+datosBene[3]+'|'+datosBene[4]+'|'+datosBene[7]+'|'+datosBene[8]+'|'+datosBene[9];
+	}
+	if (accionOrigen === "C") {
+		valorResp = datosBene[0]+'/'+datosBene[1]+'/'+datosBene[2]+'/'+datosBene[3]+'/'+datosBene[4]+'/'+datosBene[1]+'/'+datosBene[6];
+	}
+	return valorResp;
+}
+
+/**
+ * 
+ * @param registro
+ * @param id
+ */
+function agregarAlComboUsuario(registro,id)
+{
+	//Variable  que controla las iteraciones
+	var x=1;
+	var arregloOriginal = $("#combosOriginalesUsuario").val().split("@");
+	//Variable  que lee el valor del registro Seleccionado y la hace un split , para diferenciar  la llave  del contenido
+	var  registrosSeleccionado =registro.split("@");
+	
+	$("#"+id + " option").each(function()
+			{	
+		if ($(this).val()===registrosSeleccionado[0]) 
+		{
+			seleccionaSelectOption(id,registrosSeleccionado[0]);
+			$("#divBuscadorUsuario").addClass('oculto');
+			limpiaContenido();
+		    return false;
+		}	
+		if (x >= REGISTRO_POR_COMBO)
+		{			
+			$("#"+id+" option[value='*']").remove();
+			
+			$("#"+id+" option[value='"+arregloOriginal[x-1]+"']").remove();  ///"+"****"+lstUsu.codigoCliente.substring(4,8)+"
+			var verMas=$("#idOptionVerMas").val(); 
+			    $("#"+id).append('<option value="'+registrosSeleccionado[0]+'" selected="selected">'+"****"+registrosSeleccionado[0].substring(4,8)+' '+registrosSeleccionado[1]+'</option>');
+			    $("#"+id).append('<option value="*">'+verMas+'</option>');
+			   seleccionaSelectOption(id,registrosSeleccionado[0]);
+			   $("#divBuscadorUsuario").addClass('oculto');
+			   limpiaContenido();
+			    return false;
+		}
+		x++;
+			});
+	
+	
+	calculaElementosCombos(id,'combosOriginalesUsuario');
+	
+	$("#divBuscadorUsuario").addClass('oculto');
+	$("#idDivPaginaPrincipal").removeClass('oculto');
+	limpiaContenido();
+	$(window).resize();
+	
+}
+/*
+ * Para  limpiar  los buscadores. Oculta 
+ * todos  elementos  que contengan la clase .divBuscador
+ */
+function  limpiaDivsBuscadores()
+{
+	$(".divBuscador").addClass("oculto");
+	$(window).resize();
+	}
+
+/**
+ * FUNCION QUE ALMACENA LOS VALORES ORIGINALES DEL COMBO
+ * @param idCombo
+ * @param idComboOriginal
+ */
+function calculaElementosCombos(idCombo,idComboOriginal)
+{
+	var elemento ="";
+	var separador ="";
+	var iteraciones=0;
+	$("#"+ idCombo+ " option").each(function()
+			{	
+			elemento += separador + $(this).val();
+			if (iteraciones>0)
+				{
+				separador ="@";
+				}
+			iteraciones++;
+			});
+
+	$("#"+idComboOriginal).val(elemento);
+
+	}
+
+/**
+ * Funcion que almacena los valores originales del combo eliminando el caracter separador de renglon por separador de cadena
+ * @param idCombo Id del combo donde vienen los valores
+ * @param idComboOriginal Id del text donde se respaldan los valores
+ */
+function calculaElementosCombosAltaPagos(idCombo,idComboOriginal)
+{
+	var elemento ="";
+	var separador ="@";
+	var iteraciones=0;
+	$("#"+ idCombo+ " option").each(function()
+			{	
+			var valor =  $(this).val();
+			valor = valor.replace(separador, "|");
+			valor = valor.replace(separador, "|");
+			elemento += separador + valor;
+			});
+
+	$("#"+idComboOriginal).val(elemento);
+
+	}
+
+/**
+ * Funcion para seleccionar  un beneficiario
+ * @param id
+ */
+
+function beneficiarioSeleccionada(id,datoBenef){
+	var cuenta=$("#beneficiario"+id).text();
+	var desc=$("#descBeneficiario"+id).text();
+	var datosBeneficiario = $("#"+datoBenef).val();
+	var registro=cuenta+"@"+desc;
+	agregarAlComboBeneficiario(registro,$("#itemComboBeneficiario").val(),datosBeneficiario);
+	
+	$("#datosBeneficiarios").val(datosBeneficiario);
+}
+
+
+
+/**
+ * Funcion para el usuario seleccionado
+ * @param id 
+ * 
+ */
+function usuarioSeleccionado(id,usuario){
+	var usuario=usuario;
+	var desc=$("#usuarioDesc"+id).text();
+	var registro=usuario+"@"+desc;
+	agregarAlComboUsuario(registro,$("#itemComboUsuario").val());
+}
+
+
+/*
+ * Funcion  que selecciona un registro  de algun select
+ */
+function seleccionaSelectOption (id,valor){
+    $('#'+ id+' option[value="'+valor+'"').attr('selected','selected');
+    $("#"+id).selectpicker('refresh');
+    $("#"+id).trigger('change');
+}
+
+/*
+ * Selecciona el registro indicado del select.
+ */
+function seleccionaSelectOptionIndex (id,index){
+	if (parseInt(index) >= 0) {
+		$("#selectBeneficiario")[0].selectedIndex = parseInt(index-1);
+	}	
+    $("#"+id).selectpicker('refresh');
+    $("#"+id).trigger('change');
+}
+
+function validaCuentasBuscador(idBuscadorCtas) {
+	   var regresa;
+	   var noCuentaStr = "noCuenta"+idBuscadorCtas;
+	   var cuentaDesStr = "cuentaDesc"+idBuscadorCtas;
+	  
+	   var cadenaRequest = "[ { " + noCuentaStr + "  : [ {"
+	      + "longitudMaxima : '40', "+ "longitudMinima : '3' } ],  " + cuentaDesStr + "  : [ {" +"requerido : false,  alfanumerico : false,"
+	      + "longitudMaxima : '40', "+ "longitudMinima : '3' } ]                              } ]";
+	 
+	   
+	   var cadenaJSON = JSON.stringify(eval("(" + cadenaRequest + ")"));
+	   var jsonValidaciones = JSON.parse(cadenaJSON);
+	  
+	   var cadenaResponse = "[ {" + "\"" + noCuentaStr + "\"" + " : [ {" + "\""
+	   
+	      + "requerido" + "\"" + " : " + "\"" + "requerido" + "\"" + "," + "" +"\""
+	      + "numerico" + "\"" + " : " + "\"" + "NumeroCuentaNumerico" + "\"" + ","
+	      + "" + "\"" + "longitudMaxima" + "\"" + " :" + "\""
+	      + "NombreLongitud" + "\"" + ","
+	      + "" + "\"" + "longitudMinima" + "\"" + " :" + "\""
+	      + "DescripcionContratoLongitud" + "\"" +" } ], " + "\"" + cuentaDesStr + "\"" + " : [ {" + "\""
+	    
+	      + "requerido" + "\"" + " : " + "\"" + "requerido" + "\"" + "," + "" +"\""
+	      + "alfanumerico" + "\"" + " : " + "\"" + "NombreOtro" + "\"" + ","
+	      + "" + "\"" + "longitudMaxima" + "\"" + " :" + "\""
+	      + "NombreLongitud" + "\"" + ","
+	      + "" + "\"" + "longitudMinima" + "\"" + " :" + "\""
+	      + "DescripcionContratoLongitud" + "\"" +" } ]                                  } ]";
+	  
+	   
+	   var jsonIdMensajes = JSON.parse(cadenaResponse);
+	   if (validarCampos(jsonValidaciones, jsonIdMensajes, "idMensajesBuscadores", true)) {
+	      regresa = true;
+	   } else {
+	      regresa =  false;
+	   }
+	   return regresa;
+	}
+
+function validacionesBuscadorUsuarios(){
+
+	var jsonValidaciones = [
+	  {
+	    "codigoCliente": [
+	      {
+	    	
+	    	"numerico": true,
+	    	"longitudMaxima": 8
+	      }
+	    ],
+	    "nombreCliente": [
+	        {
+	         "alfanumerico": "alfabetico",
+	         "longitudMaxima": 60
+	        }
+	     ]
+	  }
+	];
+
+	var jsonIdMensajes = [
+	  {
+	    "codigoCliente": [
+	      {
+	    	"numerico": "CodigoClienteNumerico",
+	    	"longitudMaxima": "CodigoClienteLongitud"
+	      }
+	    ],
+	    "nombreCliente": [
+	        {
+	         "alfanumerico": "NombreOtro",
+	         "longitudMaxima": "NombreLongitud"
+	       }
+	    ] 		 
+	  }
+	];
+
+	if(validarCampos(jsonValidaciones,jsonIdMensajes,"idMensajesBuscadores",true)){
+		return true;
+	}else{
+		return false;
+	}
+		
+}
+function validacionesBuscadorContratos(){
+
+	var jsonValidaciones = [
+	  {
+	    
+	     "numContrato": [
+	          {	    	
+	          "numerico": true,
+	          "longitudMaxima": 12,
+	          "longitudMinima":5,
+	          "requerido":false
+	          }
+	    ],
+	    "nombContrato": [
+	       	 {
+	       	  "alfanumerico": "alfanumericoAcentos",
+	       	  "longitudMaxima": 40,
+	       	 "longitudMinima":5,
+	         "requerido":false
+	       	 }
+	    ]
+	  }
+	];
+
+	var jsonIdMensajes = [
+	  {
+	     "numContrato": [
+	          {	    	
+	       	   "numerico": "ContratoInvalido",
+	       	   "longitudMaxima": "NombreLongitud",
+	       	 "longitudMinima":"NumeroContratoLongitud",
+	         "requerido":"requerido"
+	       	  }
+	    ],
+	    "nombContrato": [
+	          {
+	        	  "alfanumerico": "NombreOtro",
+	        	  "longitudMaxima": "NombreLongitud",
+	        	  "longitudMinima":"DescripcionContratoLongitud",
+	        	  "requerido":"requerido"
+	          }
+	     ]	 
+	  }
+	];
+
+	if(validarCampos(jsonValidaciones,jsonIdMensajes,"idMensajesBuscadores",true)){
+		return true;
+	}else{
+		return false;
+	}
+		
+}
+
+function validacionesBuscadorSucursales(){
+
+	var jsonValidaciones = [
+	  {
+	     "claveSucursal": [
+	       {
+	         "alfanumerico": "alfanumericoAcento",
+	         "longitudMaxima": 4
+	     }
+	    ],
+	    "nombre": [
+	       {
+	       	"alfanumerico": "alfanumericoAcentos",
+	       	"longitudMaxima": 40
+	       }
+	    ],	    
+	    "cp": [
+	        {
+	           "numerico": true,
+	           "longitudMaxima": 5
+	        }
+	    ]  
+	  }
+	];
+
+	var jsonIdMensajes = [
+	  {
+	     "claveSucursal": [
+	        {
+	          "alfanumerico": "ClaveSucursalNumerico",
+	          "longitudMaxima": "ClaveSucursalLongitud"
+	        }
+	     ],
+	     "nombre": [
+	     	       {
+	     	       	"alfanumerico": "NombreSucursalAlfanumerico",
+	     	       	"longitudMaxima": "NombreSucursalLongitud"
+	     	       }
+	     ],	     
+	     "cp": [
+		     {
+		      "numerico": "CodigoPostalNumerico",
+		      "longitudMaxima": "CodigoPostalLongitud"
+		    }
+		 ]		 
+	  }
+	];
+
+	if(validarCampos(jsonValidaciones,jsonIdMensajes,"idMensajesBuscadores",true)){
+		return true;
+	}else{
+		return false;
+	}
+		
+}
+function validacionesBuscadorBenef(){
+
+	var jsonValidaciones = [
+	  {
+	    
+	    "claveBenef": [
+	        {
+		       "alfanumerico": "alfanumericoAcento",
+		       "longitudMaxima": 13
+	        }
+	   ],
+	   "nombreBenef": [
+	   	    {
+	   	     "alfanumerico": "alfanumericoAcentos",
+	   	     "longitudMaxima": 40
+	   	    }
+	   	]	   
+	  }
+	];
+
+	var jsonIdMensajes = [
+	  {
+	   
+		 "claveBenef": [
+		    {
+		    "alfanumerico": "ClaveBeneficiarioAlfanumerico",
+		    "longitudMaxima": "ClaveBeneficiarioLongitud"
+		    }
+		  ],
+		  "nombreBenef": [
+		    {
+			    "alfanumerico": "NombreOtro",
+			    "longitudMaxima": "NombreLongitud"
+		    }
+		  ]	  		 
+	  }
+	];
+
+	if(validarCampos(jsonValidaciones,jsonIdMensajes,"idMensajesBuscadores",true)){
+		return true;
+	}else{
+		return false;
+	}
+
+}
+function validaKeyBlurUsuarios(){
+	
+	jQuery('#codigoCliente').keypress(function(event){
+		if(validarNumericoEvent(event,'codigoCliente')){
+			return true;
+			
+		}else{
+			return false;	
+			
+		}
+	});
+	jQuery('#codigoCliente').keypress(function(event){
+		if(validarLongitudMaximaEvent('codigoCliente', '8', event)){
+			
+			return true;
+		}else{
+			return false;	
+		}
+	});
+	
+	jQuery('#codigoCliente').blur(function(event){
+		if(validarNumericoEventBlur("codigoCliente")){		
+			return true;
+		}else{					
+			return false;	
+		}
+	});
+	jQuery('#codigoCliente').blur(function(event){
+		if(validarLongitudMaximaEventBlur('codigoCliente', '8', event)){
+			return true;
+			
+		}else{
+			
+			return false;	
+		}
+	});
+	
+	jQuery('#nombreCliente').keypress(function(event){
+		if(validarAlfabeticoEvent(event)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	jQuery('#nombreCliente').keypress(function(event){
+		if(validarLongitudMaximaEvent('nombreCliente', '60', event)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	
+	jQuery('#nombreCliente').blur(function(event){
+		if(esAlfanumericoBlur(event, 'nombreCliente')){	
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	jQuery('#nombreCliente').blur(function(event){
+		if(validarLongitudMaximaEventBlur('nombreCliente', '60', event)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+}
+
+function validaKeyBlurCuentas(idBuscadorCtas){
+	
+	jQuery('#noCuenta'+idBuscadorCtas).keypress(function(event){
+		if(validarNumericoEvent(event,'noCuenta'+idBuscadorCtas)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	jQuery('#noCuenta'+idBuscadorCtas).keypress(function(event){
+		if(validarLongitudMaximaEvent('noCuenta'+idBuscadorCtas, '40', event)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	
+	jQuery('#noCuenta'+idBuscadorCtas).blur(function(event){
+		if(validarNumericoEventBlur("noCuenta"+idBuscadorCtas)){		
+			return true;
+		}else{					
+			return false;	
+		}
+	});
+	jQuery('#noCuenta'+idBuscadorCtas).blur(function(event){
+		if(validarLongitudMaximaEventBlur('noCuenta'+idBuscadorCtas, '40', event)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	
+	jQuery('#cuentaDesc'+idBuscadorCtas).keypress(function(event){
+		if(esAlfanumerico(event)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	jQuery('#cuentaDesc'+idBuscadorCtas).keypress(function(event){
+		if(validarLongitudMaximaEvent('cuentaDesc'+idBuscadorCtas, '40', event)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	
+	jQuery('#cuentaDesc'+idBuscadorCtas).blur(function(event){
+		if(esAlfanumericoBlur(event, 'cuentaDesc'+idBuscadorCtas)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	jQuery('#cuentaDesc'+idBuscadorCtas).blur(function(event){
+		if(validarLongitudMaximaEventBlur('cuentaDesc'+idBuscadorCtas, '40', event)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	
+}
+
+
+
+function validaKeyBlurBeneficiarios(){
+	
+	jQuery('#claveBenef').keypress(function(event){
+		if(esAlfanumerico(event)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	jQuery('#claveBenef').keypress(function(event){
+		if(validarLongitudMaximaEvent('claveBenef', '13', event)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	
+	jQuery('#claveBenef').blur(function(event){
+		if(esAlfanumericoBlur(event, 'claveBenef')){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	jQuery('#claveBenef').blur(function(event){
+		if(validarLongitudMaximaEventBlur('claveBenef', '13', event)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+}
+
+function validaKeyBlurSucursales(){
+	
+	jQuery('#cp').keypress(function(event){
+		if(validarNumericoEvent(event,'cp')){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	jQuery('#cp').keypress(function(event){
+		if(validarLongitudMaximaEvent('cp', '5', event)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	
+	jQuery('#cp').blur(function(event){
+		if(validarNumericoEventBlur("cp")){		
+			return true;
+		}else{					
+			return false;	
+		}
+	});
+	jQuery('#cp').blur(function(event){
+		if(validarLongitudMaximaEventBlur('cp', '5', event)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	
+	jQuery('#claveSucursal').keypress(function(event){
+		if(validarNumericoEvent(event)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	jQuery('#claveSucursal').keypress(function(event){
+		if(validarLongitudMaximaEvent('claveSucursal', '4', event)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	
+	jQuery('#claveSucursal').blur(function(event){
+		if(validarNumericoEvent(event, 'claveSucursal')){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	jQuery('#claveSucursal').blur(function(event){
+		if(validarLongitudMaximaEventBlur('claveSucursal', '4', event)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+
+	jQuery('#nombre').keypress(function(event){
+		if(validarAlfabeticoEvent(event)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	jQuery('#nombre').keypress(function(event){
+		if(validarLongitudMaximaEvent('nombre', '40', event)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	
+	jQuery('#nombre').blur(function(event){
+		if(esAlfanumericoBlur(event, 'nombre')){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	jQuery('#nombre').blur(function(event){
+		if(validarLongitudMaximaEventBlur('nombre', '40', event)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	
+}
+
+function validaKeyBlurContratos(){
+	
+	jQuery('#numContrato').keypress(function(event){
+		if(validarNumericoEvent(event,'numContrato')){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	jQuery('#numContrato').keypress(function(event){
+		if(validarLongitudMaximaEvent('numContrato', '11', event)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	
+	jQuery('#numContrato').blur(function(event){
+		if(validarNumericoEventBlur("numContrato")){		
+			return true;
+		}else{					
+			return false;	
+		}
+	});
+	jQuery('#numContrato').blur(function(event){
+		if(validarLongitudMaximaEventBlur('numContrato', '11', event)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	
+	jQuery('#nombContrato').keypress(function(event){
+		if(esAlfanumericoBlur(event)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	jQuery('#nombContrato').keypress(function(event){
+		if(validarLongitudMaximaEvent('nombContrato', '40', event)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	
+	jQuery('#nombContrato').blur(function(event){
+		if(esAlfanumericoBlur(event, 'nombContrato')){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+	jQuery('#nombContrato').blur(function(event){
+		if(validarLongitudMaximaEventBlur('nombContrato', '40', event)){
+			
+			return true;
+		}else{
+			
+			return false;	
+		}
+	});
+}
+function contentFooter(){
+	var heightWindows = $(window).height();
+	var heightMenu=180;
+	var totalHeight= heightWindows-heightMenu;
+	var heightFooterAlert=totalHeight-30;
+	var heightBuscador=0;
+	if($("#root-tplVentanaOperativa-genericaBody").height() === null || $("#root-tplVentanaOperativa-genericaBody").height()==0){
+		heightBuscador= heightFooterAlert-52;
+	}else{
+		heightBuscador= heightFooterAlert;
+	}
+	$("#footer-content-block").css("height",heightBuscador);	
+	$("#footer-content-block-cuentas").css("height",heightBuscador);
+	$("#footer-content-block-sucursal").css("height",heightBuscador);
+	$("#footer-content-block-usuarios").css("height",heightBuscador);
+	$("#footer-content-block-contratos").css("height",heightBuscador);
+}
+
+
+//FUNCIONES PARA BUSCADOR DE CUENTAS
+function consultaDivisas(idBuscadorCtas){
+	
+	addAjaxLoader();
+	var contexto= $("#contexto"+idBuscadorCtas).val();
+	var tipoCuentasD= $("#tipoCtas"+idBuscadorCtas).val();
+	
+	if(contexto === "C"){
+		$("#tipoCtasContexto"+idBuscadorCtas).val("123");
+	}
+	if(contexto === "A"){
+		$("#tipoCtasContexto"+idBuscadorCtas).val("456");
+	}
+	if(contexto === "N"){
+		$("#tipoCtasContexto"+idBuscadorCtas).val("123456");
+	}
+	var cuentasContexto=$("#tipoCtasContexto"+idBuscadorCtas).val();
+	
+	if((contexto==="A"||contexto==="N") && !tipoCuentasD.includes("6")){
+		ejecutComboNormal(idBuscadorCtas);
+	}else{
+		
+		if(tipoCuentasD.includes("6") || cuentasContexto.includes("6")){
+			$('.opagrega').remove();
+			
+			$.ajax({
+				url : '../Buscadores/consultaDivisas.do',
+				data : { id :'dummy'},
+				type : 'GET',
+				dataType : 'json',
+				success : function(response) {  
+					
+					var valTodos= "<option class='opagrega' value=''>"+todos+"</option>";
+					$(valTodos).appendTo("#selectDivisa"+idBuscadorCtas);
+					
+					$.each(response.listaDivisas, function(idx, listaDivisas){
+						var optagrega="<option class='opagrega' value='"+listaDivisas.ltcdiv+"'>"+listaDivisas.ltcdiv+ ' - '+listaDivisas.divisaTraducida+"</option>";
+						$(optagrega).appendTo("#selectDivisa"+idBuscadorCtas);
+						$("#selectDivisa"+idBuscadorCtas).selectpicker('refresh');
+						$(window).resize();
+					});
+				},
+				error : function() {
+					removeAjaxLoader();
+				},
+				complete : function() {
+					removeAjaxLoader();
+				}
+			});
+			$(window).resize();
+		} else{
+			ejecutComboNormal(idBuscadorCtas);
+		}
+		
+	}
+	
+	
+	
+}
+
+function ejecutComboNormal(idBuscadorCtas){
+	$('.opagrega').remove();
+	var optagrega = "<option class='opagrega' value='' id=''>" + todos + "</option>" +
+					"<option class='opagrega' value='MXN' id='div-cons-usu-izq-gpo-divisa-izq-select-0'>" + divisaMxn + "</option>" +
+					"<option class='opagrega' value='USD' id='div-cons-usu-izq-gpo-divisa-izq-select-1'>" + divisaUsd + "</option>" ;
+	  $(optagrega).appendTo("#selectDivisa"+idBuscadorCtas);
+      $("#selectDivisa"+idBuscadorCtas).selectpicker('refresh');
+      $(window).resize();
+  	  removeAjaxLoader();
+}
+

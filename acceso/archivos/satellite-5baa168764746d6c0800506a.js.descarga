@@ -1,0 +1,6 @@
+var ddhead = document.getElementsByTagName("head")[0];
+var ddscript = document.createElement("script");
+ddscript.type = 'text/javascript';
+ddscript.async = true;
+ddscript.src = "";
+ddhead.appendChild(ddscript);

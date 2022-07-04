@@ -1,0 +1,35 @@
+_satellite.pushAsyncScript(function(event, target, $variables){
+  function getDocHeight() {
+                  var D = document;
+                  return Math.max(
+                      D.body.scrollHeight, D.documentElement.scrollHeight,
+                      D.body.offsetHeight, D.documentElement.offsetHeight,
+                      D.body.clientHeight, D.documentElement.clientHeight
+                  );
+              }
+var lastPosition=0
+window.lanzaScroll = function() {
+  					var scrollTop
+            scrollTop=window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop
+            var scrollHeight=getDocHeight();
+          	var windowHeight= window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
+            var scrollPosition =windowHeight + scrollTop;
+  					//modificacón para cuendo el scroll position al final del scroll no es un entero
+  					if ((scrollHeight - scrollPosition) / scrollHeight < 0.002) {
+                window.mouseWheeledFired = true;
+              	setTimeout(function() { window.mouseWheeledFired = undefined }, 5000);
+                //evitamos lanzar el scroll desde iframes
+             		 if (window.top == window.self && lastPosition!=scrollPosition) {
+                    tms_track("ScrollComplete", digitalData);
+                   lastPositon=scrollPosition
+                 	 }
+            }
+        }
+window.onscroll = function() {
+ 
+  if(window.mouseWheeledFired == undefined){
+    lanzaScroll()
+     
+  }};
+
+});

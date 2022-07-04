@@ -1,0 +1,63 @@
+/**
+ * Funcion que valida si esta instalado trusteer
+ * @param obj Devuelve los datos de trusteer
+ * @param str Cadena
+ * @param signature Cadena
+ */
+function rCallback(obj, str, signature) {
+    //Valida si el Trusteer esta Instalado
+    if (obj.v4.rapport_running) {
+        $('#trusteerInstalled').val(true);
+    }else{
+        if (obj.v4.compatible && obj.v4.download_link) {
+            $('#trusteerInstalled').val(false);
+        }else{
+            $('#trusteerInstalled').val(false);
+            console.log("Lo sentimos, Rapport no es compatible con su sistema." + JSON.stringify(obj) );
+        }
+
+        // Elementos necesarios para evitar CSFR
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        
+        $.ajax({
+            type : "POST",
+            beforeSend : function(request) {
+                if (token) {
+                    request.setRequestHeader(header,token);
+			    }
+            },
+            
+            cache : false,
+            url : window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1]+"/posicionGlobal/trusteer.do",
+
+            success : function(response) {
+                console.log(response);
+
+                $('#myModalTrusteer').modal('show');
+                window.parent.resizeMe();
+                setTimeout(function() {$('#myModalTrusteer').modal('hide');}, 15000);
+            },
+            
+            error : function() {
+                console.log("Error: petición ajax fail.");
+            }
+        });
+    }
+
+    validaUrlTrusteer();
+    
+}
+
+/**
+ * Funcion que carga url de Descarga del Truster
+ */
+function validaUrlTrusteer() {
+	var trusteerInstalled = $.parseJSON($('#trusteerInstalled').val());
+
+	if(!trusteerInstalled) {
+		$(document).on('click',"#trusteerDownload",function() {
+			window.open('https://www.ibm.com/security/trusteer/landing-page/es/santander-mexico-empresas/', '_blank', 'width=1080,height=595,menubar=0,toolbar=0,location=0, resizable=yes,scrollbars=yes');
+		});
+	}
+}

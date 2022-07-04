@@ -1,0 +1,56 @@
+var validNavigation = false;
+var validRequest = false;
+var validPatron = false;
+ 
+function endSession() {
+	 $.ajax({
+         url :'../ventanaOperativa/cerrarSesion.go',
+		     async: false,
+         type : "GET",
+	 }); 
+} 
+function wireUpEvents() {
+  window.onbeforeunload = function() {
+	  // bandera para evaluar si se encuentran en el modulo de transferecias
+	  var frame = window.parent.document.getElementById("iFramePrincipal").src.split("/")[5];
+	  /* condicion para evualuar si se encuentran en transferncias mismo banco y el cierre de sesion se origino por patron de firmas
+	   * en caso de ser asi la bandera de validNavigation cambia a true ocacionando que el segundo cierre de sesion no se efectue y
+	   * reseteamos la variable de validPatron para el cierre de sesion.
+	   */
+	  if(frame == "transferenciasMismoBanco.do" && validPatron == true){
+		  validNavigation = true;
+		  validPatron = false;
+	  }
+      if (validNavigation==false && validRequest==false) {
+         endSession();
+      }else{
+    	  validNavigation = false
+      }
+  }
+  $(document).bind('keypress', function(e) {
+    if (e.keyCode == 116){
+      validNavigation = true;
+    }
+  });
+  $("a").bind("click", function() {
+    validNavigation = true;
+  });
+  $("form").bind("submit", function() {
+    validNavigation = true;
+  });
+  $("input[type=submit]").bind("click", function() {
+    validNavigation = true;
+  });
+  $( document ).ajaxComplete(function() {
+    validNavigation = false;
+  });
+  $(document).ajaxSuccess(function() {
+    validNavigation = false;
+  });
+  $( document ).ajaxError(function() {
+    validNavigation = false;
+  });
+}
+$(document).ready(function() {
+  wireUpEvents();  
+});

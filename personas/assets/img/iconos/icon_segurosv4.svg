@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.3 (67297) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 4 Copy 3</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M0,12 C0,12.3016364 0.244363636,12.5454545 0.545454545,12.5454545 L11.4545455,12.5454545 L11.4545455,20.346 C11.4545455,21.7549091 10.2398182,22.9090909 8.72727273,22.9090909 C7.21527273,22.9090909 6,21.7549091 6,20.346 C6,20.0449091 5.75563636,19.8010909 5.45454545,19.8010909 C5.15345455,19.8010909 4.90909091,20.0449091 4.90909091,20.346 C4.90909091,22.3707273 6.62454545,24 8.72727273,24 C10.83,24 12.5454545,22.3707273 12.5454545,20.346 L12.5454545,12.5454545 L23.4545455,12.5454545 C23.7556364,12.5454545 24,12.3016364 24,12 C24,5.37272727 18.6272727,0 12,0 C5.37218182,0 0,5.37272727 0,12 Z M12,1.09090909 C17.8418182,1.09090909 22.6112727,5.68309091 22.896,11.4545455 L1.10454545,11.4545455 C1.38872727,5.68309091 6.15763636,1.09090909 12,1.09090909 Z" id="path-1"></path>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Header_Desktop-inversionesCopy" transform="translate(-24.000000, -98.000000)">
+            <g id="Group-4-Copy-3" transform="translate(24.000000, 98.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="Clip-2"></g>
+                <polygon id="Fill-3" fill="#EC0000" mask="url(#mask-2)" points="-4 28 28 28 28 -4 -4 -4"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,315 @@
+
+body{
+	width: 950px;
+	height: 500px;
+	margin-left: 25px;
+	margin-top: 0px;
+}
+div#encabezado{
+	width: 100%;
+	height: 25%;
+}
+div#encabezado div#arriba{
+	width: 100%;
+	height: 40px;
+	padding: 0px;
+}
+img#glo25010{
+	border: none;
+	height: 40px;
+	margin-bottom: 5px;
+}
+a#gbo25110a{
+	border: none;
+	text-decoration: none;
+}
+img#gbo25110{
+	border: none;
+	margin-bottom: 12px;
+	margin-left: -4px;
+}
+img#gbo25120{
+	margin-bottom: 25px;
+	margin-left: -4px;
+}
+a#gbo25130a{
+	border: none;
+	text-decoration: none;
+}
+img#gbo25130{
+	border: none;
+	margin-bottom: 12px;
+	margin-left: -5px;
+}
+img#gbo25140{
+	margin-bottom: 25px;
+	margin-left: -4px;
+}
+a#gbo25150a{
+	border: none;
+	text-decoration: none;
+}
+img#gbo25150{
+	border: none;
+	margin-bottom: 12px;
+	margin-left: -4px;
+}
+img#gbo25160{
+	margin-bottom: 25px;
+	margin-left: -4px;
+}
+img#glo25020{
+	height: 40px;
+	width: 379px;
+	margin-right: -1px;
+	margin-bottom: 5px;
+	margin-left: -4px;
+}
+
+
+
+div#medio{
+	height: 60px;
+}
+img#gti25020{
+}
+span#fecha{
+	position: relative;
+	top: -20px;
+}
+span#hora{
+	position: relative;
+	left: -25px;
+}
+img#gba25010{
+}
+
+img#gti25030{
+	margin-left: 300px;
+}
+a#gbo25170img {
+  margin-left: 10px;
+}
+a#gbo25180img {
+  margin-left: 10px;
+}
+div#cuerpo {
+	margin-top: 50px;
+}
+form#formaPrincipal {
+	width: 600px;
+	margin-left: 200px;
+	padding-bottom: 20px;
+	padding-top: 30px;
+	margin-top: 20px;
+	height: 230px;
+}
+label#IdUsername {
+	margin-left: 100px;
+}
+input#IdUsernameTxt {
+	margin: 5px;
+	margin-left: 53px;
+        width: 100px;
+}
+label#IdPassword {
+	margin-left: 100px;
+}
+input#IdPasswordTxt {
+	margin: 5px;
+	margin-left: 27px;
+        width: 100px;
+}
+label#IdPwdToken {
+	margin-left: 100px;
+}
+input#IdPwdTokenTxt {
+	margin: 5px;
+	margin-left: 30px;
+}
+a#administracionToken {
+	position: relative;
+	top: 70px;
+	left: 110px;
+}
+a#administracionContra {
+	position: relative;
+	top: 70px;
+	left: 140px;
+}
+input#IdSubmit, input#IdCancelar {
+	width: 72px;
+	height: 20px;
+	margin-top: 20px;
+} 
+input#IdSubmit {
+	position: relative;
+	top: 60px;
+	left: 170px;
+}
+input#IdCancelar { 
+	position: relative;
+	top: 60px;
+	left: 200px;
+}
+
+input#IdRegresar {
+	position: relative;
+	top: 60px;
+	left: 200px;
+	height: 20px;
+    margin-top: 20px;
+    width: 72px;
+}
+
+legend {
+	position: relative;
+	margin-top: -21px;
+	padding-bottom: 5px;
+}
+img#bordeDerecho {
+	height: 284px;
+	width: 5px;
+	position: relative;
+	float: right;
+	top: -316px;
+	left: -165px;
+}
+img#barraFondo {
+	width: 581px;
+	height: 8px;
+	position: relative;
+	top: -40px;
+	left: 197px;
+}
+img#e7gif {
+	position: relative;
+	float: left;
+	left: 197px;
+	top: -34px;
+}
+img#e5gif {
+	position: relative;
+	width: 5px;
+	height: 5px;
+	float: right;
+	left: -159px;
+	top: -52px;
+}
+img#e1gif {
+	position: relative;
+	float: left;
+	left: 198px;
+	top: 19px;
+}
+img#e2gif {
+	height: 5px;
+	width: 575px;
+	position: relative;
+	top: 8px;
+	left: 198px;
+}
+img#e3gif {
+	position: relative;
+	float: right;
+	left: -166px;
+	top: -1px;
+}
+img#e8gif {
+	position: relative;
+	float: left;
+	height: 281px;
+	width: 5px;
+	left: 197px;
+	top: 6px;
+}
+
+span#hora, span#fecha { 
+	font-size: 11px; 
+	color: #000000; 
+	font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
+} 
+label {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+}
+legend {
+	color: red;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+}
+
+a#administracionContra, a#administracionToken {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+}
+input#IdSubmit {
+	text-align: left;
+	padding-left: 6px;
+	color: white;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	border: none;
+}
+input#IdCancelar {
+	margin-top: 5px;
+	text-align: left;
+	padding-left: 6px;
+	color: white;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	border: none;
+}
+
+input#IdRegresar {
+	margin-top: 5px;
+	text-align: left;
+	padding-left: 6px;
+	color: white;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	border: none;
+}
+
+fieldset {
+	background: url(../pics/bges04.gif);
+	width: 97.5%;
+	border-top: dotted 2px red;
+	border-left: none;
+	border-right: none;
+	border-bottom: none;
+	height: 100px;
+}
+input#IdUsernameTxt, input#IdPasswordTxt, input#IdPwdTokenTxt {
+}
+input#IdSubmit {
+	background-image: url(../pics/aceptar_of.gif);
+	background-repeat: no-repeat;
+        background-color: red;
+}
+input#IdCancelar {
+	background-image: url(../pics/lin_of.GIF);
+	background-repeat: no-repeat;
+        background-color: red;
+}
+
+input#IdRegresar {
+	background-image: url(../pics/can_of.gif);
+	background-repeat: no-repeat;
+	background-color: red;
+}
+
+legend {
+	border-bottom: none;
+}
+a#gbo25170img, a#gbo25180img {
+	border: none;
+}
+img#gbo25170, img#gbo25180 {
+	border: none;
+}
+.oculto {
+    display: none;
+}
